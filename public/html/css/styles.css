@@ -1,0 +1,43 @@
+
+#app {
+    font-family: Tahoma, sans-serif;
+    font-size: 1.1em;    
+}
+
+
+
+.todo-view {
+    float: left;        
+    width: 500px;
+}
+
+.todos div {
+    padding: 3px 0px 3px;        
+}
+
+.todos .complete {
+    text-decoration: line-through;
+}
+
+.todos .selected {
+    background-color: #00ff00;
+}
+
+.todos .filters li.active {
+	font-weight: bold;
+}
+
+.todos ul.filters {
+    list-style-type: none;    
+    padding: 0px;
+}
+
+.todos .filters li {
+	display: inline-block;
+	padding: 0px 5px;
+	text-transform: capitalize;	
+}
+
+.howto {    
+    font-size: 0.8em;
+}

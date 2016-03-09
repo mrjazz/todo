@@ -1,0 +1,20 @@
+sudo: false
+language: node_js
+cache:
+  directories:
+    - node_modules
+notifications:
+  email: true
+node_js:
+  - stable
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+install:
+  # Check the size of caches
+  - du -sh ./node_modules ./bower_components/ ./docs/bower_components/ || true
+  # Install npm dependencies and ensure that npm cache is not stale
+  - rm -rf node_modules/
+  - npm install
+script:
+  - node_modules/.bin/mocha --compilers js:babel-core/register --recursive tests

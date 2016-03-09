@@ -1,0 +1,68 @@
+{
+  "name": "clearfocus",
+  "version": "1.0.0",
+  "description": "Simple todo application with keyboard control, drag&drop built with React & Redux",
+  "scripts": {
+    "clean": "rimraf dist",
+    "test": "node_modules\\.bin\\mocha --compilers js:babel-core\\register --recursive tests",
+    "start": "node server.js",
+    "build": "node_modules/.bin/webpack --verbose --colors --display-error-details --config webpack.prod.js",
+    "build:production": "npm run clean && npm run build",
+    "lint": "eslint public\\js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrjazz/todo.git"
+  },
+  "keywords": [
+    "React", "GTD", "Redux"
+  ],
+  "author": "Denis Sheremetov (http://github.com/mrjazz)",
+  "license": "MIT",
+  "homepage": "https://github.com/mrjazz/todo",
+  "dependencies": {
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0",
+    "redux": "^3.0.4",
+    "react-redux": "^4.0.0",
+    "react-dnd": "^2.1.2",
+    "react-dnd-html5-backend": "^2.1.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.0.2",
+    "babel-core": "^6.3.15",
+    "babel-loader": "^6.2.0",
+    "babel-plugin-rewire": "^1.0.0-beta-3",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babel-preset-stage-0": "^6.0.15",
+    "babel-template": "^6.3.13",
+    "babel-types": "^6.3.18",
+    "jasmine-core": "^2.4.1",
+    "eslint-plugin-react": "^3.6.2",
+    "react-hot-loader": "^1.3.0",
+    "react-addons-test-utils": "^0.14.3",
+    "webpack": "^1.8.11",
+    "webpack-dev-server": "^1.8.2",
+    "webpack-merge": "^0.7.1",
+    "extract-text-webpack-plugin": "^0.9.1",
+    "babel-polyfill": "^6.3.14",
+    "rimraf": "^2.5.0",
+    "sass-loader": "^3.0.0",
+    "style-loader": "^0.13.0",
+    "mocha": "2.4.5",
+    "should": "8.2.1"
+  },
+  "bugs": {
+    "url": "https://github.com/mrjazz/todo/issues"
+  },
+  "main": "bundle.js",
+  "directories": {
+    "test": "tests"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
