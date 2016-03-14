@@ -39,12 +39,12 @@ export default class ItemsList extends Component {
     // <p>{this.state.editId} - {this.state.focusId}</p>
     return <div className="todos" ref="self" onKeyDown={this._keyPressHandler.bind(this)}>
       <ul className="filters">
-        {['all', 'completed', 'active'].map((title, key) => 
+        {['all', 'completed', 'active'].map((title, key) =>
           <li key={key} className={this.state.filter === title ? 'active' : ''}>
             {this.state.filter === title ?
               title :
-              <a href="#" 
-                onClick={() => {this._handleFilter(title)}} 
+              <a href="#"
+                onClick={() => {this._handleFilter(title)}}
                 onKeyPress={() => {this._handleFilter(title)}}>
                 {title}
               </a>
@@ -57,17 +57,18 @@ export default class ItemsList extends Component {
           <Item
             todo={i}
             index={j}
-            moveCard={this.moveCard}    
+            moveCard={this.moveCard}
+            setFocus={(id) => this.setState(Object.assign(this.state, {focusId: id}))}
             focus={this.state.focusId == i.id}
             onFocusOut={() => this.setState(Object.assign(this.state, {focusId: null}))}
-            onFocus={() => this.setState(Object.assign(this.state, {focusId: i.id}))}            
+            onFocus={() => this.setState(Object.assign(this.state, {focusId: i.id}))}
             onChange={() => this.props.checkTodo(j)}>
           {i.id == this.state.editId ?
             <ItemAdd
               value={i.text}
               onUpdate={this._handleUpdateItem.bind(this, i.id)}
               onFocusOut={this._handleCancelUpdate.bind(this, i.id)} />
-            : <label onClick={this._handleItemFocus.bind(this, i.id)}>{i.text}</label>
+            : <label onClick={this._handleItemFocus.bind(this, i.id)}>{i.text} - {i.id} - {j}</label>
           }
           </Item>
         </div>
@@ -75,7 +76,7 @@ export default class ItemsList extends Component {
     </div>
   }
 
-  _filter(items) {      
+  _filter(items) {
     return items.filter((i) => {
       switch(this.state.filter) {
         case 'active':
@@ -85,7 +86,7 @@ export default class ItemsList extends Component {
         default:
           return true;
       }
-    });    
+    });
   }
 
   _handleFilter(filter) {
@@ -97,10 +98,10 @@ export default class ItemsList extends Component {
   }
 
   _handleCancelUpdate(id) {
-    this.setState(Object.assign(this.state, {editId: null}));    
+    this.setState(Object.assign(this.state, {editId: null}));
   }
 
-  _handleUpdateItem(id, text) {    
+  _handleUpdateItem(id, text) {
     this.props.updateTodo(this.state.editId, text);
     this.setState(Object.assign(this.state, {editId: null, focusId: this.state.editId}));
   }
@@ -117,7 +118,7 @@ export default class ItemsList extends Component {
   }
 
   _keyPressHandler(e) {
-    const key = e.key;    
+    const key = e.key;
 
     if (key == 'ArrowUp' || key == 'ArrowDown') {
 
@@ -128,13 +129,13 @@ export default class ItemsList extends Component {
       if (key == 'ArrowUp') focusIndex--;
       if (key == 'ArrowDown') focusIndex++;
 
-      if (focusIndex >= 0 && focusIndex < this.props.items.length) { 
+      if (focusIndex >= 0 && focusIndex < this.props.items.length) {
         this.setState(Object.assign(this.state, {focusId: this._findIdByIndex(focusIndex)}));
       }
-    } else if (key == 'Enter') {                  
-      this.setState(Object.assign(this.state, {editId: this.state.focusId}));        
+    } else if (key == 'Enter') {
+      this.setState(Object.assign(this.state, {editId: this.state.focusId}));
       e.stopPropagation();
-      e.preventDefault();      
+      e.preventDefault();
     }
   }
 
