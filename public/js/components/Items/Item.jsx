@@ -7,8 +7,13 @@ const cardSource = {
   beginDrag(props) {
     return {
       id: props.todo.id,
-      index: props.index
+      index: props.index,
+      hoverIndex: props.index
     };
+  },
+  endDrag(props, monitor) {
+    //console.log('end ' + props.todo.id + ' - ' + monitor.getItem().id);
+    console.log(monitor.getItem())
   }
 };
 
@@ -40,6 +45,7 @@ const cardTarget = {
 
     if (hoverClientY > hoverMiddleY *.25 && hoverClientY < hoverMiddleY * 1.25) {
       props.setFocus(props.todo.id);
+      monitor.getItem().hoverIndex = hoverIndex;
       return;
     }
 
