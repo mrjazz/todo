@@ -53,7 +53,6 @@ export default class ItemsList extends Component {
           </li>
         )}
       </ul>
-      <b>{this.state.focusId}</b>
       <div className="all-items">
         {this._getItems(this._filter(this.props.items))}
       </div>
@@ -61,7 +60,6 @@ export default class ItemsList extends Component {
   }
 
   _getItems(items) {
-    //setFocus={(id) => this.setState(Object.assign(this.state, {focusId: id}))}
     return items.map(
       (i, j) => <div key={j} className="items">
         <Item
@@ -70,6 +68,7 @@ export default class ItemsList extends Component {
           index={j}
           moveCard={this.moveCard}
           focus={this.state.focusId == i.id}
+          setFocus={(id) => this.setState(Object.assign(this.state, {focusId: id}))}
           onFocusOut={() => this.setState(Object.assign(this.state, {focusId: null}))}
           onFocus={() => this.setState(Object.assign(this.state, {focusId: i.id}))}
           onChange={() => this.props.checkTodo(i.id)}>

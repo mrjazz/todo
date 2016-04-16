@@ -82,7 +82,7 @@ export default class Item extends Component {
     connectDragSource: PropTypes.func.isRequired,
     connectDropTarget: PropTypes.func.isRequired,
     moveCard: PropTypes.func.isRequired,
-    //setFocus: PropTypes.func.isRequired
+    setFocus: PropTypes.func.isRequired
   };
 
   _focus(elm) {
