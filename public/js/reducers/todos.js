@@ -1,13 +1,21 @@
 import * as Types from '../constants/ActionTypes'
 import Todo from '../models/todo'
+import {mapr} from '../lib/CollectionUtils.js';
 
 
 const initialState = [
-  new Todo(0, 'Learn React'), new Todo(1, 'Learn Redux', true), new Todo(2, 'Learn HTML', true), new Todo(3, 'Learn CSS')
+  new Todo(0, 'Learn React'),
+  new Todo(1, 'Learn Redux', true, [
+    new Todo(4, 'Read manual'),
+    new Todo(5, 'Write the code'),
+  ]),
+  new Todo(2, 'Learn HTML', true),
+  new Todo(3, 'Learn CSS')
 ];
 
 export function todos(state = initialState, action) {
   console.info(action);
+
   switch (action.type) {
     case Types.ADD_TODO:
       return [
@@ -19,9 +27,9 @@ export function todos(state = initialState, action) {
       ];
 
     case Types.CHECK_TODO:
-      const newState = state.map((todo, id) => {
-        // console.log(id, action.id, todo);
-        return id === action.id ?
+      console.log(action);
+      const newState = mapr(state, (todo) => {
+        return todo.id === action.id ?
             Object.assign({}, todo, { done: !todo.done }) :
             todo
       });
@@ -40,8 +48,8 @@ export function todos(state = initialState, action) {
         ...state.slice(+action.index + 1)
       ];
 
-    case Types.SWAP_TODOS:    
-      return state.map((todo, index) => {        
+    case Types.SWAP_TODOS:
+      return state.map((todo, index) => {
         if (action.id1 == index) {
           return Object.assign({}, state[action.id2]);
         } else if (action.id2 == index) {

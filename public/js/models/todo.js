@@ -1,12 +1,13 @@
 export default class Todo {
   /**
-   * @param {number} id
-   * @param {string} title
-   * @param {boolean} state of complete
+   * @param {Number} id
+   * @param {String} title
+   * @param {Boolean} state of complete
    */
-  constructor(id, text = '', done = false) {
+  constructor(id, text = '', done = false, children = []) {
     this.id = id;
     this.text = text;
     this.done = done;
+    this.children = children;
   }
 }

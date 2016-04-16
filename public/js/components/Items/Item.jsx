@@ -82,11 +82,10 @@ export default class Item extends Component {
     connectDragSource: PropTypes.func.isRequired,
     connectDropTarget: PropTypes.func.isRequired,
     moveCard: PropTypes.func.isRequired,
-    setFocus: PropTypes.func.isRequired
+    //setFocus: PropTypes.func.isRequired
   };
 
   _focus(elm) {
-  	//console.info(elm, this.props.focus);
     if (elm != null && this.props.focus) {
     	elm.focus();
     }
@@ -98,7 +97,7 @@ export default class Item extends Component {
 
     return connectDragSource(
       connectDropTarget(
-        <div style={{opacity}}>
+        <div style={{opacity}} className={this.props.className}>
           <input
             type="checkbox"
             name="checkbox"

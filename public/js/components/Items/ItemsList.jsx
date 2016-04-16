@@ -8,6 +8,8 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import ItemAdd from './ItemAdd.jsx';
 import Item from './Item.jsx';
 
+import {searchr, searchrIndex, searchrByIndex, lengthr} from '../../lib/CollectionUtils.js';
+
 
 export default class ItemsList extends Component {
   constructor() {
@@ -36,7 +38,6 @@ export default class ItemsList extends Component {
   }
 
   render() {
-    // <p>{this.state.editId} - {this.state.focusId}</p>
     return <div className="todos" ref="self" onKeyDown={this._keyPressHandler.bind(this)}>
       <ul className="filters">
         {['all', 'completed', 'active'].map((title, key) =>
@@ -52,28 +53,37 @@ export default class ItemsList extends Component {
           </li>
         )}
       </ul>
-      {this._filter(this.props.items).map(
-        (i, j) => <div key={j} className={this._stylesForItem(i)}>
-          <Item
-            todo={i}
-            index={j}
-            moveCard={this.moveCard}
-            setFocus={(id) => this.setState(Object.assign(this.state, {focusId: id}))}
-            focus={this.state.focusId == i.id}
-            onFocusOut={() => this.setState(Object.assign(this.state, {focusId: null}))}
-            onFocus={() => this.setState(Object.assign(this.state, {focusId: i.id}))}
-            onChange={() => this.props.checkTodo(j)}>
-          {i.id == this.state.editId ?
-            <ItemAdd
-              value={i.text}
-              onUpdate={this._handleUpdateItem.bind(this, i.id)}
-              onFocusOut={this._handleCancelUpdate.bind(this, i.id)} />
-            : <label onClick={this._handleItemFocus.bind(this, i.id)}>{i.text} - {i.id} - {j}</label>
-          }
-          </Item>
-        </div>
-      )}
+      <b>{this.state.focusId}</b>
+      <div className="all-items">
+        {this._getItems(this._filter(this.props.items))}
+      </div>
     </div>
+  }
+
+  _getItems(items) {
+    //setFocus={(id) => this.setState(Object.assign(this.state, {focusId: id}))}
+    return items.map(
+      (i, j) => <div key={j} className="items">
+        <Item
+          className={this._stylesForItem(i)}
+          todo={i}
+          index={j}
+          moveCard={this.moveCard}
+          focus={this.state.focusId == i.id}
+          onFocusOut={() => this.setState(Object.assign(this.state, {focusId: null}))}
+          onFocus={() => this.setState(Object.assign(this.state, {focusId: i.id}))}
+          onChange={() => this.props.checkTodo(i.id)}>
+        {i.id == this.state.editId ?
+          <ItemAdd
+            value={i.text}
+            onUpdate={this._handleUpdateItem.bind(this, i.id)}
+            onFocusOut={this._handleCancelUpdate.bind(this, i.id)} />
+          : <label onClick={this._handleItemFocus.bind(this, i.id)}>{i.text} - {i.id} - {j}</label>
+        }
+        </Item>
+        {i.children != undefined && i.children.length > 0 ? this._getItems(i.children) : '' }
+      </div>
+    );
   }
 
   _filter(items) {
@@ -102,26 +112,23 @@ export default class ItemsList extends Component {
   }
 
   _handleUpdateItem(id, text) {
+    console.log(this.state.editId);
     this.props.updateTodo(this.state.editId, text);
     this.setState(Object.assign(this.state, {editId: null, focusId: this.state.editId}));
   }
 
   _findIndexById(id) {
-    for(var i in this.props.items) {
-      if (this.props.items[i].id == id) return i;
-    }
-    return -1;
+    return searchrIndex(this.props.items, function (i) { return i.id == id});
   }
 
   _findIdByIndex(index) {
-    return this.props.items[index].id;
+    return searchrByIndex(this.props.items, index).id;
   }
 
   _keyPressHandler(e) {
     const key = e.key;
 
     if (key == 'ArrowUp' || key == 'ArrowDown') {
-
       // arrows handling
       if (this.state.focusId == null) return;
       let focusIndex = this._findIndexById(this.state.focusId);
@@ -129,7 +136,7 @@ export default class ItemsList extends Component {
       if (key == 'ArrowUp') focusIndex--;
       if (key == 'ArrowDown') focusIndex++;
 
-      if (focusIndex >= 0 && focusIndex < this.props.items.length) {
+      if (focusIndex >= 0 && focusIndex < lengthr(this.props.items)) {
         this.setState(Object.assign(this.state, {focusId: this._findIdByIndex(focusIndex)}));
       }
     } else if (key == 'Enter') {
@@ -140,7 +147,7 @@ export default class ItemsList extends Component {
   }
 
   _stylesForItem(i) {
-    let styles = [];
+    let styles = ['item'];
     if (i.done) styles.push('complete');
     if (i.id == this.state.focusId) styles.push('selected');
     return styles.join(' ');

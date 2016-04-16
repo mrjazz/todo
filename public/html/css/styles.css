@@ -1,19 +1,19 @@
 
 #app {
     font-family: Tahoma, sans-serif;
-    font-size: 1.1em;    
+    font-size: 1.1em;
 }
 
 
 
 .todo-view {
-    float: left;        
+    float: left;
     width: 500px;
 }
 
-.todos div {
-    padding: 3px 0px 3px;        
-}
+/*.todos div {
+    padding: 3px 0px 3px;
+}*/
 
 .todos .complete {
     text-decoration: line-through;
@@ -28,16 +28,29 @@
 }
 
 .todos ul.filters {
-    list-style-type: none;    
+    list-style-type: none;
     padding: 0px;
 }
 
 .todos .filters li {
 	display: inline-block;
 	padding: 0px 5px;
-	text-transform: capitalize;	
+	text-transform: capitalize;
 }
 
-.howto {    
+.howto {
     font-size: 0.8em;
+    display: none;
+}
+
+.todos .all-items {
+  margin-left: -20px;
+}
+
+.todos .all-items .items {
+  padding-left: 20px;
+}
+
+.item {
+  padding: 5px;
 }
