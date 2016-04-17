@@ -9,6 +9,23 @@ export function mapr(items, callback, childField = 'children') {
   return items.map(process);
 }
 
+export function filterr(items, condition, childField = 'children') {
+  function process(result, i) {
+
+    i = Object.assign({}, i); // clone
+
+    if (!condition(i)) return result;
+
+    if (childField != undefined && i[childField]) {
+      i[childField] = i[childField].reduce(process, []);
+    }
+
+    result.push(i);
+    return result;
+  }
+  return items.reduce(process, [])
+}
+
 export function callr(items, callback, childField = 'children') {
   function process(i) {
     callback(i);

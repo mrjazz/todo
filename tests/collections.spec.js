@@ -1,6 +1,6 @@
 import 'should';
 
-import {mapr, callr, searchr, searchrIndex, searchrByIndex, lengthr} from '../public/js/lib/CollectionUtils.js';
+import {mapr, callr, filterr, searchr, searchrIndex, searchrByIndex, lengthr} from '../public/js/lib/CollectionUtils.js';
 
 describe('collections test', function() {
 
@@ -28,6 +28,14 @@ describe('collections test', function() {
       result[1].label.should.equal('b');
       result[0].children[1].label.should.equal('a2');
 
+    });
+
+    it('filterr', () => {
+      const result = filterr(arr, function (o) {
+        return o.label != 'a2';
+      });
+
+      result[0].children.length.should.equal(1);
     });
 
     it('searchr', () => {

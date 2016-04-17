@@ -8,7 +8,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 import ItemAdd from './ItemAdd.jsx';
 import Item from './Item.jsx';
 
-import {searchr, searchrIndex, searchrByIndex, lengthr} from '../../lib/CollectionUtils.js';
+import {searchr, filterr, searchrIndex, searchrByIndex, lengthr} from '../../lib/CollectionUtils.js';
 
 
 export default class ItemsList extends Component {
@@ -86,7 +86,7 @@ export default class ItemsList extends Component {
   }
 
   _filter(items) {
-    return items.filter((i) => {
+    return filterr(items, (i) => {
       switch(this.state.filter) {
         case 'active':
           return !i.done;
