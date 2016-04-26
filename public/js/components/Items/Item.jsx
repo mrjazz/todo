@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from 'react';
 import { findDOMNode } from 'react-dom';
+import React, { Component, PropTypes } from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
 
 
@@ -14,7 +14,7 @@ const cardSource = {
   },
   endDrag(props, monitor) {
     //console.log('end ' + props.todo.id + ' - ' + monitor.getItem().id);
-    console.log(monitor.getItem())
+    console.log(monitor.getItem());
   }
 };
 
@@ -44,7 +44,7 @@ const cardTarget = {
     // When dragging downwards, only move when the cursor is below 50%
     // When dragging upwards, only move when the cursor is above 50%
 
-    if (hoverClientY > hoverMiddleY *.25 && hoverClientY < hoverMiddleY * 1.25) {
+    if (hoverClientY > hoverMiddleY * 0.25 && hoverClientY < hoverMiddleY * 1.25) {
       props.setFocus(props.todo.id);
       monitor.getItem().hoverIndex = hoverIndex;
       monitor.getItem().hoverId = props.todo.id;
@@ -52,7 +52,7 @@ const cardTarget = {
     }
 
     // Dragging downwards
-    if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY *.25) {
+    if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY * 0.25) {
       return;
     }
 
@@ -88,8 +88,8 @@ export default class Item extends Component {
   };
 
   _focus(elm) {
-    if (elm != null && this.props.focus) {
-    	elm.focus();
+    if (elm !== null && this.props.focus) {
+      elm.focus();
     }
   }
 
@@ -107,7 +107,7 @@ export default class Item extends Component {
             checked={todo.done}
             onBlur={this.props.onFocusOut}
             onFocus={this.props.onFocus}
-            onChange={this.props.onChange} />
+            onChange={this.props.onChange}/>
           {this.props.children}
         </div>
       )

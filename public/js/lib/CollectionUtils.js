@@ -1,7 +1,7 @@
 export function mapr(items, callback, childField = 'children') {
   function process(i) {
     const result = callback(i);
-    if (childField != undefined && result != undefined && result[childField]) {
+    if (childField !== undefined && result !== undefined && result[childField]) {
       result[childField] = result[childField].map(process);
     }
     return result;
@@ -16,20 +16,20 @@ export function filterr(items, condition, childField = 'children') {
 
     if (!condition(i)) return result;
 
-    if (childField != undefined && i[childField]) {
+    if (childField !== undefined && i[childField]) {
       i[childField] = i[childField].reduce(process, []);
     }
 
     result.push(i);
     return result;
   }
-  return items.reduce(process, [])
+  return items.reduce(process, []);
 }
 
 export function callr(items, callback, childField = 'children') {
   function process(i) {
     callback(i);
-    if (childField != undefined && i[childField]) {
+    if (childField !== undefined && i[childField]) {
       i[childField].map(process);
     }
   }
@@ -57,7 +57,7 @@ export function searchrIndex(items, check, childField = 'children') {
     searchr(items, (i) => {
       index++;
       return check(i);
-    }) !== false
+    }, childField) !== false
   ) {
     return index;
   } else {
@@ -67,11 +67,11 @@ export function searchrIndex(items, check, childField = 'children') {
 
 export function searchrByIndex(items, index, childField = 'children') {
   let idx = 0;
-  return searchr(items, (i) => idx++ == index);
+  return searchr(items, () => idx++ == index, childField);
 }
 
 export function lengthr(items, childField = 'children') {
   let idx = 0;
-  callr(items, () => idx++);
+  callr(items, () => idx++, childField);
   return idx;
 }

@@ -1,6 +1,23 @@
 {
-  "node": true,
+  // variables. e.g. 'browser' assumes a 'window' global is available, etc.
   "browser": true,
+  "browserify": true,
+  "devel": true,
+
+  // Var names must be camelCase or UPPER_CASE
+  "camelcase": true,
+  // Loops and conditionals must have curly brackets
+  "curly": false,
+  // Allow ES6 features
   "esnext": true,
-  "newcap": false
+  // 4 space indent (does not create warnings)
+  "indent": 2,
+  // Constructor functions must be capitalised
+  "newcap": true,
+  // Prevent use of undefined variables
+  "undef": true,
+  // Warn about unused variables
+  "unused": true,
+
+  "node": true
 }
