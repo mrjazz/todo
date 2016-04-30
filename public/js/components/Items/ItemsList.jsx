@@ -16,13 +16,15 @@ export default class ItemsList extends Component {
     super();
     this.state = {cards: [], focusId: null, editId: null, filter: 'all'};
     this.moveCard = this.moveCard.bind(this);
+    this.dropItem = this.dropItem.bind(this);
   }
 
   static propTypes = {
     items      : React.PropTypes.array.isRequired,
     checkTodo  : PropTypes.func.isRequired,
     swapTodos  : PropTypes.func.isRequired,
-    updateTodo : PropTypes.func.isRequired
+    updateTodo : PropTypes.func.isRequired,
+    makeChildOf: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -35,6 +37,16 @@ export default class ItemsList extends Component {
     const cards = this.props.items;
     const dragCard = cards[dragIndex];
     this.props.swapTodos(dragIndex, hoverIndex);
+  }
+
+  dropItem(id) {
+    // const result = searchr(this.props.items, (i) => i.id == id, 'children');
+    // console.log('drop', id, result);
+    if (this.state.focusId !== null) {
+      console.log(`drop ${id} inside ${this.state.focusId}`);
+      this.props.makeChildOf(id, this.state.focusId);
+      console.log(this.props.items);
+    }
   }
 
   render() {
@@ -67,6 +79,7 @@ export default class ItemsList extends Component {
           todo={i}
           index={j}
           moveCard={this.moveCard}
+          dropItem={this.dropItem}
           focus={this.state.focusId == i.id}
           setFocus={(id) => this.setState(Object.assign(this.state, {focusId: id}))}
           onFocusOut={() => this.setState(Object.assign(this.state, {focusId: null}))}
@@ -80,7 +93,7 @@ export default class ItemsList extends Component {
           : <label onClick={this._handleItemFocus.bind(this, i.id)}>{i.text} - {i.id} - {j}</label>
         }
         </Item>
-        {i.children != undefined && i.children.length > 0 ? this._getItems(i.children) : '' }
+        {i.children != undefined && i.children.length > 0 ? this._getItems(i.children) : ''}
       </div>
     );
   }

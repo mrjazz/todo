@@ -10,4 +10,8 @@ export default class Todo {
     this.done = done;
     this.children = children;
   }
+
+  add(todo) {
+    this.children.push(todo);
+  }
 }

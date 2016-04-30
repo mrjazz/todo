@@ -1,6 +1,6 @@
-import * as Types from '../constants/ActionTypes'
-import Todo from '../models/todo'
-import {mapr} from '../lib/CollectionUtils.js';
+import * as Types from '../constants/ActionTypes';
+import Todo from '../models/todo';
+import {mapr, filterr} from '../lib/CollectionUtils.js';
 
 
 const initialState = [
@@ -14,7 +14,7 @@ const initialState = [
 ];
 
 export function todos(state = initialState, action) {
-  console.info(action);
+  //console.info(action);
 
   switch (action.type) {
     case Types.ADD_TODO:
@@ -27,18 +27,16 @@ export function todos(state = initialState, action) {
       ];
 
     case Types.CHECK_TODO:
-      console.log(action);
-      const newState = mapr(state, (todo) => {
+      return mapr(state, (todo) => {
         return todo.id === action.id ?
-            Object.assign({}, todo, { done: !todo.done }) :
-            todo
+            Object.assign(Object.create(todo), todo, { done: !todo.done }) :
+            todo;
       });
-      return newState;
 
     case Types.UPDATE_TODO:
       return state.map(todo =>
         todo.id === action.id ?
-          Object.assign({}, todo, { text: action.text }) :
+          Object.assign(Object.create(todo), todo, { text: action.text }) :
           todo
       );
 
@@ -51,12 +49,36 @@ export function todos(state = initialState, action) {
     case Types.SWAP_TODOS:
       return state.map((todo, index) => {
         if (action.id1 == index) {
-          return Object.assign({}, state[action.id2]);
+          return Object.assign(Object.create(state[action.id2]), state[action.id2]);
         } else if (action.id2 == index) {
-          return Object.assign({}, state[action.id1]);
+          return Object.assign(Object.create(state[action.id1]), state[action.id1]);
         } else {
-          return Object.assign({}, todo);
+          return Object.assign(Object.create(todo), todo);
         }
+      });
+
+    case Types.MAKE_CHILD_OF_TODO:
+      let item;
+      const filtered = filterr(state, (todo) => {
+        if (todo.id === action.id) {
+          item = Object.assign(Object.create(todo), todo);
+          return false;
+        } else {
+          return true;
+        }
+      });
+
+      return mapr(filtered, (todo) => {
+        if (item && todo.id === action.parentId) {
+          todo.add(item);
+        }
+        return todo;
+      });
+
+
+    case Types.REMOVE_TODO:
+      return filterr(state, (todo) => {
+        return todo.id !== action.id;
       });
 
     default:

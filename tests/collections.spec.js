@@ -39,12 +39,12 @@ describe('collections test', function() {
     });
 
     it('searchr', () => {
-      searchr(arr, function (i) { return i.label == 'a2'; }, 'children').label.should.equal('a2');
+      searchr(arr, (i) => i.label == 'a2', 'children').label.should.equal('a2');
     });
 
     it('searchrIndex', () => {
-      searchrIndex(arr, function (i) { return i.label == 'a2'; }, 'children').should.equal(2);
-      searchrIndex(arr, function (i) { return i.label == 'a'; }, 'children').should.equal(0);
+      searchrIndex(arr, (i) => i.label == 'a2', 'children').should.equal(2);
+      searchrIndex(arr, (i) => i.label == 'a', 'children').should.equal(0);
     });
 
     it('searchrByIndex', () => {

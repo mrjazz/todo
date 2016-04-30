@@ -11,8 +11,7 @@ export function mapr(items, callback, childField = 'children') {
 
 export function filterr(items, condition, childField = 'children') {
   function process(result, i) {
-
-    i = Object.assign({}, i); // clone
+    i = Object.assign(Object.create(i), i); // clone
 
     if (!condition(i)) return result;
 

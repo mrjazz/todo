@@ -19,6 +19,7 @@ export default class ItemsView extends Component {
                   items={todos}
                   checkTodo={actions.checkTodo}
                   swapTodos={actions.swapTodos}
+                  makeChildOf={actions.makeChildOf}
                   updateTodo={actions.updateTodo}/>
             </div>)
   }
