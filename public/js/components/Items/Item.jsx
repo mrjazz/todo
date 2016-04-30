@@ -12,9 +12,11 @@ const cardSource = {
       hoverId: props.todo.id
     };
   },
+
   endDrag(props, monitor) {
     //console.log('end ' + props.todo.id + ' - ' + monitor.getItem().id);
     console.log(monitor.getItem());
+    props.dropItem(monitor.getItem().id);
   }
 };
 
@@ -23,10 +25,14 @@ const cardTarget = {
     const dragIndex = monitor.getItem().index;
     const hoverIndex = props.index;
 
+    //console.log(component.props.todo.text);
+
     // Don't replace items with themselves
     if (dragIndex === hoverIndex) {
+      //console.log(dragIndex + " = " + hoverIndex)
       return;
     }
+
 
     // Determine rectangle on screen
     const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
@@ -43,6 +49,8 @@ const cardTarget = {
     // Only perform the move when the mouse has crossed half of the items height
     // When dragging downwards, only move when the cursor is below 50%
     // When dragging upwards, only move when the cursor is above 50%
+
+    //console.log(hoverMiddleY * 0.25, hoverMiddleY, hoverMiddleY * 1.25);
 
     if (hoverClientY > hoverMiddleY * 0.25 && hoverClientY < hoverMiddleY * 1.25) {
       props.setFocus(props.todo.id);
@@ -63,6 +71,8 @@ const cardTarget = {
 
     // Reset focus by reorder
     props.setFocus(null);
+
+    console.log("moveCard(" + dragIndex + ", " + hoverIndex + ")");
 
     // Time to actually perform the action
     props.moveCard(dragIndex, hoverIndex);
@@ -95,11 +105,14 @@ export default class Item extends Component {
 
   render() {
     const { todo, isDragging, draggingItem, connectDragSource, connectDropTarget } = this.props;
-    const opacity = draggingItem !== null && draggingItem.id == todo.id ? 0.4 : 1;
+    const style = {
+      opacity: draggingItem !== null && draggingItem.id == todo.id ? 0.4 : 1,
+      border: this.props.highlight ? '1px solid red' : 'none'
+    };
 
     return connectDragSource(
       connectDropTarget(
-        <div style={{opacity}} className={this.props.className}>
+        <div style={{style}} className={this.props.className}>
           <input
             type="checkbox"
             name="checkbox"
