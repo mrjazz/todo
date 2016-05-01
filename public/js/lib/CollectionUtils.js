@@ -1,6 +1,13 @@
+/**
+ * Map for tree structure
+ * @param items
+ * @param callback
+ * @param childField
+ * @returns {Array|*}
+ */
 export function mapr(items, callback, childField = 'children') {
   function process(i) {
-    const result = callback(i);
+    const result = callback(clone(i));
     if (childField !== undefined && result !== undefined && result[childField]) {
       result[childField] = result[childField].map(process);
     }
@@ -9,9 +16,16 @@ export function mapr(items, callback, childField = 'children') {
   return items.map(process);
 }
 
+/**
+ * Filter tree by condition
+ * @param items
+ * @param condition
+ * @param childField
+ * @returns {*}
+ */
 export function filterr(items, condition, childField = 'children') {
   function process(result, i) {
-    i = Object.assign(Object.create(i), i); // clone
+    i = clone(i); // clone
 
     if (!condition(i)) return result;
 
@@ -25,6 +39,13 @@ export function filterr(items, condition, childField = 'children') {
   return items.reduce(process, []);
 }
 
+/**
+ * Recursive call functiona for elements of tree
+ * @param items
+ * @param callback
+ * @param childField
+ * @returns {Array|*}
+ */
 export function callr(items, callback, childField = 'children') {
   function process(i) {
     callback(i);
@@ -33,8 +54,20 @@ export function callr(items, callback, childField = 'children') {
     }
   }
   return items.map(process);
+  // TODO : Figure out why this shorter version doesn't work
+  // return mapr(items, (i) => {
+  //   callback(i);
+  //   return true;
+  // }, childField);
 }
 
+/**
+ * Search element by condition in tree
+ * @param items
+ * @param check
+ * @param childField
+ * @returns {*}
+ */
 export function searchr(items, check, childField = 'children') {
   function process (arr) {
     for (let i in arr) {
@@ -50,6 +83,13 @@ export function searchr(items, check, childField = 'children') {
   return process(items);
 }
 
+/**
+ * Search index by condition in tree
+ * @param items
+ * @param check
+ * @param childField
+ * @returns {number}
+ */
 export function searchrIndex(items, check, childField = 'children') {
   let index = -1;
   if (
@@ -64,13 +104,68 @@ export function searchrIndex(items, check, childField = 'children') {
   }
 }
 
+/**
+ * Search by index in tree
+ * @param items
+ * @param index
+ * @param childField
+ */
 export function searchrByIndex(items, index, childField = 'children') {
   let idx = 0;
   return searchr(items, () => idx++ == index, childField);
 }
 
+/**
+ * Amount of all elements in the tree
+ * @param items
+ * @param childField
+ * @returns {number}
+ */
 export function lengthr(items, childField = 'children') {
   let idx = 0;
   callr(items, () => idx++, childField);
   return idx;
+}
+
+/**
+ * Insert element in recursive collection
+ * @param items Array
+ * @param item Object
+ * @param condition function(currentItem)
+ */
+export function insertrBefore(items, item, condition, childField = 'children') {
+  return insertr(items, item, condition, childField, true);
+}
+
+/**
+ * Insert element in recursive collection
+ * @param items Array
+ * @param item Object
+ * @param condition function(currentItem)
+ */
+export function insertrAfter(items, item, condition, childField = 'children') {
+  return insertr(items, item, condition, childField, false);
+}
+
+// private functions
+
+function insertr(items, item, condition, childField = 'children', before = true) {
+  function process(items) {
+    const result = [];
+    items.forEach((i) => {
+      const o = clone(i);
+      if (before && condition(o)) result.push(item);
+      if (childField !== undefined && i[childField]) {
+        o[childField] = process(o[childField]);
+      }
+      result.push(o);
+      if (!before && condition(o)) result.push(item);
+    });
+    return result;
+  }
+  return process(items);
+}
+
+function clone(o) {
+  return Object.assign(Object.create(o), o); // clone
 }

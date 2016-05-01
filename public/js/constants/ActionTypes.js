@@ -3,5 +3,7 @@ export const DELETE_TODO        = 'DELETE_TODO';
 export const CHECK_TODO         = 'CHECK_TODO';
 export const UPDATE_TODO        = 'UPDATE_TODO';
 export const SWAP_TODOS         = 'SWAP_TODOS';
+export const MOVE_ABOVE_TODO    = 'MOVE_ABOVE_TODO';
+export const MOVE_BELOW_TODO    = 'MOVE_BELOW_TODO';
 export const MAKE_CHILD_OF_TODO = 'MAKE_CHILD_OF_TODO';
 export const REMOVE_TODO        = 'REMOVE_TODO';

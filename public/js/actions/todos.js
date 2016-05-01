@@ -31,6 +31,22 @@ export function swapTodos(id1, id2) {
   };
 }
 
+export function moveAboveTodo(id, parentId) {
+  return {
+    type: types.MOVE_ABOVE_TODO,
+    id,
+    parentId
+  };
+}
+
+export function moveBelowTodo(id, parentId) {
+  return {
+    type: types.MOVE_BELOW_TODO,
+    id,
+    parentId
+  };
+}
+
 export function removeTodo(id) {
   return {
     type: types.REMOVE_TODO,

@@ -16,8 +16,18 @@
     text-decoration: line-through;
 }
 
-.todos .selected {
+.todos .item-selected {
     background-color: #00ff00;
+}
+
+.todos .item-above {
+  border-top: 3px solid #00ff00;
+  padding-top: 2px;
+}
+
+.todos .item-below {
+  padding-bottom: 2px;
+  border-bottom: 3px solid #00ff00;
 }
 
 .todos .filters li.active {

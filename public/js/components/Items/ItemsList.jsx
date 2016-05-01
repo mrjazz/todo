@@ -1,12 +1,12 @@
 import React, {Component, PropTypes} from 'react';
 
-import update from 'react/lib/update';
-
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
 import ItemAdd from './ItemAdd.jsx';
 import Item from './Item.jsx';
+
+import * as HighlightType from '../../constants/HighlightTypes';
 
 import {searchr, filterr, searchrIndex, searchrByIndex, lengthr} from '../../lib/CollectionUtils.js';
 
@@ -14,9 +14,10 @@ import {searchr, filterr, searchrIndex, searchrByIndex, lengthr} from '../../lib
 export default class ItemsList extends Component {
   constructor() {
     super();
-    this.state = {cards: [], focusId: null, editId: null, filter: 'all'};
-    this.moveCard = this.moveCard.bind(this);
-    this.dropItem = this.dropItem.bind(this);
+    this.state = {cards: [], focusId: null, editId: null, filter: 'all', highlightStyle: HighlightType.NONE};
+    //this.moveCard      = this.moveCard.bind(this);
+    this.dropItem      = this.dropItem.bind(this);
+    this.highlightItem = this.highlightItem.bind(this);
   }
 
   static propTypes = {
@@ -25,7 +26,7 @@ export default class ItemsList extends Component {
     swapTodos  : PropTypes.func.isRequired,
     updateTodo : PropTypes.func.isRequired,
     makeChildOf: PropTypes.func.isRequired
-  }
+  };
 
   componentWillMount() {
     this.setState({
@@ -33,19 +34,21 @@ export default class ItemsList extends Component {
     });
   }
 
-  moveCard(dragIndex, hoverIndex) {
-    const cards = this.props.items;
-    const dragCard = cards[dragIndex];
-    this.props.swapTodos(dragIndex, hoverIndex);
-  }
-
   dropItem(id) {
-    // const result = searchr(this.props.items, (i) => i.id == id, 'children');
-    // console.log('drop', id, result);
-    if (this.state.focusId !== null) {
-      console.log(`drop ${id} inside ${this.state.focusId}`);
-      this.props.makeChildOf(id, this.state.focusId);
-      console.log(this.props.items);
+    if (this.state.focusId !== null && this.state.focusId !== id) {
+      console.log(`drop ${id} ${this.state.highlightStyle} ${this.state.focusId}`);
+      switch (this.state.highlightStyle) {
+        case HighlightType.CURRENT:
+          this.props.makeChildOf(id, this.state.focusId);
+          break;
+        case HighlightType.ABOVE:
+        case HighlightType.BELOW:
+          //this.props.swapTodos(dragId, hoverId);
+          break;
+      }
+
+      // console.log(this.props.items);
+      this.highlightItem(id, HighlightType.CURRENT);
     }
   }
 
@@ -71,6 +74,12 @@ export default class ItemsList extends Component {
     </div>
   }
 
+  highlightItem(focusId, type) {
+    // small optimization
+    if (focusId === this.state.id && type == this.state.highlightStyle) return;
+    this.setState(Object.assign(this.state, {highlightStyle: type, focusId}));
+  }
+
   _getItems(items) {
     return items.map(
       (i, j) => <div key={j} className="items">
@@ -81,9 +90,10 @@ export default class ItemsList extends Component {
           moveCard={this.moveCard}
           dropItem={this.dropItem}
           focus={this.state.focusId == i.id}
-          setFocus={(id) => this.setState(Object.assign(this.state, {focusId: id}))}
-          onFocusOut={() => this.setState(Object.assign(this.state, {focusId: null}))}
-          onFocus={() => this.setState(Object.assign(this.state, {focusId: i.id}))}
+          highlight={this.highlightItem}
+          //setFocus={(id) => this.setState(Object.assign(this.state, {focusId: id}))}
+          onFocusOut={() => this._handleItemFocus(null)}
+          onFocus={() => this._handleItemFocus(i.id)}
           onChange={() => this.props.checkTodo(i.id)}>
         {i.id == this.state.editId ?
           <ItemAdd
@@ -161,7 +171,18 @@ export default class ItemsList extends Component {
   _stylesForItem(i) {
     let styles = ['item'];
     if (i.done) styles.push('complete');
-    if (i.id == this.state.focusId) styles.push('selected');
+    if (i.id == this.state.focusId) {
+      switch (this.state.highlightStyle) {
+        case HighlightType.ABOVE:
+          styles.push('item-above');
+          break;
+        case HighlightType.BELOW:
+          styles.push('item-below');
+          break;
+        default:
+          styles.push('item-selected');
+      }
+    }
     return styles.join(' ');
   }
 }

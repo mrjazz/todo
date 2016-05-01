@@ -1,44 +1,39 @@
 import { findDOMNode } from 'react-dom';
 import React, { Component, PropTypes } from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
+import * as HighlightType from '../../constants/HighlightTypes';
 
 
 const cardSource = {
   beginDrag(props) {
     return {
       id: props.todo.id,
-      index: props.index,
-      hoverIndex: props.index,
       hoverId: props.todo.id
     };
   },
 
   endDrag(props, monitor) {
-    //console.log('end ' + props.todo.id + ' - ' + monitor.getItem().id);
-    console.log(monitor.getItem());
+    // console.log(monitor.getItem());
+    console.log('end ' + props.todo.id + ' - ' + monitor.getItem().id);
     props.dropItem(monitor.getItem().id);
   }
 };
 
 const cardTarget = {
   hover(props, monitor, component) {
-    const dragIndex = monitor.getItem().index;
-    const hoverIndex = props.index;
-
-    //console.log(component.props.todo.text);
+    const dragId = monitor.getItem().id;
+    const hoverTodo = props.todo;
 
     // Don't replace items with themselves
-    if (dragIndex === hoverIndex) {
-      //console.log(dragIndex + " = " + hoverIndex)
+    if (dragId === hoverTodo.id) {
       return;
     }
-
 
     // Determine rectangle on screen
     const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
 
     // Get vertical middle
-    const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+    const hoverHeight = (hoverBoundingRect.bottom - hoverBoundingRect.top);
 
     // Determine mouse position
     const clientOffset = monitor.getClientOffset();
@@ -46,42 +41,15 @@ const cardTarget = {
     // Get pixels to the top
     const hoverClientY = clientOffset.y - hoverBoundingRect.top;
 
-    // Only perform the move when the mouse has crossed half of the items height
-    // When dragging downwards, only move when the cursor is below 50%
-    // When dragging upwards, only move when the cursor is above 50%
+    //console.log(hoverClientY, hoverHeight);
 
-    //console.log(hoverMiddleY * 0.25, hoverMiddleY, hoverMiddleY * 1.25);
-
-    if (hoverClientY > hoverMiddleY * 0.25 && hoverClientY < hoverMiddleY * 1.25) {
-      props.setFocus(props.todo.id);
-      monitor.getItem().hoverIndex = hoverIndex;
-      monitor.getItem().hoverId = props.todo.id;
-      return;
+    if (hoverClientY < hoverHeight * 0.35) {
+      props.highlight(hoverTodo.id, HighlightType.ABOVE);
+    } else if (hoverClientY > hoverHeight * 0.65) {
+      props.highlight(hoverTodo.id, HighlightType.BELOW);
+    } else {
+      props.highlight(hoverTodo.id, HighlightType.CURRENT);
     }
-
-    // Dragging downwards
-    if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY * 0.25) {
-      return;
-    }
-
-    // Dragging upwards
-    if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY * 1.25) {
-      return;
-    }
-
-    // Reset focus by reorder
-    props.setFocus(null);
-
-    console.log("moveCard(" + dragIndex + ", " + hoverIndex + ")");
-
-    // Time to actually perform the action
-    props.moveCard(dragIndex, hoverIndex);
-
-    // Note: we're mutating the monitor item here!
-    // Generally it's better to avoid mutations,
-    // but it's good here for the sake of performance
-    // to avoid expensive index searches.
-    monitor.getItem().index = hoverIndex;
   }
 };
 
@@ -89,12 +57,11 @@ const cardTarget = {
 export default class Item extends Component {
 
   static propTypes = {
-    onFocus: PropTypes.func.isRequired,
-    onChange: PropTypes.func.isRequired,
+    highlight: PropTypes.func.isRequired,
+    onChange : PropTypes.func.isRequired,
     connectDragSource: PropTypes.func.isRequired,
-    connectDropTarget: PropTypes.func.isRequired,
-    moveCard: PropTypes.func.isRequired,
-    setFocus: PropTypes.func.isRequired
+    connectDropTarget: PropTypes.func.isRequired
+    //moveCard: PropTypes.func.isRequired
   };
 
   _focus(elm) {
@@ -105,14 +72,11 @@ export default class Item extends Component {
 
   render() {
     const { todo, isDragging, draggingItem, connectDragSource, connectDropTarget } = this.props;
-    const style = {
-      opacity: draggingItem !== null && draggingItem.id == todo.id ? 0.4 : 1,
-      border: this.props.highlight ? '1px solid red' : 'none'
-    };
+    const opacity = draggingItem !== null && draggingItem.id == todo.id ? 0.4 : 1;
 
     return connectDragSource(
       connectDropTarget(
-        <div style={{style}} className={this.props.className}>
+        <div style={{opacity}} className={this.props.className}>
           <input
             type="checkbox"
             name="checkbox"
