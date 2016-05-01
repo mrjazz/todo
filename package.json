@@ -1,6 +1,6 @@
 {
-  "name": "clearfocus",
-  "version": "1.0.0",
+  "name": "mrjazz-todo",
+  "version": "0.0.1",
   "description": "Simple todo application with keyboard control, drag&drop built with React & Redux",
   "scripts": {
     "clean": "rimraf dist",

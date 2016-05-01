@@ -36,7 +36,7 @@ export default class ItemsList extends Component {
 
   dropItem(id) {
     if (this.state.focusId !== null && this.state.focusId !== id) {
-      console.log(`drop ${id} ${this.state.highlightStyle} ${this.state.focusId}`);
+      // console.log(`drop ${id} ${this.state.highlightStyle} ${this.state.focusId}`);
       switch (this.state.highlightStyle) {
         case HighlightType.CURRENT:
           this.props.makeChildOf(id, this.state.focusId);
@@ -49,7 +49,6 @@ export default class ItemsList extends Component {
           break;
       }
 
-      // console.log(this.props.items);
       this.highlightItem(id, HighlightType.CURRENT);
     }
   }
