@@ -21,11 +21,13 @@
 }
 
 .todos .item-above {
+  background-color: #F2FFF2;
   border-top: 3px solid #00ff00;
   padding-top: 2px;
 }
 
 .todos .item-below {
+  background-color: #F2FFF2;
   padding-bottom: 2px;
   border-bottom: 3px solid #00ff00;
 }
@@ -47,7 +49,7 @@
 
 .howto {
     font-size: 0.8em;
-    display: none;
+    /*display: none;*/
 }
 
 .todos .all-items {
