@@ -1,3 +1,6 @@
-node_modules
-dist
+# project specific files and directories
 .idea
+test.bat
+
+dist
+node_modules
