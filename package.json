@@ -15,14 +15,16 @@
     "url": "git+https://github.com/mrjazz/todo.git"
   },
   "keywords": [
-    "React", "GTD", "Redux"
+    "React",
+    "GTD",
+    "Redux"
   ],
   "author": "Denis Sheremetov (http://github.com/mrjazz)",
   "license": "MIT",
   "homepage": "https://github.com/mrjazz/todo",
   "dependencies": {
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0",
+    "react": "^15.0.2",
+    "react-dom": "^15.0.2",
     "redux": "^3.0.4",
     "react-redux": "^4.0.0",
     "react-dnd": "^2.1.2",
@@ -39,19 +41,19 @@
     "babel-template": "^6.3.13",
     "babel-types": "^6.3.18",
     "jasmine-core": "^2.4.1",
-    "eslint-plugin-react": "^3.6.2",
+    "eslint-plugin-react": "^5.0.1",
     "react-hot-loader": "^1.3.0",
-    "react-addons-test-utils": "^0.14.3",
+    "react-addons-test-utils": "^15.0.2",
     "webpack": "^1.8.11",
     "webpack-dev-server": "^1.8.2",
-    "webpack-merge": "^0.7.1",
-    "extract-text-webpack-plugin": "^0.9.1",
+    "webpack-merge": "^0.12.0",
+    "extract-text-webpack-plugin": "^1.0.1",
     "babel-polyfill": "^6.3.14",
     "rimraf": "^2.5.0",
     "sass-loader": "^3.0.0",
     "style-loader": "^0.13.0",
     "mocha": "2.4.5",
-    "should": "8.2.1"
+    "should": "8.3.1"
   },
   "bugs": {
     "url": "https://github.com/mrjazz/todo/issues"
