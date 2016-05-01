@@ -14,7 +14,7 @@ const initialState = [
 ];
 
 export function todos(state = initialState, action) {
-  //console.info(action);
+  console.info(action);
 
   switch (action.type) {
     case Types.ADD_TODO:
@@ -51,18 +51,6 @@ export function todos(state = initialState, action) {
         ...state.slice(0, action.index),
         ...state.slice(+action.index + 1)
       ];
-
-    // TODO : should work with IDs instead and probaly should be removed as deprecated
-    case Types.SWAP_TODOS:
-      return state.map((todo, index) => {
-        if (action.id1 == index) {
-          return clone(state[action.id2]);
-        } else if (action.id2 == index) {
-          return clone(state[action.id1]);
-        } else {
-          return clone(todo);
-        }
-      });
 
     case Types.MAKE_CHILD_OF_TODO:
       return (

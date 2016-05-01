@@ -9,7 +9,7 @@ export default class ItemsView extends Component {
   static propTypes = {
     todos: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired
-  }
+  };
 
   render() {
     const { todos, actions } = this.props;
@@ -18,7 +18,8 @@ export default class ItemsView extends Component {
                 <ItemsList
                   items={todos}
                   checkTodo={actions.checkTodo}
-                  swapTodos={actions.swapTodos}
+                  moveBelowTodo={actions.moveBelowTodo}
+                  moveAboveTodo={actions.moveAboveTodo}
                   makeChildOf={actions.makeChildOf}
                   updateTodo={actions.updateTodo}/>
             </div>)

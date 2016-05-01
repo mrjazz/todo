@@ -15,17 +15,17 @@ export default class ItemsList extends Component {
   constructor() {
     super();
     this.state = {cards: [], focusId: null, editId: null, filter: 'all', highlightStyle: HighlightType.NONE};
-    //this.moveCard      = this.moveCard.bind(this);
     this.dropItem      = this.dropItem.bind(this);
     this.highlightItem = this.highlightItem.bind(this);
   }
 
   static propTypes = {
-    items      : React.PropTypes.array.isRequired,
-    checkTodo  : PropTypes.func.isRequired,
-    swapTodos  : PropTypes.func.isRequired,
-    updateTodo : PropTypes.func.isRequired,
-    makeChildOf: PropTypes.func.isRequired
+    items         : React.PropTypes.array.isRequired,
+    moveAboveTodo : PropTypes.func.isRequired,
+    moveBelowTodo : PropTypes.func.isRequired,
+    checkTodo     : PropTypes.func.isRequired,
+    updateTodo    : PropTypes.func.isRequired,
+    makeChildOf   : PropTypes.func.isRequired
   };
 
   componentWillMount() {
@@ -42,8 +42,10 @@ export default class ItemsList extends Component {
           this.props.makeChildOf(id, this.state.focusId);
           break;
         case HighlightType.ABOVE:
+          this.props.moveAboveTodo(id, this.state.focusId);
+          break;
         case HighlightType.BELOW:
-          //this.props.swapTodos(dragId, hoverId);
+          this.props.moveBelowTodo(id, this.state.focusId);
           break;
       }
 

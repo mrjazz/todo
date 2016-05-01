@@ -23,14 +23,6 @@ export function updateTodo(id, text) {
   };
 }
 
-export function swapTodos(id1, id2) {
-  return {
-    type: types.SWAP_TODOS,
-    id1,
-    id2
-  };
-}
-
 export function moveAboveTodo(id, parentId) {
   return {
     type: types.MOVE_ABOVE_TODO,
