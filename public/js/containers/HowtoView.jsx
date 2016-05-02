@@ -12,7 +12,7 @@ export default class HowtoView extends Component {
               <li>Tab/Shift+Tab for navigation between controls</li>
               <li>Drag&Drop for reorder</li>
             </ul>
-            <p>v0.0.1</p>
+            <p>v0.0.2</p>
           </div>
   }
 }
