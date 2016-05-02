@@ -39,6 +39,13 @@ export function moveBelowTodo(id, parentId) {
   };
 }
 
+export function flipTodo(id) {
+  return {
+    type: types.FLIP_TODO,
+    id
+  };
+}
+
 export function removeTodo(id) {
   return {
     type: types.REMOVE_TODO,

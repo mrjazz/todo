@@ -9,6 +9,7 @@ export default class Todo {
     this.text = text;
     this.done = done;
     this.children = children;
+    this.open = false;
   }
 
   add(todo) {

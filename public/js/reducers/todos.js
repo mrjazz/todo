@@ -79,6 +79,11 @@ export function todos(state = initialState, action) {
         return todo.id !== action.id;
       });
 
+    case Types.FLIP_TODO:
+      return mapr(state, (todo) => {
+        return todo.id === action.id ? Object.assign(Object.create(todo), todo, {open: !todo.open}) : todo;
+      });
+
     default:
       return state;
   }

@@ -1,6 +1,16 @@
 import 'should';
 
-import {insertrAfter, insertrBefore, mapr, callr, filterr, searchr, searchrIndex, searchrByIndex, lengthr} from '../public/js/lib/CollectionUtils.js';
+import {
+  insertrAfter,
+  insertrBefore,
+  mapr,
+  callr,
+  filterr,
+  searchr,
+  searchrIndex,
+  searchrByIndex,
+  lengthr
+} from '../public/js/lib/CollectionUtils.js';
 
 describe('collections test', function() {
 

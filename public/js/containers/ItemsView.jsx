@@ -21,7 +21,8 @@ export default class ItemsView extends Component {
                   moveBelowTodo={actions.moveBelowTodo}
                   moveAboveTodo={actions.moveAboveTodo}
                   makeChildOf={actions.makeChildOf}
-                  updateTodo={actions.updateTodo}/>
+                  updateTodo={actions.updateTodo}
+                  flipTodo={actions.flipTodo}/>
             </div>)
   }
 }

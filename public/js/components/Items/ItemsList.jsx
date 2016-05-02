@@ -7,8 +7,9 @@ import ItemAdd from './ItemAdd.jsx';
 import Item from './Item.jsx';
 
 import * as HighlightType from '../../constants/HighlightTypes';
+import * as ItemIconTypes from '../../constants/ItemIconTypes';
 
-import {searchr, filterr, searchrIndex, searchrByIndex, lengthr} from '../../lib/CollectionUtils.js';
+import {filterr, searchrIndex, searchrByIndex, lengthr} from '../../lib/CollectionUtils.js';
 
 
 export default class ItemsList extends Component {
@@ -25,12 +26,13 @@ export default class ItemsList extends Component {
     moveBelowTodo : PropTypes.func.isRequired,
     checkTodo     : PropTypes.func.isRequired,
     updateTodo    : PropTypes.func.isRequired,
+    flipTodo      : PropTypes.func.isRequired,
     makeChildOf   : PropTypes.func.isRequired
   };
 
   componentWillMount() {
     this.setState({
-      items: this.props.items
+      items : this.props.items
     });
   }
 
@@ -70,7 +72,7 @@ export default class ItemsList extends Component {
         )}
       </ul>
       <div className="all-items">
-        {this._getItems(this._filter(this.props.items))}
+        {this._getItems(this._curItems())}
       </div>
     </div>
   }
@@ -85,14 +87,13 @@ export default class ItemsList extends Component {
     return items.map(
       (i, j) => <div key={j} className="items">
         <Item
+          ref={j}
           className={this._stylesForItem(i)}
           todo={i}
-          index={j}
-          moveCard={this.moveCard}
-          dropItem={this.dropItem}
+          flipTodo={this.props.flipTodo}
           focus={this.state.focusId == i.id}
+          dropItem={this.dropItem}
           highlight={this.highlightItem}
-          //setFocus={(id) => this.setState(Object.assign(this.state, {focusId: id}))}
           onFocusOut={() => this._handleItemFocus(null)}
           onFocus={() => this._handleItemFocus(i.id)}
           onChange={() => this.props.checkTodo(i.id)}>
@@ -104,13 +105,13 @@ export default class ItemsList extends Component {
           : <label onClick={this._handleItemFocus.bind(this, i.id)}>{i.text} - {i.id} - {j}</label>
         }
         </Item>
-        {i.children != undefined && i.children.length > 0 ? this._getItems(i.children) : ''}
+        {i.children != undefined && i.children.length > 0 && i.open ? this._getItems(i.children) : ''}
       </div>
     );
   }
 
-  _filter(items) {
-    return filterr(items, (i) => {
+  _curItems() {
+    return filterr(this.props.items, (i) => {
       switch(this.state.filter) {
         case 'active':
           return !i.done;
@@ -154,13 +155,13 @@ export default class ItemsList extends Component {
     if (key == 'ArrowUp' || key == 'ArrowDown') {
       // arrows handling
       if (this.state.focusId == null) return;
-      let focusIndex = this._findIndexById(this.state.focusId);
+      let nextTodo = false;
 
-      if (key == 'ArrowUp') focusIndex--;
-      if (key == 'ArrowDown') focusIndex++;
+      if (key == 'ArrowUp') nextTodo = lookupPrev(this._curItems(), this.state.focusId);
+      if (key == 'ArrowDown') nextTodo = lookupNext(this._curItems(), this.state.focusId);
 
-      if (focusIndex >= 0 && focusIndex < lengthr(this.props.items)) {
-        this.setState(Object.assign(this.state, {focusId: this._findIdByIndex(focusIndex)}));
+      if (nextTodo) {
+        this.setState(Object.assign(this.state, {focusId: nextTodo.id}));
       }
     } else if (key == 'Enter') {
       this.setState(Object.assign(this.state, {editId: this.state.focusId}));
@@ -189,3 +190,42 @@ export default class ItemsList extends Component {
 }
 
 export default DragDropContext(HTML5Backend)(ItemsList)
+
+// helper functions
+
+export function lookupPrev(items, id) {
+  return lookup(items, id, 1);
+}
+
+export function lookupNext(items, id) {
+  return lookup(items, id, -1);
+}
+
+/**
+ *
+ * @param items
+ * @param id
+ * @param step for previous = 1, for next = -1
+ * @returns Todo
+ */
+export function lookup(items, id, step = 1) {
+  let prev = false;
+  function process(items) {
+    let cur = step > 0 ? 0 : items.length - 1;
+    const last = step > 0 ? items.length : -1;
+    while (cur != last) {
+      // console.log(cur, prev ? prev.id : '-');
+      if (step > 0 && items[cur].id === id) return prev; // make sense only for previous
+      if (step > 0) prev = items[cur];
+      if (items[cur].children && items[cur].open) {
+        let result = process(items[cur].children);
+        if (result) return result;
+      }
+      if (step < 0 && items[cur].id === id) return prev; // make sense only for next
+      if (step < 0) prev = items[cur];
+      cur += step;
+    }
+    return false;
+  }
+  return process(items);
+}

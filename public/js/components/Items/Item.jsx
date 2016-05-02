@@ -2,9 +2,10 @@ import { findDOMNode } from 'react-dom';
 import React, { Component, PropTypes } from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
 import * as HighlightType from '../../constants/HighlightTypes';
+import Todo from '../../models/todo';
 
 
-const cardSource = {
+const dropSource = {
   beginDrag(props) {
     return {
       id: props.todo.id,
@@ -19,7 +20,7 @@ const cardSource = {
   }
 };
 
-const cardTarget = {
+const dropTarget = {
   hover(props, monitor, component) {
     const dragId = monitor.getItem().id;
     const hoverTodo = props.todo;
@@ -57,6 +58,8 @@ const cardTarget = {
 export default class Item extends Component {
 
   static propTypes = {
+    todo : PropTypes.instanceOf(Todo).isRequired,
+    focus : PropTypes.bool.isRequired, // is true when need set focus on Item
     highlight: PropTypes.func.isRequired,
     onChange : PropTypes.func.isRequired,
     connectDragSource: PropTypes.func.isRequired,
@@ -64,10 +67,19 @@ export default class Item extends Component {
     //moveCard: PropTypes.func.isRequired
   };
 
+  constructor() {
+    super();
+    this._flipItem = this._flipItem.bind(this);
+  }
+
   _focus(elm) {
     if (elm !== null && this.props.focus) {
       elm.focus();
     }
+  }
+
+  _flipItem() {
+    this.props.flipTodo(this.props.todo.id);
   }
 
   render() {
@@ -77,11 +89,12 @@ export default class Item extends Component {
     return connectDragSource(
       connectDropTarget(
         <div style={{opacity}} className={this.props.className}>
+          {this._getIcon()}
           <input
             type="checkbox"
             name="checkbox"
-            ref={ this._focus.bind(this) }
             checked={todo.done}
+            ref={ this._focus.bind(this) }
             onBlur={this.props.onFocusOut}
             onFocus={this.props.onFocus}
             onChange={this.props.onChange}/>
@@ -90,13 +103,28 @@ export default class Item extends Component {
       )
     );
   }
+
+  _getIcon() {
+    const todo = this.props.todo;
+
+    if (todo.children.length == 0) {
+      return <i className="icon-empty"></i>;
+    }
+
+    if (todo.open) {
+      return <i className="icon-open" onClick={this._flipItem}></i>;
+    } else {
+      return <i className="icon-closed" onClick={this._flipItem}></i>;
+    }
+
+  }
 }
 
-Item = DropTarget('card', cardTarget, connect => ({
+Item = DropTarget('todoItem', dropTarget, connect => ({
   connectDropTarget: connect.dropTarget()
 }))(Item) || Item;
 
-Item = DragSource('card', cardSource, (connect, monitor) => ({
+Item = DragSource('todoItem', dropSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   draggingItem: monitor.getItem(),
   isDragging: monitor

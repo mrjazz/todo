@@ -10,7 +10,7 @@ describe('collections test', function() {
       new Todo(0, 'Learn React'),
       new Todo(1, 'Learn Redux', true, [
         new Todo(4, 'Read manual'),
-        new Todo(5, 'Write the code'),
+        new Todo(5, 'Write the code')
       ]),
       new Todo(2, 'Learn HTML', true),
       new Todo(3, 'Learn CSS')
@@ -59,6 +59,16 @@ describe('collections test', function() {
       const result2 = todos(initialState, TodoActions.moveBelowTodo(2, 5));
       result2[1].children[1].id.should.equal(5);
       result2[1].children[2].id.should.equal(2);
+    });
+
+    it('flipTodo', () => {
+      initialState[1].open.should.equal(false); // check initial state
+
+      const result1 = todos(initialState, TodoActions.flipTodo(1));
+      result1[1].open.should.equal(true); // first flip (expand)
+
+      const result2 = todos(result1, TodoActions.flipTodo(1));
+      result2[1].open.should.equal(false); // second flip (collapse)
     });
 
 });
