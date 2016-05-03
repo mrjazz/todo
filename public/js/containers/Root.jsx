@@ -7,7 +7,10 @@ import { bindActionCreators } from 'redux';
 import * as TodoActions from '../actions/todos'
 
 import ItemsView from '../containers/ItemsView.jsx';
-import HowtoView from '../containers/HowtoView.jsx';
+
+import {HOWTO} from '../constants/Howto.jsx';
+import Popup from 'react-popup';
+
 
 export default class Root extends Component {
   render() {
@@ -16,8 +19,9 @@ export default class Root extends Component {
     //   <ItemsView todos={todos} actions={actions}/>
     // </Provider>
     return <div>
+            <Popup />
             <ItemsView todos={todos} actions={actions}/>
-            <HowtoView/>
+            <a href="#" onClick={() => Popup.alert(HOWTO)}>Help</a>
           </div>
   }
 }
