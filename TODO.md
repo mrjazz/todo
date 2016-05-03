@@ -1,6 +1,7 @@
 TODO
 ----
 
+ - [X] Left/right arrow keys for expand-collapse items with children
  - [X] Fix editing in childrens
- - [ ] Cover reducers with tests
- - [ ] Drag into feature
+ - [X] Cover reducers with tests
+ - [X] Drag into feature

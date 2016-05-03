@@ -9,7 +9,7 @@ import Item from './Item.jsx';
 import * as HighlightType from '../../constants/HighlightTypes';
 import * as ItemIconTypes from '../../constants/ItemIconTypes';
 
-import {filterr, searchrIndex, searchrByIndex, lengthr} from '../../lib/CollectionUtils.js';
+import {searchr, filterr, searchrIndex, searchrByIndex, lengthr} from '../../lib/CollectionUtils.js';
 
 
 export default class ItemsList extends Component {
@@ -152,7 +152,22 @@ export default class ItemsList extends Component {
   _keyPressHandler(e) {
     const key = e.key;
 
-    if (key == 'ArrowUp' || key == 'ArrowDown') {
+    console.log(key);
+    if (key == 'ArrowRight' || key == 'ArrowLeft') {
+      if (this.state.focusId == null) return;
+
+      const id = this.state.focusId;
+      const todo = searchr(this.props.items, function (i) { return i.id == id});
+
+      if (todo.children == 0) return; // no sense continue
+
+      if (todo.open && key == 'ArrowLeft') {
+        this.props.flipTodo(id);
+      } else if (!todo.open && key == 'ArrowRight') {
+        this.props.flipTodo(id);
+      }
+
+    } else if (key == 'ArrowUp' || key == 'ArrowDown') {
       // arrows handling
       if (this.state.focusId == null) return;
       let nextTodo = false;

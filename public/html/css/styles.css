@@ -49,7 +49,7 @@
 
 .howto {
     font-size: 0.8em;
-    /*display: none;*/
+    display: none;
 }
 
 .todos .all-items {
