@@ -19,11 +19,8 @@ export function todos(state = initialState, action) {
   switch (action.type) {
     case Types.ADD_TODO:
       return [
-        ...state, {
-          id: state.length,
-          text: action.text,
-          done: false
-        }
+        ...state,
+        new Todo(state.length, action.text, false)
       ];
 
     case Types.CHECK_TODO:

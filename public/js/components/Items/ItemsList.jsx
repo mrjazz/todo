@@ -152,7 +152,6 @@ export default class ItemsList extends Component {
   _keyPressHandler(e) {
     const key = e.key;
 
-    console.log(key);
     if (key == 'ArrowRight' || key == 'ArrowLeft') {
       if (this.state.focusId == null) return;
 

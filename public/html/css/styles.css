@@ -86,6 +86,11 @@
   cursor: pointer;
 }
 
+.help {
+  cursor: help;
+  text-decoration: none;
+}
+
 /* Popup */
 
 .mm-popup {
