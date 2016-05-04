@@ -14,7 +14,8 @@ const initialState = [
 ];
 
 export function todos(state = initialState, action) {
-  // console.info(action);
+
+  console.info(action);
 
   switch (action.type) {
     case Types.ADD_TODO:

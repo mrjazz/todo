@@ -1,9 +1,18 @@
 TODO
 ----
 
+
+
+ - [X] If item has children and closed, expand by arrowRight
+ - [X] If item has children and open, collapse by arrowLeft
+ - [X] If item has children and open, jump to first item by arrowRight
+ - [X] Jump to parent by "left arrow" key
+ - [X] Howto popup added
+ - [ ] Fix critical issue with crashing browser
+ - [X] Fix issue with missed parent for nested items
+
 v0.0.2
 
- - [X] Howto popup added
  - [X] Left/right arrow keys for expand-collapse items with children
 
 v0.0.1

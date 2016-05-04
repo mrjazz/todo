@@ -7,9 +7,9 @@ import ItemAdd from './ItemAdd.jsx';
 import Item from './Item.jsx';
 
 import * as HighlightType from '../../constants/HighlightTypes';
-import * as ItemIconTypes from '../../constants/ItemIconTypes';
+// import * as ItemIconTypes from '../../constants/ItemIconTypes';
 
-import {searchr, filterr, searchrIndex, searchrByIndex, lengthr} from '../../lib/CollectionUtils.js';
+import {getParentFor, isParentOf, searchr, filterr, searchrIndex, searchrByIndex} from '../../lib/CollectionUtils.js';
 
 
 export default class ItemsList extends Component {
@@ -39,6 +39,12 @@ export default class ItemsList extends Component {
   dropItem(id) {
     if (this.state.focusId !== null && this.state.focusId !== id) {
       // console.log(`drop ${id} ${this.state.highlightStyle} ${this.state.focusId}`);
+
+      if (isParentOf(this._curItems(), (i) => i.id == id, (i) => i.id == this.state.focusId)) {
+        console.log("Drop parent in children!");
+        return;
+      }
+
       switch (this.state.highlightStyle) {
         case HighlightType.CURRENT:
           this.props.makeChildOf(id, this.state.focusId);
@@ -136,9 +142,9 @@ export default class ItemsList extends Component {
   }
 
   _handleUpdateItem(id, text) {
-    console.log(this.state.editId);
-    this.props.updateTodo(this.state.editId, text);
-    this.setState(Object.assign(this.state, {editId: null, focusId: this.state.editId}));
+    console.log(id, this.state.editId);
+    this.props.updateTodo(id, text);
+    this.setState(Object.assign(this.state, {editId: null, focusId: id}));
   }
 
   _findIndexById(id) {
@@ -152,33 +158,65 @@ export default class ItemsList extends Component {
   _keyPressHandler(e) {
     const key = e.key;
 
+    const todos = this._curItems();
+    const id = this.state.focusId;
+    const setFocus = this._handleItemFocus.bind(this); // need for passing in jumpOnTop()
+
     if (key == 'ArrowRight' || key == 'ArrowLeft') {
       if (this.state.focusId == null) return;
 
-      const id = this.state.focusId;
-      const todo = searchr(this.props.items, function (i) { return i.id == id});
+      const todo = searchr(todos, function (i) {
+        return i.id == id
+      });
 
-      if (todo.children == 0) return; // no sense continue
-
-      if (todo.open && key == 'ArrowLeft') {
-        this.props.flipTodo(id);
-      } else if (!todo.open && key == 'ArrowRight') {
-        this.props.flipTodo(id);
+      function jumpOnTop() { // need for avoid code duplication
+        if (key == 'ArrowLeft') {
+          // if item has parent, jump to parent by arrowLeft
+          const parent = getParentFor(todos, (i) => i.id == id);
+          if (parent) {
+            setFocus(parent.id);
+          } else {
+            setFocus(todos[0].id);
+          }
+        }
       }
+
+      if (todo.children.length > 0) {
+        if (todo.open) { // is expanded
+          if (key == 'ArrowLeft') {
+            // if has children, collapse by arrowLeft
+            this.props.flipTodo(id);
+          } else if (key == 'ArrowRight') {
+            // if has children, jump to first item by arrowRight
+            this._handleItemFocus(todo.children[0].id);
+          }
+        } else { // is collapsed
+          if (key == 'ArrowRight') {
+            // if has children, expand by arrowRight
+            this.props.flipTodo(id);
+          } else if (key == 'ArrowLeft') {
+            console.log("jump on top");
+            jumpOnTop();
+          }
+        }
+        return;
+      }
+
+      jumpOnTop();
 
     } else if (key == 'ArrowUp' || key == 'ArrowDown') {
       // arrows handling
-      if (this.state.focusId == null) return;
+      if (id == null) return; // if not focused
       let nextTodo = false;
 
-      if (key == 'ArrowUp') nextTodo = lookupPrev(this._curItems(), this.state.focusId);
-      if (key == 'ArrowDown') nextTodo = lookupNext(this._curItems(), this.state.focusId);
+      if (key == 'ArrowUp') nextTodo = lookupPrev(todos, id);
+      if (key == 'ArrowDown') nextTodo = lookupNext(todos, id);
 
       if (nextTodo) {
         this.setState(Object.assign(this.state, {focusId: nextTodo.id}));
       }
     } else if (key == 'Enter') {
-      this.setState(Object.assign(this.state, {editId: this.state.focusId}));
+      this.setState(Object.assign(this.state, {editId: id}));
       e.stopPropagation();
       e.preventDefault();
     }

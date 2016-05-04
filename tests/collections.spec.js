@@ -1,15 +1,17 @@
 import 'should';
 
 import {
-  insertrAfter,
-  insertrBefore,
   mapr,
   callr,
   filterr,
   searchr,
   searchrIndex,
   searchrByIndex,
-  lengthr
+  lengthr,
+  isParentOf,
+  insertrAfter,
+  insertrBefore,
+  getParentFor
 } from '../public/js/lib/CollectionUtils.js';
 
 describe('collections test', function() {
@@ -85,6 +87,20 @@ describe('collections test', function() {
       const result2 = insertrAfter(arr, {test: 'passed'}, (current) => current.label == 'a2');
       result2[0].children.length.should.equal(3);
       result2[0].children[2].test.should.equal('passed');
+    });
+
+    it('isParentOf', () => {
+      isParentOf(arr, (i) => i.label == 'a', (i) => i.label == 'a1').should.equal(true);
+      isParentOf(arr, (i) => i.label == 'a1', (i) => i.label == 'a2').should.equal(false);
+
+      isParentOf(arr, (i) => i.label == 'a2', (i) => i.label == 'a1').should.equal(false);
+      isParentOf(arr, (i) => i.label == 'a2', (i) => i.label == 'a').should.equal(false);
+    });
+
+    it('getParentFor', () => {
+      getParentFor(arr, (i) => i.label == 'a1').label.should.equal('a');
+      getParentFor(arr, (i) => i.label == 'a2').label.should.equal('a');
+      getParentFor(arr, (i) => i.label == 'a').should.equal(false);
     });
 
 });

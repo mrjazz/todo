@@ -147,6 +147,33 @@ export function insertrAfter(items, item, condition, childField = 'children') {
   return insertr(items, item, condition, childField, false);
 }
 
+export function getParentFor(items, condition, childField = 'children') {
+  function process(items, parent) {
+    for (let idx in items) {
+      const i = items[idx];
+      if (condition(i)) {
+        return parent;
+      }
+      if (i[childField]) {
+        const result = process(i[childField], i);
+        if (result) {
+          return result;
+        }
+      }
+    }
+    return false;
+  }
+  return process(items, false);
+}
+
+export function isParentOf(items, conditionParent, conditionItem, childField = 'children') {
+  const parent = searchr(items, conditionParent, childField);
+  if (parent && parent[childField]) {
+    return searchr(parent[childField], conditionItem, childField) !== false;
+  }
+  return false;
+}
+
 // private functions
 
 function insertr(items, item, condition, childField = 'children', before = true) {
