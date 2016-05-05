@@ -7,8 +7,16 @@ export default class DetailsView extends Component {
 
   render() {
     return (<div>
-                <a className="help" onClick={() => Popup.alert(HOWTO)}>[?]</a>
+                <a className="help float-right" onClick={() => Popup.alert(HOWTO)}>[?]</a>
                 <p>Details</p>
+                <div>
+                  <input
+                    type="text"
+                    autoFocus="true"
+                    ref="ctrlInput"
+                    defaultValue={this.props.value}
+                    />
+                </div>
                 <Popup />
             </div>);
   }
