@@ -22,6 +22,7 @@ export default class ItemsList extends Component {
 
   static propTypes = {
     items         : React.PropTypes.array.isRequired,
+    selectTodo    : PropTypes.func.isRequired,
     moveAboveTodo : PropTypes.func.isRequired,
     moveBelowTodo : PropTypes.func.isRequired,
     checkTodo     : PropTypes.func.isRequired,
@@ -135,6 +136,10 @@ export default class ItemsList extends Component {
 
   _handleItemFocus(id) {
     this.setState(Object.assign(this.state, {focusId: id}));
+    const todo = searchr(this._curItems(), function (i) {
+      return i.id == id
+    });
+    this.props.selectTodo(todo ? todo : null);
   }
 
   _handleCancelUpdate(id) {
@@ -142,9 +147,9 @@ export default class ItemsList extends Component {
   }
 
   _handleUpdateItem(id, text) {
-    console.log(id, this.state.editId);
     this.props.updateTodo(id, text);
-    this.setState(Object.assign(this.state, {editId: null, focusId: id}));
+    this._handleItemFocus(id);
+    this.setState(Object.assign(this.state, {editId: null}));
   }
 
   _findIndexById(id) {
@@ -213,7 +218,8 @@ export default class ItemsList extends Component {
       if (key == 'ArrowDown') nextTodo = lookupNext(todos, id);
 
       if (nextTodo) {
-        this.setState(Object.assign(this.state, {focusId: nextTodo.id}));
+        this._handleItemFocus(nextTodo.id);
+        // this.setState(Object.assign(this.state, {focusId: nextTodo.id}));
       }
     } else if (key == 'Enter') {
       this.setState(Object.assign(this.state, {editId: id}));

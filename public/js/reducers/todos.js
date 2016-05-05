@@ -1,4 +1,4 @@
-import * as Types from '../constants/ActionTypes';
+import * as Types from '../constants/TodoActionTypes';
 import Todo from '../models/todo';
 import {mapr, filterr, insertrAfter, insertrBefore} from '../lib/CollectionUtils.js';
 
@@ -15,7 +15,7 @@ const initialState = [
 
 export function todos(state = initialState, action) {
 
-  console.info(action);
+  // console.info(action);
 
   switch (action.type) {
     case Types.ADD_TODO:

@@ -7,22 +7,22 @@ import ItemAdd from '../components/Items/ItemAdd.jsx';
 
 export default class ItemsView extends Component {
   static propTypes = {
-    todos: PropTypes.array.isRequired,
-    actions: PropTypes.object.isRequired
+    appState: PropTypes.object.isRequired
   };
 
   render() {
-    const { todos, actions } = this.props;
+    const { todos, todoActions, appActions } = this.props;
     return (<div className="todo-view">
-                <ItemAdd onUpdate={actions.addTodo}/>
+                <ItemAdd onUpdate={todoActions.addTodo}/>
                 <ItemsList
                   items={todos}
-                  checkTodo={actions.checkTodo}
-                  moveBelowTodo={actions.moveBelowTodo}
-                  moveAboveTodo={actions.moveAboveTodo}
-                  makeChildOf={actions.makeChildOf}
-                  updateTodo={actions.updateTodo}
-                  flipTodo={actions.flipTodo}/>
+                  selectTodo={appActions.selectTodo}
+                  checkTodo={todoActions.checkTodo}
+                  moveBelowTodo={todoActions.moveBelowTodo}
+                  moveAboveTodo={todoActions.moveAboveTodo}
+                  makeChildOf={todoActions.makeChildOf}
+                  updateTodo={todoActions.updateTodo}
+                  flipTodo={todoActions.flipTodo}/>
             </div>)
   }
 }

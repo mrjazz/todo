@@ -4,7 +4,8 @@ import { Provider } from 'react-redux';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import * as TodoActions from '../actions/todos'
+import * as TodoActions from '../actions/todos';
+import * as AppActions from '../actions/app';
 
 import ItemsView from '../containers/ItemsView.jsx';
 import DetailsView from '../containers/DetailsView.jsx';
@@ -12,28 +13,36 @@ import DetailsView from '../containers/DetailsView.jsx';
 
 export default class Root extends Component {
   render() {
-    const { store, todos, actions } = this.props;
+    const { store, appState, todosState, todoActions, appActions } = this.props;
     // <Provider store={store}>
     //   <ItemsView todos={todos} actions={actions}/>
     // </Provider>
-    return <div>       
-            <ItemsView todos={todos} actions={actions}/>
-            <DetailsView/>
+    return <div>
+            <ItemsView todos={todosState} todoActions={todoActions} appActions={appActions}/>
+            <DetailsView appState={appState}/>
           </div>
   }
 }
 
 Root.propTypes = {
-  store: PropTypes.object.isRequired
+  store: PropTypes.object.isRequired,
+  todosState: PropTypes.array.isRequired,
+  todoActions: PropTypes.object.isRequired,
+  appActions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
-  return {todos: state.todos};
+  // console.log(state);
+  return {
+    todosState : state.todos,
+    appState   : state.app
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(TodoActions, dispatch)
+    todoActions : bindActionCreators(TodoActions, dispatch),
+    appActions  : bindActionCreators(AppActions, dispatch)
   }
 }
 
