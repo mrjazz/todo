@@ -6,8 +6,11 @@ import ItemAdd from '../components/Items/ItemAdd.jsx';
 
 
 export default class ItemsView extends Component {
+  
   static propTypes = {
-    appState: PropTypes.object.isRequired
+    appActions  : PropTypes.object.isRequired,
+    todoActions : PropTypes.object.isRequired,
+    todos       : React.PropTypes.array.isRequired
   };
 
   render() {

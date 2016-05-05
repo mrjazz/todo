@@ -3,9 +3,10 @@ import React, { Component, PropTypes } from 'react';
 
 
 export default class ItemAdd extends Component {
+  
   static propTypes = {
     onUpdate: PropTypes.func.isRequired
-  }
+  };
 
   _inputHandler(e) {
     if (e.key == 'Enter') {

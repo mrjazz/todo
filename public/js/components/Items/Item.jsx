@@ -83,7 +83,7 @@ export default class Item extends Component {
   }
 
   render() {
-    const { todo, isDragging, draggingItem, connectDragSource, connectDropTarget } = this.props;
+    const { todo, draggingItem, connectDragSource, connectDropTarget } = this.props;
     const opacity = draggingItem !== null && draggingItem.id == todo.id ? 0.4 : 1;
 
     return connectDragSource(

@@ -4,6 +4,7 @@ import {HOWTO} from '../constants/Howto.jsx';
 import Popup from 'react-popup';
 
 export default class DetailsView extends Component {
+  
   static propTypes = {
     appState: PropTypes.object.isRequired
   };
