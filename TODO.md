@@ -1,8 +1,9 @@
 TODO
 ----
 
-
-
+ - [ ] Add title in right panel
+ - [ ] Add notes in right panel
+ - [ ] Add date start, date end in right panel
  - [X] If item has children and closed, expand by arrowRight
  - [X] If item has children and open, collapse by arrowLeft
  - [X] If item has children and open, jump to first item by arrowRight
