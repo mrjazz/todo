@@ -4,7 +4,7 @@ import {HOWTO} from '../constants/Howto.jsx';
 import Popup from 'react-popup';
 
 export default class DetailsView extends Component {
-  
+
   static propTypes = {
     appState: PropTypes.object.isRequired
   };
@@ -20,7 +20,7 @@ export default class DetailsView extends Component {
                     type="text"
                     autoFocus="true"
                     ref="ctrlInput"
-                    defaultValue={''}
+                    defaultValue={this.props.value}
                     />
                 </div>
                 <Popup />

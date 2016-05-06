@@ -2,7 +2,7 @@ import * as AppAction from '../constants/AppActionTypes';
 import AppState from '../models/AppState';
 
 
-export function app(state = new AppState(), action) {
+export function app(state = new AppState(), action = {}) {
 
   // console.info(action);
 
