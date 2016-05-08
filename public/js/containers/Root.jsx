@@ -19,7 +19,7 @@ export default class Root extends Component {
     // </Provider>
     return <div>
             <ItemsView todos={todosState} todoActions={todoActions} appActions={appActions}/>
-            <DetailsView appState={appState}/>
+            <DetailsView appState={appState} todoActions={todoActions}/>
           </div>
   }
 }

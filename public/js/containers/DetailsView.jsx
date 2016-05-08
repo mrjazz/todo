@@ -9,9 +9,15 @@ export default class DetailsView extends Component {
     appState: PropTypes.object.isRequired
   };
 
+  constructor() {
+    super();
+    this._handleChange = this._handleChange.bind(this);
+  }
+
+
   render() {
-    //this.props.appState.currentTodo.text
-    //console.log(this.props.appState.currentTodo.text);
+    //console.log(this.props.appState.currentTodo);
+    const title = this.props.appState.currentTodo != null ? this.props.appState.currentTodo.text : '';
     return (<div>
                 <a className="help float-right" onClick={() => Popup.alert(HOWTO)}>[?]</a>
                 <p>Details</p>
@@ -20,10 +26,19 @@ export default class DetailsView extends Component {
                     type="text"
                     autoFocus="true"
                     ref="ctrlInput"
-                    defaultValue={this.props.value}
+                    value={title}
+                    onChange={this._handleChange}
                     />
                 </div>
                 <Popup />
             </div>);
   }
+
+  _handleChange(e) {
+    if (!this.props.appState.currentTodo) {
+      return;
+    }
+    this.props.todoActions.updateTodo(this.props.appState.currentTodo.id, e.target.value);
+  }
+
 }
