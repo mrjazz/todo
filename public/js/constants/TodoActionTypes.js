@@ -8,3 +8,4 @@ export const MOVE_BELOW_TODO    = 'MOVE_BELOW_TODO';
 export const MAKE_CHILD_OF_TODO = 'MAKE_CHILD_OF_TODO';
 export const REMOVE_TODO        = 'REMOVE_TODO';
 export const FLIP_TODO          = 'FLIP_TODO';
+export const SELECT_TODO        = 'SELECT_TODO';

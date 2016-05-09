@@ -4,7 +4,7 @@ import AppState from '../models/AppState';
 
 export function app(state = new AppState(), action = {}) {
 
-  console.info(action);
+  // console.info(action);
 
   switch (action.type) {
     case AppAction.SELECT_TODO:

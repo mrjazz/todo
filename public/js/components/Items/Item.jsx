@@ -95,7 +95,6 @@ export default class Item extends Component {
             name="checkbox"
             checked={todo.done}
             ref={ this._focus.bind(this) }
-            onBlur={this.props.onFocusOut}
             onFocus={this.props.onFocus}
             onChange={this.props.onChange}/>
           {this.props.children}

@@ -1,56 +1,74 @@
-import * as Types from '../constants/TodoActionTypes';
+import * as TodoAction from '../constants/TodoActionTypes';
 import Todo from '../models/todo';
 import {mapr, filterr, insertrAfter, insertrBefore} from '../lib/CollectionUtils.js';
 
 
-const initialState = [
-  new Todo(0, 'Learn React'),
-  new Todo(1, 'Learn Redux', true, [
-    new Todo(4, 'Read manual'),
-    new Todo(5, 'Write the code')
-  ]),
-  new Todo(2, 'Learn HTML', true),
-  new Todo(3, 'Learn CSS')
-];
+const initialState = {
+  focusId: null,
+  todos: [
+    new Todo(0, 'Learn React'),
+    new Todo(1, 'Learn Redux', true, [
+      new Todo(4, 'Read manual'),
+      new Todo(5, 'Write the code')
+    ]),
+    new Todo(2, 'Learn HTML', true),
+    new Todo(3, 'Learn CSS')
+  ]
+};
 
 export function todos(state = initialState, action) {
+  return Object.assign(clone(state), {
+    todos   : processItemsAction(state.todos, action),
+    focusId : processFocusAction(state.focusId, action)
+  });
+}
 
+function processFocusAction(state, action) {
+  switch (action.type) {
+    case TodoAction.SELECT_TODO:
+      return action.id;
+    default:
+      return state;
+  }
+}
+
+function processItemsAction(state, action) {
   // console.info(action);
 
   switch (action.type) {
-    case Types.ADD_TODO:
+    case TodoAction.ADD_TODO:
       return [
         ...state,
         new Todo(state.length, action.text, false)
       ];
 
-    case Types.CHECK_TODO:
+    case TodoAction.CHECK_TODO:
       return mapr(state, (todo) => {
         return todo.id === action.id ?
             Object.assign(clone(todo), { done: !todo.done }) :
             todo;
       });
 
-    case Types.UPDATE_TODO:
+    case TodoAction.UPDATE_TODO:
       return mapr(state, todo =>
         todo.id === action.id ?
           Object.assign(Object.create(todo), todo, { text: action.text }) :
           todo
       );
 
-    case Types.MOVE_ABOVE_TODO:
+    case TodoAction.MOVE_ABOVE_TODO:
       return insert(insertrBefore, state, action.id, action.parentId);
 
-    case Types.MOVE_BELOW_TODO:
+    case TodoAction.MOVE_BELOW_TODO:
       return insert(insertrAfter, state, action.id, action.parentId);
 
-    case Types.DELETE_TODO:
+    case TodoAction.DELETE_TODO:
       return [
         ...state.slice(0, action.index),
         ...state.slice(+action.index + 1)
       ];
 
-    case Types.MAKE_CHILD_OF_TODO:
+    case TodoAction.MAKE_CHILD_OF_TODO:
       return (
         () => {
           let item = false;
@@ -72,12 +90,12 @@ export function todos(state = initialState, action) {
         }
       )();
 
-    case Types.REMOVE_TODO:
+    case TodoAction.REMOVE_TODO:
       return filterr(state, (todo) => {
         return todo.id !== action.id;
       });
 
-    case Types.FLIP_TODO:
+    case TodoAction.FLIP_TODO:
       return mapr(state, (todo) => {
         return todo.id === action.id ? Object.assign(Object.create(todo), todo, {open: !todo.open}) : todo;
       });

@@ -13,15 +13,16 @@ import {getParentFor, isParentOf, searchr, filterr, searchrIndex, searchrByIndex
 
 
 export default class ItemsList extends Component {
+
   constructor() {
     super();
-    this.state = {cards: [], focusId: null, editId: null, filter: 'all', highlightStyle: HighlightType.NONE};
+    this.state = {cards: [], editId: null, filter: 'all', highlightStyle: HighlightType.NONE};
     this.dropItem      = this.dropItem.bind(this);
     this.highlightItem = this.highlightItem.bind(this);
   }
 
   static propTypes = {
-    items         : React.PropTypes.array.isRequired,
+    todos         : React.PropTypes.object.isRequired,
     selectTodo    : PropTypes.func.isRequired,
     moveAboveTodo : PropTypes.func.isRequired,
     moveBelowTodo : PropTypes.func.isRequired,
@@ -38,23 +39,23 @@ export default class ItemsList extends Component {
   }
 
   dropItem(id) {
-    if (this.state.focusId !== null && this.state.focusId !== id) {
-      // console.log(`drop ${id} ${this.state.highlightStyle} ${this.state.focusId}`);
+    if (this.props.todos.focusId !== null && this.props.todos.focusId !== id) {
+      // console.log(`drop ${id} ${this.state.highlightStyle} ${this.props.todos.focusId}`);
 
-      if (isParentOf(this._curItems(), (i) => i.id == id, (i) => i.id == this.state.focusId)) {
+      if (isParentOf(this._curItems(), (i) => i.id == id, (i) => i.id == this.props.todos.focusId)) {
         console.log("Drop parent in children!");
         return;
       }
 
       switch (this.state.highlightStyle) {
         case HighlightType.CURRENT:
-          this.props.makeChildOf(id, this.state.focusId);
+          this.props.makeChildOf(id, this.props.todos.focusId);
           break;
         case HighlightType.ABOVE:
-          this.props.moveAboveTodo(id, this.state.focusId);
+          this.props.moveAboveTodo(id, this.props.todos.focusId);
           break;
         case HighlightType.BELOW:
-          this.props.moveBelowTodo(id, this.state.focusId);
+          this.props.moveBelowTodo(id, this.props.todos.focusId);
           break;
       }
 
@@ -87,7 +88,8 @@ export default class ItemsList extends Component {
   highlightItem(focusId, type) {
     // small optimization
     if (focusId === this.state.id && type == this.state.highlightStyle) return;
-    this.setState(Object.assign(this.state, {highlightStyle: type, focusId}));
+    this.setState(Object.assign(this.state, {highlightStyle: type}));
+    this.props.selectTodo(focusId);
   }
 
   _getItems(items) {
@@ -98,10 +100,10 @@ export default class ItemsList extends Component {
           className={this._stylesForItem(i)}
           todo={i}
           flipTodo={this.props.flipTodo}
-          focus={this.state.focusId == i.id}
+          focus={/*this.props.todos.focusId == i.id*/ false}
           dropItem={this.dropItem}
           highlight={this.highlightItem}
-          onFocusOut={() => this._handleItemFocus(null)}
+          // onFocusOut={() => this._handleItemFocus(null)}
           onFocus={() => this._handleItemFocus(i.id)}
           onChange={() => this.props.checkTodo(i.id)}>
         {i.id == this.state.editId ?
@@ -118,7 +120,7 @@ export default class ItemsList extends Component {
   }
 
   _curItems() {
-    return filterr(this.props.items, (i) => {
+    return filterr(this.props.todos.todos, (i) => {
       switch(this.state.filter) {
         case 'active':
           return !i.done;
@@ -135,11 +137,7 @@ export default class ItemsList extends Component {
   }
 
   _handleItemFocus(id) {
-    this.setState(Object.assign(this.state, {focusId: id}));
-    const todo = searchr(this._curItems(), function (i) {
-      return i.id == id
-    });
-    this.props.selectTodo(todo ? todo : null);
+    this.props.selectTodo(id);
   }
 
   _handleCancelUpdate(id) {
@@ -148,7 +146,7 @@ export default class ItemsList extends Component {
 
   _handleUpdateItem(id, text) {
     this.props.updateTodo(id, text);
-    this._handleItemFocus(id);
+    //this._handleItemFocus(id);
     this.setState(Object.assign(this.state, {editId: null}));
   }
 
@@ -164,11 +162,11 @@ export default class ItemsList extends Component {
     const key = e.key;
 
     const todos = this._curItems();
-    const id = this.state.focusId;
+    const id = this.props.todos.focusId;
     const setFocus = this._handleItemFocus.bind(this); // need for passing in jumpOnTop()
 
     if (key == 'ArrowRight' || key == 'ArrowLeft') {
-      if (this.state.focusId == null) return;
+      if (this.props.todos.focusId == null) return;
 
       const todo = searchr(todos, function (i) {
         return i.id == id
@@ -231,7 +229,7 @@ export default class ItemsList extends Component {
   _stylesForItem(i) {
     let styles = ['item'];
     if (i.done) styles.push('complete');
-    if (i.id == this.state.focusId) {
+    if (i.id == this.props.todos.focusId) {
       switch (this.state.highlightStyle) {
         case HighlightType.ABOVE:
           styles.push('item-above');

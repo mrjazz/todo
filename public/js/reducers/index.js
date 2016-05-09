@@ -4,8 +4,9 @@ import { app } from './app';
 
 
 const rootReducer = combineReducers({
-  todos,
-  app
+  todos
+  //app
+  // no sense for additional reducers for now
 });
 
 export default rootReducer;

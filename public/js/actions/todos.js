@@ -60,3 +60,10 @@ export function makeChildOf(id, parentId) {
     parentId
   };
 }
+
+export function selectTodo(id) {
+  return {
+    type: TodoAction.SELECT_TODO,
+    id
+  };
+}
