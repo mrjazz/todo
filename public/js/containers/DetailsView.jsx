@@ -3,15 +3,31 @@ import React, { Component, PropTypes } from 'react';
 import {HOWTO} from '../constants/Howto.jsx';
 import Popup from 'react-popup';
 
+import {searchr} from '../lib/CollectionUtils.js';
+
 export default class DetailsView extends Component {
 
   static propTypes = {
-    appState: PropTypes.object.isRequired
+    todosState: PropTypes.object.isRequired
   };
 
+  constructor() {
+    super();
+    this._handleChange = this._handleChange.bind(this);
+  }
+
   render() {
-    //this.props.appState.currentTodo.text
-    //console.log(this.props.appState.currentTodo.text);
+    const state = this.props.todosState;
+
+    let title = '';
+
+    if (state.todos) {
+      const todo = searchr(state.todos, function (i) {
+        return i.id == state.focusId
+      });
+      title = todo.text;
+    }
+
     return (<div>
                 <a className="help float-right" onClick={() => Popup.alert(HOWTO)}>[?]</a>
                 <p>Details</p>
@@ -20,10 +36,19 @@ export default class DetailsView extends Component {
                     type="text"
                     autoFocus="true"
                     ref="ctrlInput"
-                    defaultValue={this.props.value}
+                    value={title}
+                    onChange={this._handleChange}
                     />
                 </div>
                 <Popup />
             </div>);
   }
+
+  _handleChange(e) {
+    if (!this.props.todosState.focusId) {
+      return;
+    }
+    this.props.todoActions.updateTodo(this.props.todosState.focusId, e.target.value);
+  }
+
 }

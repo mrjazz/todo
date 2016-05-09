@@ -5,48 +5,61 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as TodoActions from '../actions/todos';
-import * as AppActions from '../actions/app';
 
+import TestView from '../containers/TestView.jsx';
 import ItemsView from '../containers/ItemsView.jsx';
 import DetailsView from '../containers/DetailsView.jsx';
 
 
 export default class Root extends Component {
-  render() {
-    const { store, appState, todosState, todoActions, appActions } = this.props;
-    // <Provider store={store}>
-    //   <ItemsView todos={todos} actions={actions}/>
-    // </Provider>
-    return <div>
-            <ItemsView todos={todosState} todoActions={todoActions} appActions={appActions}/>
-            <DetailsView appState={appState}/>
-          </div>
-  }
-}
 
-Root.propTypes = {
-  store: PropTypes.object.isRequired,
-  todosState: PropTypes.array.isRequired,
-  todoActions: PropTypes.object.isRequired,
-  appActions: PropTypes.object.isRequired
-};
+  // static propTypes = {
+  //   store: PropTypes.object.isRequired
+  //   // todosState: PropTypes.object.isRequired,
+  //   // todoActions: PropTypes.object.isRequired
+  // };
 
-function mapStateToProps(state) {
-  // console.log(state);
-  return {
-    todosState : state.todos,
-    appState   : state.app
+  static childContextTypes = {
+    color: React.PropTypes.string
   };
-}
 
-function mapDispatchToProps(dispatch) {
-  return {
-    todoActions : bindActionCreators(TodoActions, dispatch),
-    appActions  : bindActionCreators(AppActions, dispatch)
+  getChildContext() {
+    return {color: "purple"};
+  }
+
+  render() {
+    // const { store, todosState, todoActions } = this.props;
+
+    //console.log(this.props);
+
+    //
+    //   <ItemsView todos={todos} actions={actions}/>
+    //
+    // onKeyDown={(e) => console.log(e)}
+
+    /*<div><ItemsView todosState={store.getState().todos} todoActions={todoActions} />
+     <DetailsView todosState={store.getState().todos} todoActions={todoActions}/></div>*/
+    // return <Provider store={this.props.store}>
+    //         <TestView name="hello"/>
+    //       </Provider>
+    return <TestView name="hello"/>;
   }
 }
 
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Root)
+// function mapStateToProps(state) {
+//   // console.log(state);
+//   return {
+//     todosState : state.todos
+//   };
+// }
+//
+// function mapDispatchToProps(dispatch) {
+//   return {
+//     todoActions : bindActionCreators(TodoActions, dispatch)
+//   }
+// }
+//
+// export default connect(
+//     mapStateToProps,
+//     mapDispatchToProps
+// )(Root)
