@@ -7,24 +7,27 @@ import {lookup, lookupPrev, lookupNext} from '../public/js/components/Items/Item
 
 describe('items list test', function() {
 
-    const initialState = [
-      new Todo(0, 'Learn React'),
-      new Todo(1, 'Learn Redux', true, [
-        new Todo(4, 'Read manual'),
-        new Todo(5, 'Write the code')
-      ]),
-      new Todo(2, 'Learn HTML', true),
-      new Todo(3, 'Learn CSS')
-    ];
+    const initialState = {
+      todos: [
+        new Todo(0, 'Learn React'),
+        new Todo(1, 'Learn Redux', true, [
+          new Todo(4, 'Read manual'),
+          new Todo(5, 'Write the code')
+        ]),
+        new Todo(2, 'Learn HTML', true),
+        new Todo(3, 'Learn CSS')
+      ]
+    };
 
     it('lookup', () => {
-      lookupPrev(initialState, 1).id.should.equal(0);
+      const todoItems = initialState.todos;
+      lookupPrev(todoItems, 1).id.should.equal(0);
 
-      lookupNext(initialState, 1).id.should.equal(2);
+      lookupNext(todoItems, 1).id.should.equal(2);
 
-      lookupPrev(initialState, 2).id.should.equal(1);
+      lookupPrev(todoItems, 2).id.should.equal(1);
 
-      const expanded = todos(initialState, TodoActions.flipTodo(1)); // expand item
+      const expanded = todos(initialState, TodoActions.flipTodo(1)).todos; // expand item
       expanded[1].open.should.equal(true);
 
       const res = lookupPrev(expanded, 2);
