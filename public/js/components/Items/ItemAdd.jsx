@@ -12,10 +12,8 @@ export default class ItemAdd extends Component {
   _inputHandler(e) {
     if (e.key == 'Enter') {
       //this.props.onAdd(this.refs.ctrlInput.value);
-      // this.props.onUpdate(this.refs.ctrlInput.value);
-
-      this.context.store.dispatch(addTodo(this.refs.ctrlInput.value));
-
+      this.props.onUpdate(this.refs.ctrlInput.value);
+      
       this.refs.ctrlInput.value = '';
 
       e.stopPropagation();

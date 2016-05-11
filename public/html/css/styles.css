@@ -17,19 +17,23 @@
 }
 
 .todos .item-selected {
-    background-color: #00ff00;
+    background-color: #00FF00;
+}
+
+.todos .item-hover {
+  background-color: #B8FFB8;
 }
 
 .todos .item-above {
   background-color: #F2FFF2;
-  border-top: 3px solid #00ff00;
+  border-top: 3px solid #B8FFB8;
   padding-top: 2px;
 }
 
 .todos .item-below {
   background-color: #F2FFF2;
   padding-bottom: 2px;
-  border-bottom: 3px solid #00ff00;
+  border-bottom: 3px solid #B8FFB8;
 }
 
 .todos .filters li.active {

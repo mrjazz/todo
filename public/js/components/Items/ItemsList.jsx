@@ -17,7 +17,13 @@ export default class ItemsList extends Component {
 
   constructor() {
     super();
-    this.state = {cards: [], editId: null, filter: 'all', highlightStyle: HighlightType.NONE};
+    this.state = {
+      cards: [],
+      editId: null,
+      filter: 'all',
+      highlightStyle: HighlightType.NONE,
+      highlightId: null
+    };
     this.dropItem      = this.dropItem.bind(this);
     this.highlightItem = this.highlightItem.bind(this);
   }
@@ -48,27 +54,29 @@ export default class ItemsList extends Component {
   // }
 
   dropItem(id) {
-    if (this._curState().focusId !== null && this._curState().focusId !== id) {
+    const highlightId = this.state.highlightId;
+    if (highlightId !== null) {
       // console.log(`drop ${id} ${this.state.highlightStyle} ${this.props.todos.focusId}`);
 
-      if (isParentOf(this._curItems(), (i) => i.id == id, (i) => i.id == this._curState().focusId)) {
+      if (isParentOf(this._curItems(), (i) => i.id == id, (i) => i.id == highlightId)) {
         console.log("Drop parent in children!");
         return;
       }
 
       switch (this.state.highlightStyle) {
-        case HighlightType.CURRENT:
-          this.context.store.dispatch(makeChildOf(id, this._curState().focusId));
+        case HighlightType.HOVER:
+          this.context.store.dispatch(makeChildOf(id, highlightId));
           break;
         case HighlightType.ABOVE:
-          this.context.store.dispatch(moveAboveTodo(id, this._curState().focusId));
+          this.context.store.dispatch(moveAboveTodo(id, highlightId));
           break;
         case HighlightType.BELOW:
-          this.context.store.dispatch(moveBelowTodo(id, this._curState().focusId));
+          this.context.store.dispatch(moveBelowTodo(id, highlightId));
           break;
       }
 
-      this.highlightItem(id, HighlightType.CURRENT);
+      this.setState(Object.assign(this.state, {highlightStyle: HighlightType.CURRENT, highlightId: null}));
+      this.context.store.dispatch(selectTodo(id));
     }
   }
 
@@ -95,10 +103,21 @@ export default class ItemsList extends Component {
   }
 
   highlightItem(focusId, type) {
-    // small optimization
-    if (focusId === this.state.id && type == this.state.highlightStyle) return;
-    this.setState(Object.assign(this.state, {highlightStyle: type}));
-    this.context.store.dispatch(selectTodo(focusId));
+    this.setState(Object.assign(
+      this.state, {
+        highlightStyle: type,
+        highlightId: focusId
+      }
+    ));
+  }
+
+  _focusOut() {
+    this.setState(Object.assign(
+      this.state, {
+        highlightStyle: this.props.todos.focusId !== null ? HighlightType.CURRENT : null
+      }
+    ));
+    this._handleItemFocus(null);
   }
 
   _getItems(items) {
@@ -108,13 +127,13 @@ export default class ItemsList extends Component {
           ref={j}
           className={this._stylesForItem(i)}
           todo={i}
-          focus={this.props.todos.focusId == i.id}
+          focus={this.state.editId == null && this.props.todos.focusId == i.id}
           dropItem={this.dropItem}
           highlight={this.highlightItem}
           onFocus={() => this._handleItemFocus(i.id)}
           //flipTodo={this.props.flipTodo}
-          // onFocusOut={() => this._handleItemFocus(null)}
-          // onChange={() => this.props.checkTodo(i.id)}
+          onFocusOut={() => this._focusOut()}
+          onChange={() => this.props.checkTodo(i.id)}
         >
         {i.id == this.state.editId ?
           <ItemAdd
@@ -161,7 +180,7 @@ export default class ItemsList extends Component {
   _handleUpdateItem(id, text) {
     this.context.store.dispatch(updateTodo(id, text));
     //this._handleItemFocus(id);
-    this.setState(Object.assign(this.state, {editId: null}));
+    this.setState(Object.assign(this.state, {editId: null, highlightStyle: HighlightType.CURRENT}));
   }
 
   _findIndexById(id) {
@@ -234,26 +253,36 @@ export default class ItemsList extends Component {
         // this.setState(Object.assign(this.state, {focusId: nextTodo.id}));
       }
     } else if (key == 'Enter') {
-      this.setState(Object.assign(this.state, {editId: id}));
+      this.setState(Object.assign(this.state, {editId: id, highlightStyle: HighlightType.HOVER}));
       e.stopPropagation();
       e.preventDefault();
+    }
+  }
+
+  _getHighlightCSS(style) {
+    switch (style) {
+      case HighlightType.HOVER:
+        return 'item-hover';
+      case HighlightType.ABOVE:
+        return 'item-above';
+      case HighlightType.BELOW:
+        return 'item-below';
+      default:
+        return 'item-selected';
     }
   }
 
   _stylesForItem(i) {
     let styles = ['item'];
     if (i.done) styles.push('complete');
-    if (i.id == this._curState().focusId) {
-      switch (this.state.highlightStyle) {
-        case HighlightType.ABOVE:
-          styles.push('item-above');
-          break;
-        case HighlightType.BELOW:
-          styles.push('item-below');
-          break;
-        default:
-          styles.push('item-selected');
-      }
+
+    if (i.id == this.state.highlightId) {
+      styles.push(this._getHighlightCSS(this.state.highlightStyle));
+    } else if (i.id == this.state.editId) {
+      styles.push(this._getHighlightCSS(HighlightType.HOVER));
+    } else if (this.state.highlightId == null && i.id == this._curState().focusId) {
+      // if item is highlighted do not highlight focused item
+      styles.push(this._getHighlightCSS(this.state.highlightStyle));
     }
     return styles.join(' ');
   }

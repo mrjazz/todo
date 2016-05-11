@@ -18,7 +18,7 @@ const initialState = {
 
 export function todos(state = initialState, action) {
 
-  // console.info(action);
+  console.info(action);
 
   return Object.assign(clone(state), {
     todos   : processItemsAction(state.todos, action),
@@ -29,6 +29,8 @@ export function todos(state = initialState, action) {
 function processFocusAction(state, action) {
   switch (action.type) {
     case TodoAction.SELECT_TODO:
+      return action.id;
+    case TodoAction.UPDATE_TODO:
       return action.id;
     default:
       return state;

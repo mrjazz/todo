@@ -51,7 +51,7 @@ const dropTarget = {
     } else if (hoverClientY > hoverHeight * 0.65) {
       props.highlight(hoverTodo.id, HighlightType.BELOW);
     } else {
-      props.highlight(hoverTodo.id, HighlightType.CURRENT);
+      props.highlight(hoverTodo.id, HighlightType.HOVER);
     }
   }
 };
@@ -97,13 +97,6 @@ export default class Item extends Component {
     const { todo, draggingItem, connectDragSource, connectDropTarget } = this.props;
     const opacity = draggingItem !== null && draggingItem.id == todo.id ? 0.4 : 1;
 
-    if (this.props.focus) {
-      setTimeout(() => {
-        this.refs.inp.focus();
-        
-      }, 10);
-    }
-
     return connectDragSource(
       connectDropTarget(
         <div style={{opacity}} className={this.props.className}>
@@ -112,7 +105,8 @@ export default class Item extends Component {
             type="checkbox"
             name="checkbox"
             checked={todo.done}
-            ref="inp"
+            ref={this._focus.bind(this)}
+            onBlur={this.props.onFocusOut}
             onFocus={this.props.onFocus}
             onChange={this._checkTodo}/>
           {this.props.children}
