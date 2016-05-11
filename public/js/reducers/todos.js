@@ -17,6 +17,9 @@ const initialState = {
 };
 
 export function todos(state = initialState, action) {
+
+  // console.info(action);
+
   return Object.assign(clone(state), {
     todos   : processItemsAction(state.todos, action),
     focusId : processFocusAction(state.focusId, action)
@@ -33,8 +36,6 @@ function processFocusAction(state, action) {
 }
 
 function processItemsAction(state, action) {
-  // console.info(action);
-
   switch (action.type) {
     case TodoAction.ADD_TODO:
       return [

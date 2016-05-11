@@ -4,6 +4,8 @@ import { DragSource, DropTarget } from 'react-dnd';
 import * as HighlightType from '../../constants/HighlightTypes';
 import Todo from '../../models/todo';
 
+import {checkTodo, flipTodo} from '../../actions/todos';
+
 
 const dropSource = {
   beginDrag(props) {
@@ -57,19 +59,24 @@ const dropTarget = {
 
 export default class Item extends Component {
 
-  static propTypes = {
-    todo : PropTypes.instanceOf(Todo).isRequired,
-    focus : PropTypes.bool.isRequired, // is true when need set focus on Item
-    highlight: PropTypes.func.isRequired,
-    onChange : PropTypes.func.isRequired,
-    connectDragSource: PropTypes.func.isRequired,
-    connectDropTarget: PropTypes.func.isRequired
-    //moveCard: PropTypes.func.isRequired
+  static contextTypes = {
+    store: PropTypes.object.isRequired
   };
+
+  // static propTypes = {
+  //   todo : PropTypes.instanceOf(Todo).isRequired,
+  //   focus : PropTypes.bool.isRequired, // is true when need set focus on Item
+  //   highlight: PropTypes.func.isRequired,
+  //   onChange : PropTypes.func.isRequired,
+  //   connectDragSource: PropTypes.func.isRequired,
+  //   connectDropTarget: PropTypes.func.isRequired
+  //   //moveCard: PropTypes.func.isRequired
+  // };
 
   constructor() {
     super();
-    this._flipItem = this._flipItem.bind(this);
+    this._flipItem  = this._flipItem.bind(this);
+    this._checkTodo = this._checkTodo.bind(this);
   }
 
   _focus(elm) {
@@ -79,7 +86,11 @@ export default class Item extends Component {
   }
 
   _flipItem() {
-    this.props.flipTodo(this.props.todo.id);
+    this.context.store.dispatch(flipTodo(this.props.todo.id));
+  }
+
+  _checkTodo() {
+    this.context.store.dispatch(checkTodo(this.props.todo.id));
   }
 
   render() {
@@ -96,7 +107,7 @@ export default class Item extends Component {
             checked={todo.done}
             ref={ this._focus.bind(this) }
             onFocus={this.props.onFocus}
-            onChange={this.props.onChange}/>
+            onChange={this._checkTodo}/>
           {this.props.children}
         </div>
       )

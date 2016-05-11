@@ -10,6 +10,7 @@ import * as HighlightType from '../../constants/HighlightTypes';
 // import * as ItemIconTypes from '../../constants/ItemIconTypes';
 
 import {getParentFor, isParentOf, searchr, filterr, searchrIndex, searchrByIndex} from '../../lib/CollectionUtils.js';
+import {moveBelowTodo, moveAboveTodo, makeChildOf, selectTodo, updateTodo, flipTodo} from '../../actions/todos';
 
 
 export default class ItemsList extends Component {
@@ -21,41 +22,49 @@ export default class ItemsList extends Component {
     this.highlightItem = this.highlightItem.bind(this);
   }
 
-  static propTypes = {
-    todos         : React.PropTypes.object.isRequired,
-    selectTodo    : PropTypes.func.isRequired,
-    moveAboveTodo : PropTypes.func.isRequired,
-    moveBelowTodo : PropTypes.func.isRequired,
-    checkTodo     : PropTypes.func.isRequired,
-    updateTodo    : PropTypes.func.isRequired,
-    flipTodo      : PropTypes.func.isRequired,
-    makeChildOf   : PropTypes.func.isRequired
+  static contextTypes = {
+    store: PropTypes.object.isRequired
   };
 
-  componentWillMount() {
-    this.setState({
-      items : this.props.items
-    });
+  static propTypes = {
+    todos: React.PropTypes.object.isRequired
   }
 
+  // static propTypes = {
+  //   todos         : React.PropTypes.object.isRequired,
+  //   selectTodo    : PropTypes.func.isRequired,
+  //   moveAboveTodo : PropTypes.func.isRequired,
+  //   moveBelowTodo : PropTypes.func.isRequired,
+  //   checkTodo     : PropTypes.func.isRequired,
+  //   updateTodo    : PropTypes.func.isRequired,
+  //   flipTodo      : PropTypes.func.isRequired,
+  //   makeChildOf   : PropTypes.func.isRequired
+  // };
+
+  // componentWillMount() {
+  //   this.setState({
+  //     items : null
+  //   });
+  // }
+
   dropItem(id) {
-    if (this.props.todos.focusId !== null && this.props.todos.focusId !== id) {
+    if (this._curState().focusId !== null && this._curState().focusId !== id) {
       // console.log(`drop ${id} ${this.state.highlightStyle} ${this.props.todos.focusId}`);
 
-      if (isParentOf(this._curItems(), (i) => i.id == id, (i) => i.id == this.props.todos.focusId)) {
+      if (isParentOf(this._curItems(), (i) => i.id == id, (i) => i.id == this._curState().focusId)) {
         console.log("Drop parent in children!");
         return;
       }
 
       switch (this.state.highlightStyle) {
         case HighlightType.CURRENT:
-          this.props.makeChildOf(id, this.props.todos.focusId);
+          this.context.store.dispatch(makeChildOf(id, this._curState().focusId));
           break;
         case HighlightType.ABOVE:
-          this.props.moveAboveTodo(id, this.props.todos.focusId);
+          this.context.store.dispatch(moveAboveTodo(id, this._curState().focusId));
           break;
         case HighlightType.BELOW:
-          this.props.moveBelowTodo(id, this.props.todos.focusId);
+          this.context.store.dispatch(moveBelowTodo(id, this._curState().focusId));
           break;
       }
 
@@ -89,7 +98,7 @@ export default class ItemsList extends Component {
     // small optimization
     if (focusId === this.state.id && type == this.state.highlightStyle) return;
     this.setState(Object.assign(this.state, {highlightStyle: type}));
-    this.props.selectTodo(focusId);
+    this.context.store.dispatch(selectTodo(focusId));
   }
 
   _getItems(items) {
@@ -99,13 +108,14 @@ export default class ItemsList extends Component {
           ref={j}
           className={this._stylesForItem(i)}
           todo={i}
-          flipTodo={this.props.flipTodo}
           focus={/*this.props.todos.focusId == i.id*/ false}
           dropItem={this.dropItem}
           highlight={this.highlightItem}
-          // onFocusOut={() => this._handleItemFocus(null)}
           onFocus={() => this._handleItemFocus(i.id)}
-          onChange={() => this.props.checkTodo(i.id)}>
+          //flipTodo={this.props.flipTodo}
+          // onFocusOut={() => this._handleItemFocus(null)}
+          // onChange={() => this.props.checkTodo(i.id)}
+        >
         {i.id == this.state.editId ?
           <ItemAdd
             value={i.text}
@@ -119,8 +129,12 @@ export default class ItemsList extends Component {
     );
   }
 
+  _curState() {
+    return this.context.store.getState().todos;
+  }
+
   _curItems() {
-    return filterr(this.props.todos.todos, (i) => {
+    return filterr(this._curState().todos, (i) => {
       switch(this.state.filter) {
         case 'active':
           return !i.done;
@@ -137,7 +151,7 @@ export default class ItemsList extends Component {
   }
 
   _handleItemFocus(id) {
-    this.props.selectTodo(id);
+    this.context.store.dispatch(selectTodo(id));
   }
 
   _handleCancelUpdate(id) {
@@ -145,28 +159,28 @@ export default class ItemsList extends Component {
   }
 
   _handleUpdateItem(id, text) {
-    this.props.updateTodo(id, text);
+    this.context.store.dispatch(updateTodo(id, text));
     //this._handleItemFocus(id);
     this.setState(Object.assign(this.state, {editId: null}));
   }
 
   _findIndexById(id) {
-    return searchrIndex(this.props.items, function (i) { return i.id == id});
+    return searchrIndex(this._curState().todos, function (i) { return i.id == id});
   }
 
   _findIdByIndex(index) {
-    return searchrByIndex(this.props.items, index).id;
+    return searchrByIndex(this._curState().todos, index).id;
   }
 
   _keyPressHandler(e) {
     const key = e.key;
 
     const todos = this._curItems();
-    const id = this.props.todos.focusId;
+    const id = this._curState().focusId;
     const setFocus = this._handleItemFocus.bind(this); // need for passing in jumpOnTop()
 
     if (key == 'ArrowRight' || key == 'ArrowLeft') {
-      if (this.props.todos.focusId == null) return;
+      if (this._curState().focusId == null) return;
 
       const todo = searchr(todos, function (i) {
         return i.id == id
@@ -188,7 +202,7 @@ export default class ItemsList extends Component {
         if (todo.open) { // is expanded
           if (key == 'ArrowLeft') {
             // if has children, collapse by arrowLeft
-            this.props.flipTodo(id);
+            this.context.store.dispatch(flipTodo(id));
           } else if (key == 'ArrowRight') {
             // if has children, jump to first item by arrowRight
             this._handleItemFocus(todo.children[0].id);
@@ -196,7 +210,7 @@ export default class ItemsList extends Component {
         } else { // is collapsed
           if (key == 'ArrowRight') {
             // if has children, expand by arrowRight
-            this.props.flipTodo(id);
+            this.context.store.dispatch(flipTodo(id));
           } else if (key == 'ArrowLeft') {
             console.log("jump on top");
             jumpOnTop();
@@ -229,7 +243,7 @@ export default class ItemsList extends Component {
   _stylesForItem(i) {
     let styles = ['item'];
     if (i.done) styles.push('complete');
-    if (i.id == this.props.todos.focusId) {
+    if (i.id == this._curState().focusId) {
       switch (this.state.highlightStyle) {
         case HighlightType.ABOVE:
           styles.push('item-above');
