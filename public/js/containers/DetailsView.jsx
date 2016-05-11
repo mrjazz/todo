@@ -7,9 +7,9 @@ import {searchr} from '../lib/CollectionUtils.js';
 
 export default class DetailsView extends Component {
 
-  static propTypes = {
-    todosState: PropTypes.object.isRequired
-  };
+  // static propTypes = {
+  //   todosState: PropTypes.object.isRequired
+  // };
 
   constructor() {
     super();
@@ -17,6 +17,10 @@ export default class DetailsView extends Component {
   }
 
   render() {
+    return <h1>hello</h1>;
+  }
+
+/*  render() {
     const state = this.props.todosState;
 
     let title = '';
@@ -42,7 +46,7 @@ export default class DetailsView extends Component {
                 </div>
                 <Popup />
             </div>);
-  }
+  }*/
 
   _handleChange(e) {
     if (!this.props.todosState.focusId) {

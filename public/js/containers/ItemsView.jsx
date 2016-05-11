@@ -10,7 +10,6 @@ export default class ItemsView extends Component {
   };
 
   render() {
-    console.log(this.context.store.getState().todos);
     return <div className="todo-view">
             <ItemAdd/>
             <ItemsList todos={this.context.store.getState().todos}/>

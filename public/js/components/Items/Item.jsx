@@ -97,6 +97,13 @@ export default class Item extends Component {
     const { todo, draggingItem, connectDragSource, connectDropTarget } = this.props;
     const opacity = draggingItem !== null && draggingItem.id == todo.id ? 0.4 : 1;
 
+    if (this.props.focus) {
+      setTimeout(() => {
+        this.refs.inp.focus();
+        
+      }, 10);
+    }
+
     return connectDragSource(
       connectDropTarget(
         <div style={{opacity}} className={this.props.className}>
@@ -105,7 +112,7 @@ export default class Item extends Component {
             type="checkbox"
             name="checkbox"
             checked={todo.done}
-            ref={ this._focus.bind(this) }
+            ref="inp"
             onFocus={this.props.onFocus}
             onChange={this._checkTodo}/>
           {this.props.children}

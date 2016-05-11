@@ -108,7 +108,7 @@ export default class ItemsList extends Component {
           ref={j}
           className={this._stylesForItem(i)}
           todo={i}
-          focus={/*this.props.todos.focusId == i.id*/ false}
+          focus={this.props.todos.focusId == i.id}
           dropItem={this.dropItem}
           highlight={this.highlightItem}
           onFocus={() => this._handleItemFocus(i.id)}
