@@ -1,5 +1,11 @@
 import * as TodoAction from '../constants/TodoActionTypes';
 
+export function deleteTodo(id) {
+  return {
+    type: TodoAction.DELETE_TODO,
+    id
+  };
+}
 
 export function addTodo(text) {
   return {

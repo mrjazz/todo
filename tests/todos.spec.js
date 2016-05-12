@@ -18,6 +18,12 @@ describe('collections test', function() {
       ]
     };
 
+    it('deleteTodo', () => {
+      const result = todos(initialState, TodoActions.deleteTodo(1));
+      result.todos.length.should.equal(3);
+      result.todos[1].id.should.equal(2);
+    });
+
     it('check', () => {
       initialState.todos[1].children[0].done.should.equal(false);
       const result = todos(initialState, TodoActions.checkTodo(4));

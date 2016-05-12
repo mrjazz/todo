@@ -18,7 +18,7 @@ const dropSource = {
   endDrag(props, monitor) {
     // console.log(monitor.getItem());
     // console.log('end ' + props.todo.id + ' - ' + monitor.getItem().id);
-    props.dropItem(monitor.getItem().id);
+    props.dropItemHandler(monitor.getItem().id);
   }
 };
 
@@ -106,6 +106,7 @@ export default class Item extends Component {
             name="checkbox"
             checked={todo.done}
             ref={this._focus.bind(this)}
+            onKeyDown={this.props.onKeyDown}
             onBlur={this.props.onFocusOut}
             onFocus={this.props.onFocus}
             onChange={this._checkTodo}/>

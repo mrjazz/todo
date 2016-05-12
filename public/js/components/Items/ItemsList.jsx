@@ -3,17 +3,19 @@ import React, {Component, PropTypes} from 'react';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
+import ItemsFilter from './ItemsFilter.jsx';
 import ItemAdd from './ItemAdd.jsx';
 import Item from './Item.jsx';
 
 import * as HighlightType from '../../constants/HighlightTypes';
-// import * as ItemIconTypes from '../../constants/ItemIconTypes';
 
 import {getParentFor, isParentOf, searchr, filterr, searchrIndex, searchrByIndex} from '../../lib/CollectionUtils.js';
-import {moveBelowTodo, moveAboveTodo, makeChildOf, selectTodo, updateTodo, flipTodo} from '../../actions/todos';
+import * as TodoAction from '../../actions/todos';
 
 
 export default class ItemsList extends Component {
+
+  state;
 
   constructor() {
     super();
@@ -24,8 +26,10 @@ export default class ItemsList extends Component {
       highlightStyle: HighlightType.NONE,
       highlightId: null
     };
-    this.dropItem      = this.dropItem.bind(this);
-    this.highlightItem = this.highlightItem.bind(this);
+    this.dropItemHandler         = this.dropItemHandler.bind(this);
+    this.highlightItem    = this.highlightItem.bind(this);
+    this.handleFilter    = this.handleFilter.bind(this);
+    this.itemKeyPressHandler = this.itemKeyPressHandler.bind(this);
   }
 
   static contextTypes = {
@@ -34,72 +38,68 @@ export default class ItemsList extends Component {
 
   static propTypes = {
     todos: React.PropTypes.object.isRequired
+  };
+
+  render() {
+    return <ItemsFilter onFilter={this.handleFilter}>
+      {this.renderItems(this.curItems())}
+    </ItemsFilter>;
   }
 
-  // static propTypes = {
-  //   todos         : React.PropTypes.object.isRequired,
-  //   selectTodo    : PropTypes.func.isRequired,
-  //   moveAboveTodo : PropTypes.func.isRequired,
-  //   moveBelowTodo : PropTypes.func.isRequired,
-  //   checkTodo     : PropTypes.func.isRequired,
-  //   updateTodo    : PropTypes.func.isRequired,
-  //   flipTodo      : PropTypes.func.isRequired,
-  //   makeChildOf   : PropTypes.func.isRequired
-  // };
+  renderItems(items) {
+    return items.map(
+      (i, j) => <div key={j} className="items">
+        <Item
+          ref={j}
+          className={this.stylesForItem(i)}
+          todo={i}
+          focus={this.state.editId == null && this.props.todos.focusId == i.id}
+          dropItem={this.dropItemHandler}
+          highlight={this.highlightItem}
+          onKeyDown={this.itemKeyPressHandler}
+          onFocus={() => this.itemFocusHandler(i.id)}
+          onFocusOut={() => this.focusOutHandler()}
+          onChange={() => this.props.checkTodo(i.id)}
+        >
+          {i.id == this.state.editId ?
+            <ItemAdd
+              value={i.text}
+              onUpdate={this.updateItemHandler.bind(this, i.id)}
+              onFocusOut={this.updateCancelHandler.bind(this, i.id)} />
+            : <label onClick={this.itemFocusHandler.bind(this, i.id)}>{i.text} - {i.id} - {j}</label>
+          }
+        </Item>
+        {i.children != undefined && i.children.length > 0 && i.open ? this.renderItems(i.children) : ''}
+      </div>
+    );
+  }
 
-  // componentWillMount() {
-  //   this.setState({
-  //     items : null
-  //   });
-  // }
-
-  dropItem(id) {
+  dropItemHandler(id) {
     const highlightId = this.state.highlightId;
+    const store = this.context.store;
     if (highlightId !== null) {
       // console.log(`drop ${id} ${this.state.highlightStyle} ${this.props.todos.focusId}`);
 
-      if (isParentOf(this._curItems(), (i) => i.id == id, (i) => i.id == highlightId)) {
+      if (isParentOf(this.curItems(), (i) => i.id == id, (i) => i.id == highlightId)) {
         console.log("Drop parent in children!");
         return;
       }
 
       switch (this.state.highlightStyle) {
         case HighlightType.HOVER:
-          this.context.store.dispatch(makeChildOf(id, highlightId));
+          store.dispatch(makeChildOf(id, highlightId));
           break;
         case HighlightType.ABOVE:
-          this.context.store.dispatch(moveAboveTodo(id, highlightId));
+          store.dispatch(moveAboveTodo(id, highlightId));
           break;
         case HighlightType.BELOW:
-          this.context.store.dispatch(moveBelowTodo(id, highlightId));
+          store.dispatch(moveBelowTodo(id, highlightId));
           break;
       }
 
       this.setState(Object.assign(this.state, {highlightStyle: HighlightType.CURRENT, highlightId: null}));
-      this.context.store.dispatch(selectTodo(id));
+      store.dispatch(TodoAction.selectTodo(id));
     }
-  }
-
-  render() {
-    return <div className="todos" ref="self" onKeyDown={this._keyPressHandler.bind(this)}>
-      <ul className="filters">
-        {['all', 'completed', 'active'].map((title, key) =>
-          <li key={key} className={this.state.filter === title ? 'active' : ''}>
-            {this.state.filter === title ?
-              title :
-              <a href="#"
-                onClick={() => {this._handleFilter(title)}}
-                onKeyPress={() => {this._handleFilter(title)}}>
-                {title}
-              </a>
-            }
-          </li>
-        )}
-      </ul>
-      <div className="all-items">
-        {this._getItems(this._curItems())}
-      </div>
-    </div>
   }
 
   highlightItem(focusId, type) {
@@ -111,49 +111,21 @@ export default class ItemsList extends Component {
     ));
   }
 
-  _focusOut() {
+  focusOutHandler() {
     this.setState(Object.assign(
       this.state, {
         highlightStyle: this.props.todos.focusId !== null ? HighlightType.CURRENT : null
       }
     ));
-    this._handleItemFocus(null);
+    this.itemFocusHandler(null);
   }
 
-  _getItems(items) {
-    return items.map(
-      (i, j) => <div key={j} className="items">
-        <Item
-          ref={j}
-          className={this._stylesForItem(i)}
-          todo={i}
-          focus={this.state.editId == null && this.props.todos.focusId == i.id}
-          dropItem={this.dropItem}
-          highlight={this.highlightItem}
-          onFocus={() => this._handleItemFocus(i.id)}
-          //flipTodo={this.props.flipTodo}
-          onFocusOut={() => this._focusOut()}
-          onChange={() => this.props.checkTodo(i.id)}
-        >
-        {i.id == this.state.editId ?
-          <ItemAdd
-            value={i.text}
-            onUpdate={this._handleUpdateItem.bind(this, i.id)}
-            onFocusOut={this._handleCancelUpdate.bind(this, i.id)} />
-          : <label onClick={this._handleItemFocus.bind(this, i.id)}>{i.text} - {i.id} - {j}</label>
-        }
-        </Item>
-        {i.children != undefined && i.children.length > 0 && i.open ? this._getItems(i.children) : ''}
-      </div>
-    );
-  }
-
-  _curState() {
+  curState() {
     return this.context.store.getState().todos;
   }
 
-  _curItems() {
-    return filterr(this._curState().todos, (i) => {
+  curItems() {
+    return filterr(this.curState().todos, (i) => {
       switch(this.state.filter) {
         case 'active':
           return !i.done;
@@ -165,101 +137,127 @@ export default class ItemsList extends Component {
     });
   }
 
-  _handleFilter(filter) {
+  handleFilter(filter) {
     this.setState(Object.assign(this.state, {filter}));
   }
 
-  _handleItemFocus(id) {
-    this.context.store.dispatch(selectTodo(id));
+  itemFocusHandler(id) {
+    this.context.store.dispatch(TodoAction.selectTodo(id));
   }
 
-  _handleCancelUpdate(id) {
+  updateCancelHandler(id) {
     this.setState(Object.assign(this.state, {editId: null}));
   }
 
-  _handleUpdateItem(id, text) {
-    this.context.store.dispatch(updateTodo(id, text));
+  updateItemHandler(id, text) {
+    if (text != null) {
+      this.context.store.dispatch(TodoAction.updateTodo(id, text));
+    } else {
+      this.context.store.dispatch(TodoAction.selectTodo(id));
+    }
     //this._handleItemFocus(id);
     this.setState(Object.assign(this.state, {editId: null, highlightStyle: HighlightType.CURRENT}));
   }
 
-  _findIndexById(id) {
-    return searchrIndex(this._curState().todos, function (i) { return i.id == id});
+  findIndexById(id) {
+    return searchrIndex(this.curState().todos, function (i) { return i.id == id});
   }
 
-  _findIdByIndex(index) {
-    return searchrByIndex(this._curState().todos, index).id;
+  findIdByIndex(index) {
+    return searchrByIndex(this.curState().todos, index).id;
   }
 
-  _keyPressHandler(e) {
+  itemKeyPressHandler(e) {
     const key = e.key;
+    const store = this.context.store;
 
-    const todos = this._curItems();
-    const id = this._curState().focusId;
-    const setFocus = this._handleItemFocus.bind(this); // need for passing in jumpOnTop()
+    // console.log(key);
 
-    if (key == 'ArrowRight' || key == 'ArrowLeft') {
-      if (this._curState().focusId == null) return;
+    const todos = this.curItems();
+    const id = this.curState().focusId;
+    const setFocus = this.itemFocusHandler.bind(this); // need for passing in jumpOnTop()
 
-      const todo = searchr(todos, function (i) {
-        return i.id == id
-      });
-
-      function jumpOnTop() { // need for avoid code duplication
-        if (key == 'ArrowLeft') {
-          // if item has parent, jump to parent by arrowLeft
-          const parent = getParentFor(todos, (i) => i.id == id);
-          if (parent) {
-            setFocus(parent.id);
-          } else {
-            setFocus(todos[0].id);
-          }
+    switch (key) {
+      case 'Delete':
+        let selNextTodo = lookupNext(todos, id); // next
+        if (selNextTodo === false) {
+          selNextTodo = lookupPrev(todos, id); // previous
         }
-      }
+        store.dispatch(TodoAction.deleteTodo(id));
+        store.dispatch(TodoAction.selectTodo(selNextTodo.id));
+        break;
+      case 'ArrowRight':
+      case 'ArrowLeft':
+        if (this.curState().focusId == null) return;
 
-      if (todo.children.length > 0) {
-        if (todo.open) { // is expanded
+        const todo = searchr(todos, function (i) {
+          return i.id == id
+        });
+
+        function jumpOnTop() { // need for avoid code duplication
           if (key == 'ArrowLeft') {
-            // if has children, collapse by arrowLeft
-            this.context.store.dispatch(flipTodo(id));
-          } else if (key == 'ArrowRight') {
-            // if has children, jump to first item by arrowRight
-            this._handleItemFocus(todo.children[0].id);
-          }
-        } else { // is collapsed
-          if (key == 'ArrowRight') {
-            // if has children, expand by arrowRight
-            this.context.store.dispatch(flipTodo(id));
-          } else if (key == 'ArrowLeft') {
-            console.log("jump on top");
-            jumpOnTop();
+            // if item has parent, jump to parent by arrowLeft
+            const parent = getParentFor(todos, (i) => i.id == id);
+            if (parent) {
+              setFocus(parent.id);
+            } else {
+              setFocus(todos[0].id);
+            }
           }
         }
-        return;
-      }
 
-      jumpOnTop();
+        if (todo.children.length > 0) {
+          if (todo.open) { // is expanded
+            if (key == 'ArrowLeft') {
+              // if has children, collapse by arrowLeft
+              store.dispatch(TodoAction.flipTodo(id));
+            } else if (key == 'ArrowRight') {
+              // if has children, jump to first item by arrowRight
+              this.itemFocusHandler(todo.children[0].id);
+            }
+          } else { // is collapsed
+            if (key == 'ArrowRight') {
+              // if has children, expand by arrowRight
+              store.dispatch(TodoAction.flipTodo(id));
+            } else if (key == 'ArrowLeft') {
+              console.log("jump on top");
+              jumpOnTop();
+            }
+          }
+          return;
+        }
 
-    } else if (key == 'ArrowUp' || key == 'ArrowDown') {
-      // arrows handling
-      if (id == null) return; // if not focused
-      let nextTodo = false;
+        jumpOnTop();
+        break;
 
-      if (key == 'ArrowUp') nextTodo = lookupPrev(todos, id);
-      if (key == 'ArrowDown') nextTodo = lookupNext(todos, id);
 
-      if (nextTodo) {
-        this._handleItemFocus(nextTodo.id);
-        // this.setState(Object.assign(this.state, {focusId: nextTodo.id}));
-      }
-    } else if (key == 'Enter') {
-      this.setState(Object.assign(this.state, {editId: id, highlightStyle: HighlightType.HOVER}));
-      e.stopPropagation();
-      e.preventDefault();
+      case 'ArrowUp':
+      case 'ArrowDown':
+
+        // arrows handling (move up, move down)
+
+        if (id == null) return; // if not focused
+        let nextTodo = false;
+
+        if (key == 'ArrowUp') nextTodo = lookupPrev(todos, id);
+        if (key == 'ArrowDown') nextTodo = lookupNext(todos, id);
+
+        if (nextTodo) {
+          this.itemFocusHandler(nextTodo.id);
+        }
+        break;
+
+      case 'Enter':
+      case 'F2':
+        // edit item
+        this.setState(Object.assign(this.state, {editId: id, highlightStyle: HighlightType.HOVER}));
+        e.stopPropagation();
+        e.preventDefault();
+        break;
     }
   }
 
-  _getHighlightCSS(style) {
+  getHighlightCSS(style) {
     switch (style) {
       case HighlightType.HOVER:
         return 'item-hover';
@@ -272,17 +270,17 @@ export default class ItemsList extends Component {
     }
   }
 
-  _stylesForItem(i) {
+  stylesForItem(i) {
     let styles = ['item'];
     if (i.done) styles.push('complete');
 
     if (i.id == this.state.highlightId) {
-      styles.push(this._getHighlightCSS(this.state.highlightStyle));
+      styles.push(this.getHighlightCSS(this.state.highlightStyle));
     } else if (i.id == this.state.editId) {
-      styles.push(this._getHighlightCSS(HighlightType.HOVER));
-    } else if (this.state.highlightId == null && i.id == this._curState().focusId) {
+      styles.push(this.getHighlightCSS(HighlightType.HOVER));
+    } else if (this.state.highlightId == null && i.id == this.curState().focusId) {
       // if item is highlighted do not highlight focused item
-      styles.push(this._getHighlightCSS(this.state.highlightStyle));
+      styles.push(this.getHighlightCSS(this.state.highlightStyle));
     }
     return styles.join(' ');
   }
@@ -301,6 +299,7 @@ export function lookupNext(items, id) {
 }
 
 /**
+ * Search next or previous items in tree of items
  *
  * @param items
  * @param id

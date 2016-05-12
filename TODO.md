@@ -3,24 +3,27 @@ TODO
 
 Fixes:
 
- - [ ] Fix multiple selectTodo actions
+ - [X] Fix multiple selectTodo actions (probably can't be done because need process onFocus, onFocusOut events)
+ - [X] Fix multiple flipTodo actions
  - [X] Fix critical issue with crashing browser
  - [X] Fix issue with missed parent for nested items
 
 Add new shortcuts:
- - [ ] ? - Help
- - [ ] Ctrl+D - Duplicate
- - [ ] Ctrl+F - Search
+ - [X] Exit from edit by Esc
  - [ ] Ctrl+D - Duplicate
  - [ ] Ctrl+C or Ctrl+X - Copy or Cut
  - [ ] Ctrl+V - Paste below
  - [ ] Ctrl+←/Ctrl+→ - Change nesting for list items
  - [ ] Ctrl+↑/Ctrl+↓ - Re-order list items
- - [ ] Del - delete
+ - [X] Del - delete
  - [ ] F2 - make edit
+ - [ ] Ctrl+F - Search
  - [ ] Enter - Add below
  - [ ] Alt+Enter - Add above
  - [ ] Tab/Shift+Tab - Indent or unindent
+ - [ ] Ctrl+Shift ← - Collapse all
+ - [ ] Ctrl+Shift → - Expand all
+ - [ ] ? - Help
  - [X] Jump to parent by ←
  - [X] If item has children and closed, expand by →
  - [X] If item has children and open, collapse by ←

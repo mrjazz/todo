@@ -1,6 +1,6 @@
 import * as TodoAction from '../constants/TodoActionTypes';
 import Todo from '../models/todo';
-import {mapr, filterr, insertrAfter, insertrBefore} from '../lib/CollectionUtils.js';
+import {lengthr, mapr, filterr, insertrAfter, insertrBefore} from '../lib/CollectionUtils.js';
 
 
 const initialState = {
@@ -18,7 +18,7 @@ const initialState = {
 
 export function todos(state = initialState, action) {
 
-  console.info(action);
+  // console.info(action);
 
   return Object.assign(clone(state), {
     todos   : processItemsAction(state.todos, action),
@@ -42,7 +42,7 @@ function processItemsAction(state, action) {
     case TodoAction.ADD_TODO:
       return [
         ...state,
-        new Todo(state.length, action.text, false)
+        new Todo(lengthr(state) + 1, action.text, false)
       ];
 
     case TodoAction.CHECK_TODO:
@@ -66,10 +66,7 @@ function processItemsAction(state, action) {
       return insert(insertrAfter, state, action.id, action.parentId);
 
     case TodoAction.DELETE_TODO:
-      return [
-        ...state.slice(0, action.index),
-        ...state.slice(+action.index + 1)
-      ];
+      return filterr(state, (i) => i.id !== action.id);
 
     case TodoAction.MAKE_CHILD_OF_TODO:
       return (

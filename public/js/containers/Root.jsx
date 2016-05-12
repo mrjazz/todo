@@ -17,8 +17,6 @@ export default class Root extends Component {
 
   render() {
     const { todos, store } = this.props;
-    //   <ItemsView todos={todos} actions={actions}/>
-    //
     return <Provider store={store}>
       <div>
         <ItemsView todos={todos} />

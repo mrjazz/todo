@@ -19,14 +19,3 @@ export default class ItemsView extends Component {
         </div>
   }
 }
-
-/*
- todos={todosState}
- selectTodo={todoActions.selectTodo}
- checkTodo={todoActions.checkTodo}
- moveBelowTodo={todoActions.moveBelowTodo}
- moveAboveTodo={todoActions.moveAboveTodo}
- makeChildOf={todoActions.makeChildOf}
- updateTodo={todoActions.updateTodo}
- flipTodo={todoActions.flipTodo}
- */
