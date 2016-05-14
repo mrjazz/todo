@@ -16,7 +16,7 @@ Add new shortcuts:
  - [ ] Ctrl+←/Ctrl+→ - Change nesting for list items
  - [ ] Ctrl+↑/Ctrl+↓ - Re-order list items
  - [X] Del - delete
- - [ ] F2 - make edit
+ - [X] F2 - make edit
  - [ ] Ctrl+F - Search
  - [ ] Enter - Add below
  - [ ] Alt+Enter - Add above
