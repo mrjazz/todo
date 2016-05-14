@@ -18,6 +18,24 @@ describe('collections test', function() {
       ]
     };
 
+    it('addBelow', () => {
+      const title = "Test";
+      const result1 = todos(initialState, TodoActions.addBelow(1, title));
+      result1.todos[2].text.should.equal(title);
+
+      const result2 = todos(initialState, TodoActions.addBelow(5, title));
+      result2.todos[1].children[2].text.should.equal(title);
+    });
+
+    it('addAbove', () => {
+      const title = "Test";
+      const result1 = todos(initialState, TodoActions.addAbove(1, title));
+      result1.todos[1].text.should.equal(title);
+
+      const result2 = todos(initialState, TodoActions.addAbove(4, title));
+      result2.todos[1].children[0].text.should.equal(title);
+    });
+
     it('deleteTodo', () => {
       const result = todos(initialState, TodoActions.deleteTodo(1));
       result.todos.length.should.equal(3);

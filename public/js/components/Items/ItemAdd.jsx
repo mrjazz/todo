@@ -1,7 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 
-import {addTodo} from '../../actions/todos';
-
 
 export default class ItemAdd extends Component {
 
@@ -12,9 +10,14 @@ export default class ItemAdd extends Component {
   _inputHandler(e) {
     switch (e.key) {
       case 'Enter':
+        this.props.onUpdate(this.refs.ctrlInput.value);
+        this.refs.ctrlInput.value = '';
+        e.stopPropagation();
+        e.preventDefault();
+        break;
       case 'Escape':
         //this.props.onAdd(this.refs.ctrlInput.value);
-        this.props.onUpdate(e.key == 'Enter' ? this.refs.ctrlInput.value : null);
+        this.props.onCancel();
         this.refs.ctrlInput.value = '';
         e.stopPropagation();
         e.preventDefault();
@@ -29,7 +32,7 @@ export default class ItemAdd extends Component {
               autoFocus="true"
               ref="ctrlInput"
               defaultValue={this.props.value}
-              onBlur={this.props.onFocusOut}
+              onBlur={this.props.onCancel}
               onKeyDown={this._inputHandler.bind(this)} />
   }
 }

@@ -17,7 +17,7 @@ export default class DetailsView extends Component {
   }
 
   render() {
-    return <h1>hello</h1>;
+    return <h1></h1>;
   }
 
 /*  render() {

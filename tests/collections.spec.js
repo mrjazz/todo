@@ -24,7 +24,28 @@ describe('collections test', function() {
       {label: 'b'}
     ];
 
-    it('callr', () => {
+    it('insertrBefore', () => {
+      const result1 = insertrBefore(arr, {test: 'passed'}, (current) => current.label == 'b');
+      result1.length.should.equal(3);
+      result1[1].test.should.equal('passed');
+
+      const result2 = insertrBefore(arr, {test: 'passed'}, (current) => current.label == 'a2');
+      result2[0].children.length.should.equal(3);
+      result2[0].children[1].test.should.equal('passed');
+    });
+
+    it('insertrAfter', () => {
+      const result1 = insertrAfter(arr, {test: 'passed'}, (current) => current.label == 'b');
+      result1.length.should.equal(3);
+      result1[2].test.should.equal('passed');
+
+      const result2 = insertrAfter(arr, {test: 'passed'}, (current) => current.label == 'a2');
+      result2[0].children.length.should.equal(3);
+      result2[0].children[2].test.should.equal('passed');
+    });
+
+
+  it('callr', () => {
       const result = [];
       callr(arr, function (i) { result.push(i.label); }, 'children');
       result.length.should.equal(4);
@@ -67,26 +88,6 @@ describe('collections test', function() {
 
     it('lengthr', () => {
       lengthr(arr, 'children').should.equal(4);
-    });
-
-    it('insertrBefore', () => {
-      const result1 = insertrBefore(arr, {test: 'passed'}, (current) => current.label == 'b');
-      result1.length.should.equal(3);
-      result1[1].test.should.equal('passed');
-
-      const result2 = insertrBefore(arr, {test: 'passed'}, (current) => current.label == 'a2');
-      result2[0].children.length.should.equal(3);
-      result2[0].children[1].test.should.equal('passed');
-    });
-
-    it('insertrAfter', () => {
-      const result1 = insertrAfter(arr, {test: 'passed'}, (current) => current.label == 'b');
-      result1.length.should.equal(3);
-      result1[2].test.should.equal('passed');
-
-      const result2 = insertrAfter(arr, {test: 'passed'}, (current) => current.label == 'a2');
-      result2[0].children.length.should.equal(3);
-      result2[0].children[2].test.should.equal('passed');
     });
 
     it('isParentOf', () => {

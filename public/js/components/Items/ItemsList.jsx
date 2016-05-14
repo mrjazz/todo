@@ -21,8 +21,9 @@ export default class ItemsList extends Component {
     super();
     this.state = {
       cards: [],
-      editId: null,
       filter: 'all',
+      editId: null,
+      createId: null,
       highlightStyle: HighlightType.NONE,
       highlightId: null
     };
@@ -61,17 +62,27 @@ export default class ItemsList extends Component {
           onFocusOut={() => this.focusOutHandler()}
           onChange={() => this.props.checkTodo(i.id)}
         >
-          {i.id == this.state.editId ?
-            <ItemAdd
-              value={i.text}
-              onUpdate={this.updateItemHandler.bind(this, i.id)}
-              onFocusOut={this.updateCancelHandler.bind(this, i.id)} />
-            : <label onClick={this.itemFocusHandler.bind(this, i.id)}>{i.text} - {i.id} - {j}</label>
-          }
+          {this.getControl(i)}
         </Item>
         {i.children != undefined && i.children.length > 0 && i.open ? this.renderItems(i.children) : ''}
       </div>
     );
+  }
+
+  getControl(todo) {
+    if (todo.id === this.state.editId) {
+      return <ItemAdd
+        value={todo.text}
+        onUpdate={this.updateItemHandler.bind(this, todo.id)}
+        onCancel={this.updateCancelHandler.bind(this, todo.id)} />
+    } if (todo.id === this.state.createId) {
+      return <ItemAdd
+        value={todo.text}
+        onUpdate={this.createItemHandler.bind(this, todo.id)}
+        onCancel={this.createCancelHandler.bind(this, todo.id)} />
+    } else {
+      return <label onClick={this.itemFocusHandler.bind(this, todo.id)}>{todo.text} - {todo.id}</label>;
+    }
   }
 
   dropItemHandler(id) {
@@ -157,6 +168,26 @@ export default class ItemsList extends Component {
     }
     //this._handleItemFocus(id);
     this.setState(Object.assign(this.state, {editId: null, highlightStyle: HighlightType.CURRENT}));
+  }
+
+  createItemHandler(id, text) {
+    console.log("create");
+
+    this.context.store.dispatch(TodoAction.updateTodo(id, text));
+
+    this.setState(Object.assign(
+      this.state,
+      {createId: null, highlightId: null, highlightStyle: HighlightType.NONE}
+    ));
+  }
+
+  createCancelHandler() {
+    this.context.store.dispatch(TodoAction.cancelCreateTodo());
+
+    this.setState(Object.assign(
+      this.state,
+      {createId: null, highlightId: null, highlightStyle: HighlightType.NONE}
+    ));
   }
 
   findIndexById(id) {
@@ -248,6 +279,16 @@ export default class ItemsList extends Component {
         break;
 
       case 'Enter':
+        // add below
+        store.dispatch(TodoAction.addBelow(id, ''));
+        const newId = this.curState().lastInsertId;
+        this.setState(Object.assign(this.state, {
+          createId: newId,
+          highlightId: newId,
+          highlightStyle: HighlightType.HOVER
+        }));
+        break;
+
       case 'F2':
         // edit item
         this.setState(Object.assign(this.state, {editId: id, highlightStyle: HighlightType.HOVER}));

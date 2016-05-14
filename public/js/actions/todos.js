@@ -14,6 +14,28 @@ export function addTodo(text) {
   };
 }
 
+export function cancelCreateTodo() {
+  return {
+    type: TodoAction.CANCEL_CREATE
+  };
+}
+
+export function addBelow(id, text) {
+  return {
+    type: TodoAction.ADD_BELOW,
+    id,
+    text
+  };
+}
+
+export function addAbove(id, text) {
+  return {
+    type: TodoAction.ADD_ABOVE,
+    id,
+    text
+  };
+}
+
 export function checkTodo(id) {
   return {
     type: TodoAction.CHECK_TODO,

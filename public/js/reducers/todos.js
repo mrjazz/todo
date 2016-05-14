@@ -5,6 +5,8 @@ import {lengthr, mapr, filterr, insertrAfter, insertrBefore} from '../lib/Collec
 
 const initialState = {
   focusId: null,
+  lastInsertId: null,
+  cancelId: null,
   todos: [
     new Todo(0, 'Learn React'),
     new Todo(1, 'Learn Redux', true, [
@@ -20,10 +22,53 @@ export function todos(state = initialState, action) {
 
   // console.info(action);
 
-  return Object.assign(clone(state), {
-    todos   : processItemsAction(state.todos, action),
-    focusId : processFocusAction(state.focusId, action)
-  });
+  return processFullState(
+    Object.assign(clone(state), {
+      todos   : processItemsAction(state.todos, action),
+      focusId : processFocusAction(state.focusId, action)
+    }),
+    action
+  );
+}
+
+function processFullState(state, action) {
+
+  function newId() {
+    const id = lengthr(state.todos) + 1;
+    state.lastInsertId = id;
+    return id;
+  }
+
+  switch (action.type) {
+    case TodoAction.ADD_TODO:
+      state.todos = [
+        ...state,
+        new Todo(newId(), action.text, false)
+      ];
+      break;
+
+    case TodoAction.ADD_BELOW:
+      state.cancelId = state.focusId;
+      state.todos = insertrAfter(state.todos, new Todo(newId(), action.text), (i) => i.id == action.id);
+      break;
+
+    case TodoAction.ADD_ABOVE:
+      state.cancelId = state.focusId;
+      state.todos = insertrBefore(state.todos, new Todo(newId(), action.text), (i) => i.id == action.id);
+      break;
+
+    case TodoAction.CANCEL_CREATE:
+      state.todos = filterr(state.todos, (i) => i.id !== state.lastInsertId);
+      state.focusId = state.cancelId;
+      state.cancelId = null;
+      break;
+
+    case TodoAction.UPDATE_TODO:
+      state.cancelId = null;
+      break;
+  }
+
+  return state;
 }
 
 function processFocusAction(state, action) {
@@ -39,11 +84,6 @@ function processFocusAction(state, action) {
 
 function processItemsAction(state, action) {
   switch (action.type) {
-    case TodoAction.ADD_TODO:
-      return [
-        ...state,
-        new Todo(lengthr(state) + 1, action.text, false)
-      ];
 
     case TodoAction.CHECK_TODO:
       return mapr(state, (todo) => {

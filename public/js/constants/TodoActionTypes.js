@@ -1,4 +1,7 @@
 export const ADD_TODO           = 'ADD_TODO';
+export const ADD_BELOW          = 'ADD_BELOW';
+export const CANCEL_CREATE      = 'CANCEL_CREATE';
+export const ADD_ABOVE          = 'ADD_ABOVE';
 export const DELETE_TODO        = 'DELETE_TODO';
 export const CHECK_TODO         = 'CHECK_TODO';
 export const UPDATE_TODO        = 'UPDATE_TODO';
