@@ -7,6 +7,7 @@ Fixes:
  - [X] Fix multiple flipTodo actions
  - [X] Fix critical issue with crashing browser
  - [X] Fix issue with missed parent for nested items
+ - [ ] For some reason after Del, Enter drop item (new ID should be generated according to max, not lengthr)
 
 Add new shortcuts:
  - [X] Exit from edit by Esc
@@ -17,10 +18,11 @@ Add new shortcuts:
  - [ ] Ctrl+↑/Ctrl+↓ - Re-order list items
  - [X] Del - delete
  - [X] F2 - make edit
+ - [ ] Home/End - jump on top/end of list
  - [ ] Ctrl+F - Search
- - [ ] Enter - Add below
- - [ ] Alt+Enter - Add above
- - [ ] Tab/Shift+Tab - Indent or unindent
+ - [X] Enter - Add below
+ - [X] Alt+Enter - Add item as child
+ - [ ] Tab/Shift+Tab - Previous/next
  - [ ] Ctrl+Shift ← - Collapse all
  - [ ] Ctrl+Shift → - Expand all
  - [ ] ? - Help

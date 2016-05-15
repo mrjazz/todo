@@ -18,7 +18,7 @@ const dropSource = {
   endDrag(props, monitor) {
     // console.log(monitor.getItem());
     // console.log('end ' + props.todo.id + ' - ' + monitor.getItem().id);
-    props.dropItemHandler(monitor.getItem().id);
+    props.onDrop(monitor.getItem().id);
   }
 };
 

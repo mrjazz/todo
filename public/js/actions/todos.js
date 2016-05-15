@@ -28,9 +28,9 @@ export function addBelow(id, text) {
   };
 }
 
-export function addAbove(id, text) {
+export function addAsChild(id, text) {
   return {
-    type: TodoAction.ADD_ABOVE,
+    type: TodoAction.ADD_AS_CHILD,
     id,
     text
   };

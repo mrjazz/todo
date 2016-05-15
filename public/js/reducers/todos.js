@@ -1,6 +1,6 @@
 import * as TodoAction from '../constants/TodoActionTypes';
 import Todo from '../models/todo';
-import {lengthr, mapr, filterr, insertrAfter, insertrBefore} from '../lib/CollectionUtils.js';
+import {callr, lengthr, mapr, filterr, insertrAfter, insertrBefore} from '../lib/CollectionUtils.js';
 
 
 const initialState = {
@@ -34,12 +34,26 @@ export function todos(state = initialState, action) {
 function processFullState(state, action) {
 
   function newId() {
-    const id = lengthr(state.todos) + 1;
-    state.lastInsertId = id;
-    return id;
+    let max = 0;
+    callr(state.todos, (i) => max = i.id > max ? i.id : max);
+    state.lastInsertId = max + 1;
+    return state.lastInsertId;
   }
 
   switch (action.type) {
+    case TodoAction.ADD_AS_CHILD:
+      state.cancelId = state.focusId;
+      state.todos = mapr(state.todos, (i) => {
+        if (i.id === action.id) {
+          i.children = [
+            ...i.children,
+            new Todo(newId(), action.text, false)
+          ];
+        }
+        return i;
+      });
+      break;
+
     case TodoAction.ADD_TODO:
       state.todos = [
         ...state,
@@ -50,11 +64,6 @@ function processFullState(state, action) {
     case TodoAction.ADD_BELOW:
       state.cancelId = state.focusId;
       state.todos = insertrAfter(state.todos, new Todo(newId(), action.text), (i) => i.id == action.id);
-      break;
-
-    case TodoAction.ADD_ABOVE:
-      state.cancelId = state.focusId;
-      state.todos = insertrBefore(state.todos, new Todo(newId(), action.text), (i) => i.id == action.id);
       break;
 
     case TodoAction.CANCEL_CREATE:

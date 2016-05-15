@@ -55,7 +55,7 @@ export default class ItemsList extends Component {
           className={this.stylesForItem(i)}
           todo={i}
           focus={this.state.editId == null && this.props.todos.focusId == i.id}
-          dropItem={this.dropItemHandler}
+          onDrop={this.dropItemHandler}
           highlight={this.highlightItem}
           onKeyDown={this.itemKeyPressHandler}
           onFocus={() => this.itemFocusHandler(i.id)}
@@ -70,12 +70,12 @@ export default class ItemsList extends Component {
   }
 
   getControl(todo) {
-    if (todo.id === this.state.editId) {
+    if (todo.id === this.state.editId) { // edit existing item
       return <ItemAdd
         value={todo.text}
         onUpdate={this.updateItemHandler.bind(this, todo.id)}
         onCancel={this.updateCancelHandler.bind(this, todo.id)} />
-    } if (todo.id === this.state.createId) {
+    } if (todo.id === this.state.createId) { // create new item
       return <ItemAdd
         value={todo.text}
         onUpdate={this.createItemHandler.bind(this, todo.id)}
@@ -98,13 +98,13 @@ export default class ItemsList extends Component {
 
       switch (this.state.highlightStyle) {
         case HighlightType.HOVER:
-          store.dispatch(makeChildOf(id, highlightId));
+          store.dispatch(TodoAction.makeChildOf(id, highlightId));
           break;
         case HighlightType.ABOVE:
-          store.dispatch(moveAboveTodo(id, highlightId));
+          store.dispatch(TodoAction.moveAboveTodo(id, highlightId));
           break;
         case HighlightType.BELOW:
-          store.dispatch(moveBelowTodo(id, highlightId));
+          store.dispatch(TodoAction.moveBelowTodo(id, highlightId));
           break;
       }
 
@@ -158,6 +158,7 @@ export default class ItemsList extends Component {
 
   updateCancelHandler(id) {
     this.setState(Object.assign(this.state, {editId: null}));
+    this.itemFocusHandler(id);
   }
 
   updateItemHandler(id, text) {
@@ -171,8 +172,6 @@ export default class ItemsList extends Component {
   }
 
   createItemHandler(id, text) {
-    console.log("create");
-
     this.context.store.dispatch(TodoAction.updateTodo(id, text));
 
     this.setState(Object.assign(
@@ -279,8 +278,23 @@ export default class ItemsList extends Component {
         break;
 
       case 'Enter':
-        // add below
-        store.dispatch(TodoAction.addBelow(id, ''));
+        console.log();
+        if (e.altKey) {
+          // [Alt + Enter] add as child
+          const curTodo = searchr(todos, function (i) {
+            return i.id == id
+          });
+
+          if (!curTodo.open) { // expand current item if it's closed
+            store.dispatch(TodoAction.flipTodo(id));
+          }
+
+          store.dispatch(TodoAction.addAsChild(id, ''));
+        } else {
+          // [Enter] add below current item
+          store.dispatch(TodoAction.addBelow(id, ''));
+        }
+
         const newId = this.curState().lastInsertId;
         this.setState(Object.assign(this.state, {
           createId: newId,
