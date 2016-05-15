@@ -94,6 +94,20 @@ function processFocusAction(state, action) {
 function processItemsAction(state, action) {
   switch (action.type) {
 
+    case TodoAction.COLLAPSE_ALL:
+      return mapr(state, (todo) => {
+        return todo.open ?
+          Object.assign(clone(todo), { open: false }) :
+          todo;
+      });
+
+    case TodoAction.EXPAND_ALL:
+      return mapr(state, (todo) => {
+        return todo.children.length > 0 ?
+          Object.assign(clone(todo), { open: true }) :
+          todo;
+      });
+
     case TodoAction.CHECK_TODO:
       return mapr(state, (todo) => {
         return todo.id === action.id ?

@@ -7,6 +7,18 @@ export function deleteTodo(id) {
   };
 }
 
+export function expandAll() {
+  return {
+    type: TodoAction.EXPAND_ALL
+  };
+}
+
+export function collapseAll() {
+  return {
+    type: TodoAction.COLLAPSE_ALL
+  };
+}
+
 export function addTodo(text) {
   return {
     type: TodoAction.ADD_TODO,

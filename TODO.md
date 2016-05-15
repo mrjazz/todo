@@ -11,20 +11,20 @@ Fixes:
 
 Add new shortcuts:
  - [X] Exit from edit by Esc
- - [ ] Ctrl+D - Duplicate
+ - [X] Ctrl+D - Duplicate
  - [ ] Ctrl+C or Ctrl+X - Copy or Cut
  - [ ] Ctrl+V - Paste below
  - [ ] Ctrl+←/Ctrl+→ - Change nesting for list items
  - [ ] Ctrl+↑/Ctrl+↓ - Re-order list items
  - [X] Del - delete
  - [X] F2 - make edit
- - [ ] Home/End - jump on top/end of list
+ - [X] Home/End - jump on top/end of list
  - [ ] Ctrl+F - Search
  - [X] Enter - Add below
  - [X] Alt+Enter - Add item as child
- - [ ] Tab/Shift+Tab - Previous/next
- - [ ] Ctrl+Shift ← - Collapse all
- - [ ] Ctrl+Shift → - Expand all
+ - [X] Tab/Shift+Tab - Previous/next
+ - [X] Ctrl+Shift ← - Collapse all
+ - [X] Ctrl+Shift → - Expand all
  - [ ] ? - Help
  - [X] Jump to parent by ←
  - [X] If item has children and closed, expand by →

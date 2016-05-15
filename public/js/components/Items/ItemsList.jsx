@@ -201,14 +201,49 @@ export default class ItemsList extends Component {
     const key = e.key;
     const store = this.context.store;
 
-    // console.log(key);
+    // console.log(e.keyCode);
 
     const todos = this.curItems();
     const id = this.curState().focusId;
     const setFocus = this.itemFocusHandler.bind(this); // need for passing in jumpOnTop()
 
+    function focusedTodo() {
+      return searchr(todos, function (i) {
+        return i.id == id
+      });
+    }
+
+    switch (e.keyCode) { // processing letter keys
+      case 68:
+        if (e.ctrlKey) { // Ctrl + D - Duplicate item
+          (() => {
+            const curTodo = focusedTodo();
+            console.log("Ctrl + D");
+            e.stopPropagation();
+            e.preventDefault();
+
+            store.dispatch(TodoAction.addBelow(id, curTodo.text));
+            store.dispatch(TodoAction.selectTodo(this.curState().lastInsertId));
+          })();
+          return;
+        }
+    }
+
     switch (key) {
+      case 'Home':
+        // Jump to begin
+        if (todos.length > 0) {
+          store.dispatch(TodoAction.selectTodo(todos[0].id));
+        }
+        break;
+      case 'End':
+        // Jump to end
+        if (todos.length > 0) {
+          store.dispatch(TodoAction.selectTodo(todos[todos.length - 1].id));
+        }
+        break;
       case 'Delete':
+        // Delete item
         let selNextTodo = lookupNext(todos, id); // next
         if (selNextTodo === false) {
           selNextTodo = lookupPrev(todos, id); // previous
@@ -218,11 +253,22 @@ export default class ItemsList extends Component {
         break;
       case 'ArrowRight':
       case 'ArrowLeft':
+        // Expand
+        if (e.ctrlKey && e.shiftKey && key == 'ArrowRight') {
+          store.dispatch(TodoAction.expandAll());
+          return;
+        }
+
+        // Collapse
+        if (e.ctrlKey && e.shiftKey && key == 'ArrowLeft') {
+          store.dispatch(TodoAction.collapseAll());
+          return;
+        }
+
+        // Left or Right keys
         if (this.curState().focusId == null) return;
 
-        const todo = searchr(todos, function (i) {
-          return i.id == id
-        });
+        const todo = focusedTodo();
 
         function jumpOnTop() { // need for avoid code duplication
           if (key == 'ArrowLeft') {
@@ -260,12 +306,9 @@ export default class ItemsList extends Component {
         jumpOnTop();
         break;
 
-
       case 'ArrowUp':
       case 'ArrowDown':
-
         // arrows handling (move up, move down)
-
         if (id == null) return; // if not focused
         let nextTodo = false;
 
@@ -278,29 +321,28 @@ export default class ItemsList extends Component {
         break;
 
       case 'Enter':
-        console.log();
-        if (e.altKey) {
-          // [Alt + Enter] add as child
-          const curTodo = searchr(todos, function (i) {
-            return i.id == id
-          });
+        (() => {
+          if (e.altKey) {
+            // [Alt + Enter] add as child
+            const curTodo = focusedTodo();
 
-          if (!curTodo.open) { // expand current item if it's closed
-            store.dispatch(TodoAction.flipTodo(id));
+            if (!curTodo.open) { // expand current item if it's closed
+              store.dispatch(TodoAction.flipTodo(id));
+            }
+
+            store.dispatch(TodoAction.addAsChild(id, ''));
+          } else {
+            // [Enter] add below current item
+            store.dispatch(TodoAction.addBelow(id, ''));
           }
 
-          store.dispatch(TodoAction.addAsChild(id, ''));
-        } else {
-          // [Enter] add below current item
-          store.dispatch(TodoAction.addBelow(id, ''));
-        }
-
-        const newId = this.curState().lastInsertId;
-        this.setState(Object.assign(this.state, {
-          createId: newId,
-          highlightId: newId,
-          highlightStyle: HighlightType.HOVER
-        }));
+          const newId = this.curState().lastInsertId;
+          this.setState(Object.assign(this.state, {
+            createId: newId,
+            highlightId: newId,
+            highlightStyle: HighlightType.HOVER
+          }));
+        })();
         break;
 
       case 'F2':

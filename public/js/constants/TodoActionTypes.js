@@ -1,6 +1,8 @@
 export const ADD_TODO           = 'ADD_TODO';
 export const ADD_BELOW          = 'ADD_BELOW';
 export const CANCEL_CREATE      = 'CANCEL_CREATE';
+export const COLLAPSE_ALL       = 'COLLAPSE_ALL';
+export const EXPAND_ALL         = 'EXPAND_ALL';
 export const ADD_AS_CHILD       = 'ADD_AS_CHILD';
 export const DELETE_TODO        = 'DELETE_TODO';
 export const CHECK_TODO         = 'CHECK_TODO';
