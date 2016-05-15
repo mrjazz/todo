@@ -201,7 +201,7 @@ export default class ItemsList extends Component {
     const key = e.key;
     const store = this.context.store;
 
-    // console.log(e.keyCode);
+    // console.log(e.altKey);
 
     const todos = this.curItems();
     const id = this.curState().focusId;
@@ -253,6 +253,22 @@ export default class ItemsList extends Component {
         break;
       case 'ArrowRight':
       case 'ArrowLeft':
+        // Make child of previous item
+        if (e.altKey && key == 'ArrowRight') {
+          (() => {
+            const parent = lookupPrev(todos, id);
+            if (parent) {
+              store.dispatch(TodoAction.makeChildOf(id, parent.id)); // move item
+
+              if (!parent.open) { // expand parent if closed
+                store.dispatch(TodoAction.flipTodo(parent.id));
+              }
+            }
+            console.log(this.curState());
+          })();
+          return;
+        }
+
         // Expand
         if (e.ctrlKey && e.shiftKey && key == 'ArrowRight') {
           store.dispatch(TodoAction.expandAll());
@@ -309,15 +325,17 @@ export default class ItemsList extends Component {
       case 'ArrowUp':
       case 'ArrowDown':
         // arrows handling (move up, move down)
-        if (id == null) return; // if not focused
-        let nextTodo = false;
+        (() => {
+          if (id == null) return; // if not focused
+          let nextTodo = false;
 
-        if (key == 'ArrowUp') nextTodo = lookupPrev(todos, id);
-        if (key == 'ArrowDown') nextTodo = lookupNext(todos, id);
+          if (key == 'ArrowUp') nextTodo = lookupPrev(todos, id);
+          if (key == 'ArrowDown') nextTodo = lookupNext(todos, id);
 
-        if (nextTodo) {
-          this.itemFocusHandler(nextTodo.id);
-        }
+          if (nextTodo) {
+            this.itemFocusHandler(nextTodo.id);
+          }
+        })();
         break;
 
       case 'Enter':

@@ -14,7 +14,8 @@ Add new shortcuts:
  - [X] Ctrl+D - Duplicate
  - [ ] Ctrl+C or Ctrl+X - Copy or Cut
  - [ ] Ctrl+V - Paste below
- - [ ] Ctrl+←/Ctrl+→ - Change nesting for list items
+ - [ ] Ctrl+← - Move item on upper level
+ - [X] Ctrl+→ - Make item child of previous item
  - [ ] Ctrl+↑/Ctrl+↓ - Re-order list items
  - [X] Del - delete
  - [X] F2 - make edit
