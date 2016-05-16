@@ -199,9 +199,8 @@ export default class ItemsList extends Component {
 
   itemKeyPressHandler(e) {
     const key = e.key;
-    const store = this.context.store;
 
-    // console.log(e.altKey);
+    const store = this.context.store;
 
     const todos = this.curItems();
     const id = this.curState().focusId;
@@ -213,36 +212,47 @@ export default class ItemsList extends Component {
       });
     }
 
-    switch (e.keyCode) { // processing letter keys
-      case 68:
-        if (e.ctrlKey) { // Ctrl + D - Duplicate item
-          (() => {
-            const curTodo = focusedTodo();
-            console.log("Ctrl + D");
-            e.stopPropagation();
-            e.preventDefault();
-
-            store.dispatch(TodoAction.addBelow(id, curTodo.text));
-            store.dispatch(TodoAction.selectTodo(this.curState().lastInsertId));
-          })();
-          return;
+    function jumpOnTop() { // need for avoid code duplication
+      if (key == 'ArrowLeft') {
+        // if item has parent, jump to parent by arrowLeft
+        const parent = getParentFor(todos, (i) => i.id == id);
+        if (parent) {
+          setFocus(parent.id);
+        } else {
+          setFocus(todos[0].id);
         }
+      }
     }
 
-    switch (key) {
-      case 'Home':
+    // Shortcut functions
+
+    const keyMap = {
+
+      'CtrlD' : () => {
+        // Duplicate item
+        const curTodo = focusedTodo();
+        e.stopPropagation();
+        e.preventDefault();
+
+        store.dispatch(TodoAction.addBelow(id, curTodo.text));
+        store.dispatch(TodoAction.selectTodo(this.curState().lastInsertId));
+      },
+
+      'Home' : () => {
         // Jump to begin
         if (todos.length > 0) {
           store.dispatch(TodoAction.selectTodo(todos[0].id));
         }
-        break;
-      case 'End':
+      },
+
+      'End' : () => {
         // Jump to end
         if (todos.length > 0) {
           store.dispatch(TodoAction.selectTodo(todos[todos.length - 1].id));
         }
-        break;
-      case 'Delete':
+      },
+
+      'Delete' : () => {
         // Delete item
         let selNextTodo = lookupNext(todos, id); // next
         if (selNextTodo === false) {
@@ -250,65 +260,43 @@ export default class ItemsList extends Component {
         }
         store.dispatch(TodoAction.deleteTodo(id));
         store.dispatch(TodoAction.selectTodo(selNextTodo.id));
-        break;
-      case 'ArrowRight':
-      case 'ArrowLeft':
+      },
 
+      'CtrlShiftArrowRight' : () => {
         // Expand
-        if (e.ctrlKey && e.shiftKey && key == 'ArrowRight') {
-          store.dispatch(TodoAction.expandAll());
-          return;
-        }
+        store.dispatch(TodoAction.expandAll());
+      },
 
+      'CtrlShiftArrowLeft' : () => {
         // Collapse
-        if (e.ctrlKey && e.shiftKey && key == 'ArrowLeft') {
-          store.dispatch(TodoAction.collapseAll());
-          return;
-        }
+        store.dispatch(TodoAction.collapseAll());
+      },
 
+      'CtrlArrowLeft' : () => {
         // Move item on level up
-        if (e.ctrlKey && key == 'ArrowLeft') {
-          (() => {
-            const parent = getParentFor(todos, (i) => i.id == id);
-            // console.log(`Move {id} item above {parent.id}`);
-            if (parent) {
-              store.dispatch(TodoAction.moveBelowTodo(id, parent.id));
-            }
-          })();
-          return;
+        const parent = getParentFor(todos, (i) => i.id == id);
+        // console.log(`Move {id} item above {parent.id}`);
+        if (parent) {
+          store.dispatch(TodoAction.moveBelowTodo(id, parent.id));
         }
+      },
 
-        // Make child of previous item
-        if (e.ctrlKey && key == 'ArrowRight') {
-          (() => {
-            const parent = lookupPrev(todos, id);
-            if (parent) {
-              store.dispatch(TodoAction.makeChildOf(id, parent.id)); // move item
+      'CtrlArrowRight' : () => {
+        const parent = lookupPrev(todos, id);
+        if (parent) {
+          store.dispatch(TodoAction.makeChildOf(id, parent.id)); // move item
 
-              if (!parent.open) { // expand parent if closed
-                store.dispatch(TodoAction.flipTodo(parent.id));
-              }
-            }
-          })();
-          return;
+          if (!parent.open) { // expand parent if closed
+            store.dispatch(TodoAction.flipTodo(parent.id));
+          }
         }
+      },
 
+      'ArrowRight' : () => {
         // Left or Right keys
         if (this.curState().focusId == null) return;
 
         const todo = focusedTodo();
-
-        function jumpOnTop() { // need for avoid code duplication
-          if (key == 'ArrowLeft') {
-            // if item has parent, jump to parent by arrowLeft
-            const parent = getParentFor(todos, (i) => i.id == id);
-            if (parent) {
-              setFocus(parent.id);
-            } else {
-              setFocus(todos[0].id);
-            }
-          }
-        }
 
         if (todo.children.length > 0) {
           if (todo.open) { // is expanded
@@ -332,56 +320,68 @@ export default class ItemsList extends Component {
         }
 
         jumpOnTop();
-        break;
+      },
 
-      case 'ArrowUp':
-      case 'ArrowDown':
+      'ArrowLeft' : () => {
+        ArrowRight();
+      },
+
+      'ArrowUp' : () => {
         // arrows handling (move up, move down)
-        (() => {
-          if (id == null) return; // if not focused
-          let nextTodo = false;
+        if (id == null) return; // if not focused
+        let nextTodo = false;
 
-          if (key == 'ArrowUp') nextTodo = lookupPrev(todos, id);
-          if (key == 'ArrowDown') nextTodo = lookupNext(todos, id);
+        if (key == 'ArrowUp') nextTodo = lookupPrev(todos, id);
+        if (key == 'ArrowDown') nextTodo = lookupNext(todos, id);
 
-          if (nextTodo) {
-            this.itemFocusHandler(nextTodo.id);
-          }
-        })();
-        break;
+        if (nextTodo) {
+          this.itemFocusHandler(nextTodo.id);
+        }
+      },
 
-      case 'Enter':
-        (() => {
-          if (e.altKey) {
-            // [Alt + Enter] add as child
-            const curTodo = focusedTodo();
+      'ArrowDown' : () => {
+        ArrowUp();
+      },
 
-            if (!curTodo.open) { // expand current item if it's closed
-              store.dispatch(TodoAction.flipTodo(id));
-            }
+      'Enter' : () => {
+        if (e.altKey) {
+          // [Alt + Enter] add as child
+          const curTodo = focusedTodo();
 
-            store.dispatch(TodoAction.addAsChild(id, ''));
-          } else {
-            // [Enter] add below current item
-            store.dispatch(TodoAction.addBelow(id, ''));
+          if (!curTodo.open) { // expand current item if it's closed
+            store.dispatch(TodoAction.flipTodo(id));
           }
 
-          const newId = this.curState().lastInsertId;
-          this.setState(Object.assign(this.state, {
-            createId: newId,
-            highlightId: newId,
-            highlightStyle: HighlightType.HOVER
-          }));
-        })();
-        break;
+          store.dispatch(TodoAction.addAsChild(id, ''));
+        } else {
+          // [Enter] add below current item
+          store.dispatch(TodoAction.addBelow(id, ''));
+        }
 
-      case 'F2':
+        const newId = this.curState().lastInsertId;
+        this.setState(Object.assign(this.state, {
+          createId: newId,
+          highlightId: newId,
+          highlightStyle: HighlightType.HOVER
+        }));
+      },
+
+      'AltEnter' : () => {
+        Enter();
+      },
+
+      'F2' : () => {
         // edit item
         this.setState(Object.assign(this.state, {editId: id, highlightStyle: HighlightType.HOVER}));
         e.stopPropagation();
         e.preventDefault();
-        break;
-    }
+      }
+
+    };
+
+
+    const shortcut = getShortcut(e);
+    if(keyMap[shortcut]) keyMap[shortcut]();
   }
 
   getHighlightCSS(style) {
@@ -453,4 +453,19 @@ export function lookup(items, id, step = 1) {
     return false;
   }
   return process(items);
+}
+
+function getShortcut(e) {
+  let result = '';
+  if (e.ctrlKey) result += 'Ctrl';
+  if (e.altKey) result += 'Alt';
+  if (e.shiftKey) result += 'Shift';
+
+  if (e.key !== "Unidentified") {
+    if (e.key !== "Alt" && e.key !== "Control" && e.key !== "Shift") result += e.key;
+  } else {
+    result += String.fromCharCode(e.keyCode).toUpperCase();
+  }
+
+  return result;
 }
