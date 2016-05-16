@@ -1,6 +1,6 @@
 import * as TodoAction from '../constants/TodoActionTypes';
 import Todo from '../models/todo';
-import {callr, lengthr, mapr, filterr, insertrAfter, insertrBefore} from '../lib/CollectionUtils.js';
+import {callr, searchr, mapr, filterr, insertrAfter, insertrBefore} from '../lib/CollectionUtils.js';
 
 
 const initialState = {
@@ -41,6 +41,32 @@ function processFullState(state, action) {
   }
 
   switch (action.type) {
+
+    case TodoAction.COLLAPSE_ALL:
+      state.todos = mapr(state.todos, (todo) => {
+        return todo.open ?
+          Object.assign(clone(todo), { open: false }) :
+          todo;
+      });
+
+      // if current item in children, we should set focus on top level parent of it
+      for (let i in state.todos) {
+        if (state.todos[i].id == state.focusId) break;
+        if (searchr(state.todos[i].children, (todo) => todo.id === state.focusId)) {
+            state.focusId = state.todos[i].id;
+            break;
+        }
+      }
+      break;
+
+    case TodoAction.EXPAND_ALL:
+      state.todos = mapr(state.todos, (todo) => {
+        return todo.children.length > 0 ?
+          Object.assign(clone(todo), { open: true }) :
+          todo;
+      });
+      break;
+
     case TodoAction.ADD_AS_CHILD:
       state.cancelId = state.focusId;
       state.todos = mapr(state.todos, (i) => {
@@ -93,20 +119,6 @@ function processFocusAction(state, action) {
 
 function processItemsAction(state, action) {
   switch (action.type) {
-
-    case TodoAction.COLLAPSE_ALL:
-      return mapr(state, (todo) => {
-        return todo.open ?
-          Object.assign(clone(todo), { open: false }) :
-          todo;
-      });
-
-    case TodoAction.EXPAND_ALL:
-      return mapr(state, (todo) => {
-        return todo.children.length > 0 ?
-          Object.assign(clone(todo), { open: true }) :
-          todo;
-      });
 
     case TodoAction.CHECK_TODO:
       return mapr(state, (todo) => {

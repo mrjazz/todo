@@ -21,9 +21,10 @@ describe('collections test', function() {
     it('expandAndCollapse', () => {
       const result1 = todos(initialState, TodoActions.expandAll());
       result1.todos[1].open.should.equal(true);
-
+      result1.focusId = 5;
       const result2 = todos(result1, TodoActions.collapseAll());
       result2.todos[1].open.should.equal(false);
+      result2.focusId.should.equal(1);
     });
 
     it('addBelow', () => {

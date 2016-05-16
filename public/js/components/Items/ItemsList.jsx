@@ -253,21 +253,6 @@ export default class ItemsList extends Component {
         break;
       case 'ArrowRight':
       case 'ArrowLeft':
-        // Make child of previous item
-        if (e.altKey && key == 'ArrowRight') {
-          (() => {
-            const parent = lookupPrev(todos, id);
-            if (parent) {
-              store.dispatch(TodoAction.makeChildOf(id, parent.id)); // move item
-
-              if (!parent.open) { // expand parent if closed
-                store.dispatch(TodoAction.flipTodo(parent.id));
-              }
-            }
-            console.log(this.curState());
-          })();
-          return;
-        }
 
         // Expand
         if (e.ctrlKey && e.shiftKey && key == 'ArrowRight') {
@@ -278,6 +263,33 @@ export default class ItemsList extends Component {
         // Collapse
         if (e.ctrlKey && e.shiftKey && key == 'ArrowLeft') {
           store.dispatch(TodoAction.collapseAll());
+          return;
+        }
+
+        // Move item on level up
+        if (e.ctrlKey && key == 'ArrowLeft') {
+          (() => {
+            const parent = getParentFor(todos, (i) => i.id == id);
+            // console.log(`Move {id} item above {parent.id}`);
+            if (parent) {
+              store.dispatch(TodoAction.moveBelowTodo(id, parent.id));
+            }
+          })();
+          return;
+        }
+
+        // Make child of previous item
+        if (e.ctrlKey && key == 'ArrowRight') {
+          (() => {
+            const parent = lookupPrev(todos, id);
+            if (parent) {
+              store.dispatch(TodoAction.makeChildOf(id, parent.id)); // move item
+
+              if (!parent.open) { // expand parent if closed
+                store.dispatch(TodoAction.flipTodo(parent.id));
+              }
+            }
+          })();
           return;
         }
 

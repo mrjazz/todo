@@ -1,6 +1,11 @@
 TODO
 ----
 
+Refactoring:
+
+ - [ ] Make Items list more lightweight, move out shortcut handlers
+ - [ ] Add mapping for shortcuts, maybe some kind of pattern matching
+
 Fixes:
 
  - [X] Fix multiple selectTodo actions (probably can't be done because need process onFocus, onFocusOut events)
@@ -14,7 +19,7 @@ Add new shortcuts:
  - [X] Ctrl+D - Duplicate
  - [ ] Ctrl+C or Ctrl+X - Copy or Cut
  - [ ] Ctrl+V - Paste below
- - [ ] Ctrl+← - Move item on upper level
+ - [X] Ctrl+← - Move item on upper level
  - [X] Ctrl+→ - Make item child of previous item
  - [ ] Ctrl+↑/Ctrl+↓ - Re-order list items
  - [X] Del - delete
@@ -41,7 +46,6 @@ Sidebar functionality:
 Features:
 
  - [X] Howto popup added
-
 
 v0.0.2
 
