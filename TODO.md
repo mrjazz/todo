@@ -5,6 +5,7 @@ Refactoring:
 
  - [ ] Make Items list more lightweight, move out shortcut handlers
  - [ ] Add mapping for shortcuts, maybe some kind of pattern matching
+ - [ ] Caching for cur items
 
 Fixes:
 
@@ -21,7 +22,7 @@ Add new shortcuts:
  - [ ] Ctrl+V - Paste below
  - [X] Ctrl+← - Move item on upper level
  - [X] Ctrl+→ - Make item child of previous item
- - [ ] Ctrl+↑/Ctrl+↓ - Re-order list items
+ - [X] Ctrl+↑/Ctrl+↓ - Re-order list items
  - [X] Del - delete
  - [X] F2 - make edit
  - [X] Home/End - jump on top/end of list

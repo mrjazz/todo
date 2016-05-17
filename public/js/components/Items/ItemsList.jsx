@@ -323,7 +323,7 @@ export default class ItemsList extends Component {
       },
 
       'ArrowLeft' : () => {
-        ArrowRight();
+        keyMap.ArrowRight();
       },
 
       'ArrowUp' : () => {
@@ -340,7 +340,7 @@ export default class ItemsList extends Component {
       },
 
       'ArrowDown' : () => {
-        ArrowUp();
+        keyMap.ArrowUp();
       },
 
       'Enter' : () => {
@@ -367,7 +367,7 @@ export default class ItemsList extends Component {
       },
 
       'AltEnter' : () => {
-        Enter();
+        keyMap.Enter();
       },
 
       'F2' : () => {
@@ -375,12 +375,26 @@ export default class ItemsList extends Component {
         this.setState(Object.assign(this.state, {editId: id, highlightStyle: HighlightType.HOVER}));
         e.stopPropagation();
         e.preventDefault();
+      },
+
+      'CtrlArrowUp' : () => {
+        const prev = lookupPrev(todos, id); // previous
+        if (prev) {
+          store.dispatch(TodoAction.moveAboveTodo(id, prev.id));
+        }
+      },
+
+      'CtrlArrowDown' : () => {
+        const next = lookupNext(todos, id); // next
+        if (next) {
+          store.dispatch(TodoAction.moveBelowTodo(id, next.id));
+        }
       }
 
     };
 
-
     const shortcut = getShortcut(e);
+    // console.log(shortcut);
     if(keyMap[shortcut]) keyMap[shortcut]();
   }
 
