@@ -43,8 +43,6 @@ function insert(fnInsert, items, id, parentId) {
 
 export function todos(state = initialState, action) {
 
-  // console.info(action);
-
   function newId() {
     let max = 0;
     callr(state.todos, (i) => max = i.id > max ? i.id : max);
@@ -143,6 +141,7 @@ export function todos(state = initialState, action) {
     },
 
     ADD_BELOW : () => {
+      // console.log(action.todo);
       state.cancelId = state.focusId;
       state.todos = insertrAfter(
         state.todos,
@@ -219,9 +218,13 @@ export function todos(state = initialState, action) {
     }
   };
 
+  // console.info(action);
+
+  state = clone(state);
+
   if (todoActions[action.type]) {
     todoActions[action.type](state, action);
-    return clone(state);
+    return state;
   }
 
   return state;

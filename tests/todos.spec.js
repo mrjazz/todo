@@ -28,23 +28,24 @@ describe('collections test', function() {
     });
 
     it('addBelow', () => {
-      const title = "Test";
-      const result1 = todos(initialState, TodoActions.addBelow(1, title));
+      const title = 'Test';
+      const todo = new Todo(-1, title);
+      const result1 = todos(initialState, TodoActions.addBelow(1, todo));
       result1.todos[2].text.should.equal(title);
 
-      const result2 = todos(initialState, TodoActions.addBelow(5, title));
+      const result2 = todos(initialState, TodoActions.addBelow(5, todo));
       result2.todos[1].children[2].text.should.equal(title);
 
       const result3 = todos({
           todos: [new Todo(100, 'Learn React')]
         },
-        TodoActions.addBelow(100, title)
+        TodoActions.addBelow(100, todo)
       );
       result3.todos[1].id.should.equal(101); // make sure next id is bigger than all previous
     });
 
     it('addAsChild', () => {
-      const title = "Test";
+      const title = 'Test';
       const result1 = todos(initialState, TodoActions.addAsChild(1, title));
       result1.todos[1].children[2].text.should.equal(title);
     });
