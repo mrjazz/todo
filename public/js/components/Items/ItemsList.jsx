@@ -7,6 +7,8 @@ import ItemsFilter from './ItemsFilter.jsx';
 import ItemAdd from './ItemAdd.jsx';
 import Item from './Item.jsx';
 
+import Todo from '../../models/todo';
+
 import * as HighlightType from '../../constants/HighlightTypes';
 
 import {getParentFor, isParentOf, searchr, filterr, searchrIndex, searchrByIndex} from '../../lib/CollectionUtils.js';
@@ -224,6 +226,14 @@ export default class ItemsList extends Component {
       }
     }
 
+    function prevOrNext() {
+      let selNextTodo = lookupNext(todos, id); // next
+      if (selNextTodo === false) {
+        selNextTodo = lookupPrev(todos, id); // previous
+      }
+      return selNextTodo;
+    }
+
     // Shortcut functions
 
     const keyMap = {
@@ -234,7 +244,7 @@ export default class ItemsList extends Component {
         e.stopPropagation();
         e.preventDefault();
 
-        store.dispatch(TodoAction.addBelow(id, curTodo.text));
+        store.dispatch(TodoAction.addBelow(id, curTodo));
         store.dispatch(TodoAction.selectTodo(this.curState().lastInsertId));
       },
 
@@ -254,12 +264,9 @@ export default class ItemsList extends Component {
 
       'Delete' : () => {
         // Delete item
-        let selNextTodo = lookupNext(todos, id); // next
-        if (selNextTodo === false) {
-          selNextTodo = lookupPrev(todos, id); // previous
-        }
+        const next = prevOrNext();
         store.dispatch(TodoAction.deleteTodo(id));
-        store.dispatch(TodoAction.selectTodo(selNextTodo.id));
+        store.dispatch(TodoAction.selectTodo(next.id));
       },
 
       'CtrlShiftArrowRight' : () => {
@@ -355,7 +362,7 @@ export default class ItemsList extends Component {
           store.dispatch(TodoAction.addAsChild(id, ''));
         } else {
           // [Enter] add below current item
-          store.dispatch(TodoAction.addBelow(id, ''));
+          store.dispatch(TodoAction.addBelow(id, new Todo(-1)));
         }
 
         const newId = this.curState().lastInsertId;
@@ -389,6 +396,27 @@ export default class ItemsList extends Component {
         if (next) {
           store.dispatch(TodoAction.moveBelowTodo(id, next.id));
         }
+      },
+
+      'CtrlX' : () => {
+        const nextTodo = prevOrNext();
+        store.dispatch(TodoAction.cutTodo(id));
+        if (nextTodo) {
+          this.itemFocusHandler(nextTodo.id);
+        }
+      },
+
+      'CtrlV' : () => {
+        store.dispatch(TodoAction.pasteTodo(id, this.curState().clipboard));
+      },
+
+      'CtrlAltV' : () => {
+        console.log('pasterAsChild');
+        store.dispatch(TodoAction.pasteAsChildTodo(id, this.curState().clipboard));
+      },
+
+      'CtrlC' : () => {
+        store.dispatch(TodoAction.copyTodo(id));
       }
 
     };

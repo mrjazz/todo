@@ -3,8 +3,9 @@ TODO
 
 Refactoring:
 
+ - [ ] Move functionality from shortcut mapping to reducer
  - [ ] Make Items list more lightweight, move out shortcut handlers
- - [ ] Add mapping for shortcuts, maybe some kind of pattern matching
+ - [X] Add mapping for shortcuts, maybe some kind of pattern matching
  - [ ] Caching for cur items
 
 Fixes:
@@ -18,8 +19,8 @@ Fixes:
 Add new shortcuts:
  - [X] Exit from edit by Esc
  - [X] Ctrl+D - Duplicate
- - [ ] Ctrl+C or Ctrl+X - Copy or Cut
- - [ ] Ctrl+V - Paste below
+ - [X] Ctrl+C or Ctrl+X - Copy or Cut
+ - [X] Ctrl+V - Paste below
  - [X] Ctrl+← - Move item on upper level
  - [X] Ctrl+→ - Make item child of previous item
  - [X] Ctrl+↑/Ctrl+↓ - Re-order list items

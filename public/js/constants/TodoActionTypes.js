@@ -1,4 +1,8 @@
 export const ADD_TODO           = 'ADD_TODO';
+export const CUT_TODO           = 'CUT_TODO';
+export const COPY_TODO          = 'COPY_TODO';
+export const PASTE_TODO         = 'PASTE_TODO';
+export const PASTE_AS_CHILD_TODO = 'PASTE_AS_CHILD_TODO';
 export const ADD_BELOW          = 'ADD_BELOW';
 export const CANCEL_CREATE      = 'CANCEL_CREATE';
 export const COLLAPSE_ALL       = 'COLLAPSE_ALL';
