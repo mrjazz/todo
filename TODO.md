@@ -14,9 +14,12 @@ Fixes:
  - [X] Fix multiple flipTodo actions
  - [X] Fix critical issue with crashing browser
  - [X] Fix issue with missed parent for nested items
- - [ ] For some reason after Del, Enter drop item (new ID should be generated according to max, not lengthr)
+ - [X] For some reason after Del, Enter drop item (new ID should be generated according to max, not lengthr)
 
 Add new shortcuts:
+ - [ ] Ctrl+F - Search
+ - [ ] ? - Help
+ - [ ] Set colors by 1..6 keys
  - [X] Exit from edit by Esc
  - [X] Ctrl+D - Duplicate
  - [X] Ctrl+C or Ctrl+X - Copy or Cut
@@ -27,25 +30,24 @@ Add new shortcuts:
  - [X] Del - delete
  - [X] F2 - make edit
  - [X] Home/End - jump on top/end of list
- - [ ] Ctrl+F - Search
  - [X] Enter - Add below
  - [X] Alt+Enter - Add item as child
  - [X] Tab/Shift+Tab - Previous/next
  - [X] Ctrl+Shift ← - Collapse all
  - [X] Ctrl+Shift → - Expand all
- - [ ] ? - Help
  - [X] Jump to parent by ←
  - [X] If item has children and closed, expand by →
  - [X] If item has children and open, collapse by ←
  - [X] If item has children and open, jump to first item by →
 
-Sidebar functionality:
+Features:
 
- - [ ] Add title in right panel
+ - [ ] Add description
  - [ ] Add notes in right panel
  - [ ] Add date start, date end in right panel
-
-Features:
+ - [ ] Parse hashtags
+ - [ ] Create _todo next_ view
+ - [ ] Update description on howto popup
 
  - [X] Howto popup added
 

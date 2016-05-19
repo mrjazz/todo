@@ -6,6 +6,7 @@
 .todo-view {
     float: left;
     width: 500px;
+    height: 500px;
 }
 
 /*.todos div {
@@ -52,8 +53,9 @@
 }
 
 .howto {
-    font-size: 0.8em;
-    display: none;
+  font-size: 0.8em;
+    /*display: none;*/
+
 }
 
 .todos .all-items {

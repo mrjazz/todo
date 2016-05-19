@@ -223,8 +223,7 @@ export function todos(state = initialState, action) {
   state = clone(state);
 
   if (todoActions[action.type]) {
-    todoActions[action.type](state, action);
-    return state;
+    todoActions[action.type](state, action); // modify state
   }
 
   return state;

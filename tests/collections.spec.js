@@ -25,11 +25,15 @@ describe('collections test', function() {
     ];
 
     it('insertrBefore', () => {
-      const result1 = insertrBefore(arr, {test: 'passed'}, (current) => current.label == 'b');
+      const result1 = insertrBefore(
+        arr, {test: 'passed'}, (current) => current.label == 'b'
+      );
       result1.length.should.equal(3);
       result1[1].test.should.equal('passed');
 
-      const result2 = insertrBefore(arr, {test: 'passed'}, (current) => current.label == 'a2');
+      const result2 = insertrBefore(
+        arr, {test: 'passed'}, (current) => current.label == 'a2'
+      );
       result2[0].children.length.should.equal(3);
       result2[0].children[1].test.should.equal('passed');
     });
