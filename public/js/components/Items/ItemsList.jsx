@@ -24,6 +24,7 @@ export default class ItemsList extends Component {
     this.state = {
       cards: [],
       filter: 'all',
+      prevKey: null,
       editId: null,
       createId: null,
       highlightStyle: HighlightType.NONE,
@@ -238,7 +239,7 @@ export default class ItemsList extends Component {
 
     const keyMap = {
 
-      'CtrlD' : () => {
+      'CtrlD'() {
         // Duplicate item
         const curTodo = focusedTodo();
         e.stopPropagation();
@@ -248,38 +249,38 @@ export default class ItemsList extends Component {
         store.dispatch(TodoAction.selectTodo(this.curState().lastInsertId));
       },
 
-      'Home' : () => {
+      'Home'() {
         // Jump to begin
         if (todos.length > 0) {
           store.dispatch(TodoAction.selectTodo(todos[0].id));
         }
       },
 
-      'End' : () => {
+      'End'() {
         // Jump to end
         if (todos.length > 0) {
           store.dispatch(TodoAction.selectTodo(todos[todos.length - 1].id));
         }
       },
 
-      'Delete' : () => {
+      'Delete'() {
         // Delete item
         const next = prevOrNext();
         store.dispatch(TodoAction.deleteTodo(id));
         store.dispatch(TodoAction.selectTodo(next.id));
       },
 
-      'CtrlShiftArrowRight' : () => {
+      'CtrlShiftArrowRight'() {
         // Expand
         store.dispatch(TodoAction.expandAll());
       },
 
-      'CtrlShiftArrowLeft' : () => {
+      'CtrlShiftArrowLeft'() {
         // Collapse
         store.dispatch(TodoAction.collapseAll());
       },
 
-      'CtrlArrowLeft' : () => {
+      'CtrlArrowLeft'() {
         // Move item on level up
         const parent = getParentFor(todos, (i) => i.id == id);
         // console.log(`Move {id} item above {parent.id}`);
@@ -288,7 +289,7 @@ export default class ItemsList extends Component {
         }
       },
 
-      'CtrlArrowRight' : () => {
+      'CtrlArrowRight'() {
         const parent = lookupPrev(todos, id);
         if (parent) {
           store.dispatch(TodoAction.makeChildOf(id, parent.id)); // move item
@@ -299,7 +300,7 @@ export default class ItemsList extends Component {
         }
       },
 
-      'ArrowRight' : () => {
+      'ArrowRight'() {
         // Left or Right keys
         if (this.curState().focusId == null) return;
 
@@ -329,11 +330,11 @@ export default class ItemsList extends Component {
         jumpOnTop();
       },
 
-      'ArrowLeft' : () => {
+      'ArrowLeft'() {
         keyMap.ArrowRight();
       },
 
-      'ArrowUp' : () => {
+      'ArrowUp'() {
         // arrows handling (move up, move down)
         if (id == null) return; // if not focused
         let nextTodo = false;
@@ -346,11 +347,11 @@ export default class ItemsList extends Component {
         }
       },
 
-      'ArrowDown' : () => {
+      'ArrowDown'() {
         keyMap.ArrowUp();
       },
 
-      'Enter' : () => {
+      'Enter'() {
         if (e.altKey) {
           // [Alt + Enter] add as child
           const curTodo = focusedTodo();
@@ -373,32 +374,32 @@ export default class ItemsList extends Component {
         }));
       },
 
-      'AltEnter' : () => {
+      'AltEnter'() {
         keyMap.Enter();
       },
 
-      'F2' : () => {
+      'F2'() {
         // edit item
         this.setState(Object.assign(this.state, {editId: id, highlightStyle: HighlightType.HOVER}));
         e.stopPropagation();
         e.preventDefault();
       },
 
-      'CtrlArrowUp' : () => {
+      'CtrlArrowUp'() {
         const prev = lookupPrev(todos, id); // previous
         if (prev) {
           store.dispatch(TodoAction.moveAboveTodo(id, prev.id));
         }
       },
 
-      'CtrlArrowDown' : () => {
+      'CtrlArrowDown'() {
         const next = lookupNext(todos, id); // next
         if (next) {
           store.dispatch(TodoAction.moveBelowTodo(id, next.id));
         }
       },
 
-      'CtrlX' : () => {
+      'CtrlX'() {
         const nextTodo = prevOrNext();
         store.dispatch(TodoAction.cutTodo(id));
         if (nextTodo) {
@@ -406,24 +407,45 @@ export default class ItemsList extends Component {
         }
       },
 
-      'CtrlV' : () => {
+      'CtrlV'() {
         store.dispatch(TodoAction.pasteTodo(id, this.curState().clipboard));
       },
 
-      'CtrlAltV' : () => {
-        console.log('pasterAsChild');
+      'CtrlAltV'() {
         store.dispatch(TodoAction.pasteAsChildTodo(id, this.curState().clipboard));
       },
 
-      'CtrlC' : () => {
+      'CtrlC'() {
         store.dispatch(TodoAction.copyTodo(id));
+      },
+
+      'D_S'() {
+        console.log("date start");
+      },
+
+      'D_E'() {
+        console.log("date end");
       }
 
     };
 
     const shortcut = getShortcut(e);
     // console.log(shortcut);
-    if(keyMap[shortcut]) keyMap[shortcut]();
+    if(keyMap[shortcut]) {
+      keyMap[shortcut](); // process shortcut if exists
+    } else if (
+      this.state.prevKey &&
+      ((new Date()).getTime() - this.state.prevKey.time < 1000) &&
+      keyMap[this.state.prevKey.shortcut + "_" + shortcut]
+    ) {
+      keyMap[this.state.prevKey.shortcut + "_" + shortcut](); // process double shortcut
+    } else {
+      const prevKey = {
+        shortcut: shortcut,
+        time: (new Date()).getTime()
+      };
+      this.setState(Object.assign(this.state, {prevKey: prevKey}));
+    }
   }
 
   getHighlightCSS(style) {

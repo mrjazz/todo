@@ -1,6 +1,7 @@
 TODO
 ----
 
+
 Refactoring:
 
  - [ ] Move functionality from shortcut mapping to reducer
@@ -8,18 +9,37 @@ Refactoring:
  - [X] Add mapping for shortcuts, maybe some kind of pattern matching
  - [ ] Caching for cur items
 
+
 Fixes:
 
- - [X] Fix multiple selectTodo actions (probably can't be done because need process onFocus, onFocusOut events)
- - [X] Fix multiple flipTodo actions
- - [X] Fix critical issue with crashing browser
- - [X] Fix issue with missed parent for nested items
- - [X] For some reason after Del, Enter drop item (new ID should be generated according to max, not lengthr)
+
 
 Add new shortcuts:
+
+ - [ ] D+S - Shortcut for _Date Start_
+ - [ ] D+E - Shortcut for _Date Start_
  - [ ] Ctrl+F - Search
  - [ ] ? - Help
  - [ ] Set colors by 1..6 keys
+
+
+Features:
+
+ - [ ] Add description
+ - [ ] Add notes in right panel
+ - [ ] Add date start, date end in right panel
+ - [ ] Parse hashtags
+ - [ ] Create _todo next_ view
+ - [ ] Add animation for deleted item
+
+
+v0.0.3
+
+ - [X] Update description on howto popup
+ - [X] Howto popup added
+
+Shortcuts:
+
  - [X] Exit from edit by Esc
  - [X] Ctrl+D - Duplicate
  - [X] Ctrl+C or Ctrl+X - Copy or Cut
@@ -40,20 +60,19 @@ Add new shortcuts:
  - [X] If item has children and open, collapse by ←
  - [X] If item has children and open, jump to first item by →
 
-Features:
+Fixes:
 
- - [ ] Add description
- - [ ] Add notes in right panel
- - [ ] Add date start, date end in right panel
- - [ ] Parse hashtags
- - [ ] Create _todo next_ view
- - [ ] Update description on howto popup
+ - [X] Fix multiple selectTodo actions (probably can't be done because need process onFocus, onFocusOut events)
+ - [X] Fix multiple flipTodo actions
+ - [X] Fix critical issue with crashing browser
+ - [X] Fix issue with missed parent for nested items
+ - [X] For some reason after Del, Enter drop item (new ID should be generated according to max, not lengthr)
 
- - [X] Howto popup added
 
 v0.0.2
 
  - [X] Left/right arrow keys for expand-collapse items with children
+
 
 v0.0.1
 

@@ -51,11 +51,11 @@ export function todos(state = initialState, action) {
   }
 
   const todoActions = {
-    SELECT_TODO : () => {
+    SELECT_TODO() {
       state.focusId = action.id;
     },
 
-    PASTE_AS_CHILD_TODO : () => {
+    PASTE_AS_CHILD_TODO() {
       if (state.clipboard != null) {
         const todo = Object.assign(clone(action.todo), { id: newId() });
 
@@ -75,7 +75,7 @@ export function todos(state = initialState, action) {
       }
     },
 
-    PASTE_TODO : () => {
+    PASTE_TODO() {
       // state.clipboard = searchr(state.todos, (i) => action.id === i.id);
       if (state.clipboard != null) {
         console.log(action.todo);
@@ -86,16 +86,16 @@ export function todos(state = initialState, action) {
       }
     },
 
-    COPY_TODO : () => {
+    COPY_TODO() {
       state.clipboard = searchr(state.todos, (i) => action.id === i.id);
     },
 
-    CUT_TODO : () => {
+    CUT_TODO() {
       state.clipboard = searchr(state.todos, (i) => action.id === i.id);
       state.todos = filterr(state.todos, (i) => i.id !== action.id);
     },
 
-    COLLAPSE_ALL : () => {
+    COLLAPSE_ALL() {
       state.todos = mapr(state.todos, (todo) => {
         return todo.open ?
           Object.assign(clone(todo), { open: false }) :
@@ -112,7 +112,7 @@ export function todos(state = initialState, action) {
       }
     },
 
-    EXPAND_ALL : () => {
+    EXPAND_ALL() {
       state.todos = mapr(state.todos, (todo) => {
         return todo.children.length > 0 ?
           Object.assign(clone(todo), { open: true }) :
@@ -120,7 +120,7 @@ export function todos(state = initialState, action) {
       });
     },
 
-    ADD_AS_CHILD : () => {
+    ADD_AS_CHILD() {
       state.cancelId = state.focusId;
       state.todos = mapr(state.todos, (i) => {
         if (i.id === action.id) {
@@ -133,14 +133,14 @@ export function todos(state = initialState, action) {
       });
     },
 
-    ADD_TODO : () => {
+    ADD_TODO() {
       state.todos = [
         ...state,
         new Todo(newId(), action.text, false)
       ];
     },
 
-    ADD_BELOW : () => {
+    ADD_BELOW() {
       // console.log(action.todo);
       state.cancelId = state.focusId;
       state.todos = insertrAfter(
@@ -150,13 +150,13 @@ export function todos(state = initialState, action) {
       );
     },
 
-    CANCEL_CREATE : () => {
+    CANCEL_CREATE() {
       state.todos = filterr(state.todos, (i) => i.id !== state.lastInsertId);
       state.focusId = state.cancelId;
       state.cancelId = null;
     },
 
-    CHECK_TODO : () => {
+    CHECK_TODO() {
       state.todos = mapr(state.todos, (todo) => {
         return todo.id === action.id ?
           Object.assign(clone(todo), { done: !todo.done }) :
@@ -164,7 +164,7 @@ export function todos(state = initialState, action) {
       });
     },
 
-    UPDATE_TODO : () => {
+    UPDATE_TODO() {
       state.focusId = action.id;
       state.cancelId = null;
       state.todos = mapr(state.todos, todo =>
@@ -174,19 +174,19 @@ export function todos(state = initialState, action) {
       );
     },
 
-    MOVE_ABOVE_TODO : () => {
+    MOVE_ABOVE_TODO() {
       state.todos = insert(insertrBefore, state.todos, action.id, action.parentId);
     },
 
-    MOVE_BELOW_TODO : () => {
+    MOVE_BELOW_TODO() {
       state.todos = insert(insertrAfter, state.todos, action.id, action.parentId);
     },
 
-    DELETE_TODO : () => {
+    DELETE_TODO() {
       state.todos = filterr(state.todos, (i) => i.id !== action.id);
     },
 
-    MAKE_CHILD_OF_TODO : () => {
+    MAKE_CHILD_OF_TODO() {
       let item = false;
       const filtered = filterr(state.todos, (todo) => {
         if (todo.id === action.id) {
@@ -205,13 +205,13 @@ export function todos(state = initialState, action) {
       });
     },
 
-    REMOVE_TODO : () => {
+    REMOVE_TODO() {
       state.todos = filterr(state.todos, (todo) => {
         return todo.id !== action.id;
       });
     },
 
-    FLIP_TODO : () => {
+    FLIP_TODO() {
       state.todos = mapr(state.todos, (todo) => {
         return todo.id === action.id ? Object.assign(Object.create(todo), todo, {open: !todo.open}) : todo;
       });
@@ -223,7 +223,7 @@ export function todos(state = initialState, action) {
   state = clone(state);
 
   if (todoActions[action.type]) {
-    todoActions[action.type](state, action); // modify state
+    todoActions[action.type](); // modify state
   }
 
   return state;
