@@ -15,7 +15,7 @@ export default class ItemsView extends Component {
     const store = this.context.store;
     return <div className="todo-view">
           <ItemAdd onUpdate={(text) => store.dispatch(addTodo(text))} />
-          <ItemsList todos={store.getState().todos}/>
+          <ItemsList/>
         </div>
   }
 }

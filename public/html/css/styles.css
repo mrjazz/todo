@@ -67,6 +67,7 @@
 
 .item {
   padding: 5px 5px 5px 12px;
+  display: block;
 }
 
 .icon-empty {
@@ -95,6 +96,17 @@
   cursor: help;
   text-decoration: none;
 }
+
+.debug {
+  font-size: 10px;
+}
+
+label.lbl {
+  border: 1px solid red;
+  display: block;
+}
+
+
 
 /* Popup */
 

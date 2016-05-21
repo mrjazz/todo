@@ -12,7 +12,8 @@ Refactoring:
 
 Fixes:
 
-
+ - [ ] Delete items with children doesn't set focus correctly
+ - [X] Add item replace existing todos
 
 Add new shortcuts:
 
@@ -31,6 +32,17 @@ Features:
  - [ ] Parse hashtags
  - [ ] Create _todo next_ view
  - [ ] Add animation for deleted item
+ - [ ] Calendar research. Options are:
+
+   - https://vitalets.github.io/bootstrap-datepicker/
+   - http://amsul.ca/pickadate.js/date/
+   - http://demos.telerik.com/kendo-ui/datepicker/keyboard-navigation
+
+ Parse text to date:
+  - http://www.datejs.com/
+
+ Display date:
+  - http://momentjs.com/
 
 
 v0.0.3

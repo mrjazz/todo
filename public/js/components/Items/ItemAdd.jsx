@@ -1,11 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 
 
 export default class ItemAdd extends Component {
-
-  static contextTypes = {
-    store: PropTypes.object.isRequired
-  };
 
   _inputHandler(e) {
     switch (e.key) {

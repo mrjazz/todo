@@ -134,18 +134,20 @@ export function todos(state = initialState, action) {
     },
 
     ADD_TODO() {
+      const id = newId();
       state.todos = [
-        ...state,
-        new Todo(newId(), action.text, false)
+        ...state.todos,
+        new Todo(id, action.text, false)
       ];
     },
 
     ADD_BELOW() {
       // console.log(action.todo);
       state.cancelId = state.focusId;
+      state.focusId = newId();
       state.todos = insertrAfter(
         state.todos,
-        Object.assign(clone(action.todo), { id: newId() }),
+        Object.assign(clone(action.todo), { id: state.focusId }),
         (i) => i.id == action.id
       );
     },

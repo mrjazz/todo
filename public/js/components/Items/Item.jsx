@@ -63,15 +63,16 @@ export default class Item extends Component {
     store: PropTypes.object.isRequired
   };
 
-  // static propTypes = {
-  //   todo : PropTypes.instanceOf(Todo).isRequired,
-  //   focus : PropTypes.bool.isRequired, // is true when need set focus on Item
-  //   highlight: PropTypes.func.isRequired,
-  //   onChange : PropTypes.func.isRequired,
-  //   connectDragSource: PropTypes.func.isRequired,
-  //   connectDropTarget: PropTypes.func.isRequired
-  //   //moveCard: PropTypes.func.isRequired
-  // };
+  static propTypes = {
+    todo: PropTypes.instanceOf(Todo).isRequired,
+    focus: PropTypes.bool.isRequired, // is true when need set focus on Item
+    visible: PropTypes.bool.isRequired,
+    highlight: PropTypes.func.isRequired,
+    onChange : PropTypes.func.isRequired,
+    connectDragSource: PropTypes.func.isRequired,
+    connectDropTarget: PropTypes.func.isRequired
+    //moveCard: PropTypes.func.isRequired
+  };
 
   constructor() {
     super();
@@ -110,6 +111,7 @@ export default class Item extends Component {
             onBlur={this.props.onFocusOut}
             onFocus={this.props.onFocus}
             onChange={this._checkTodo}/>
+          {this.props.visible ? <label onClick={this.props.onFocus}>{todo.text}<sup>{todo.id}</sup></label> : ''}
           {this.props.children}
         </div>
       )
