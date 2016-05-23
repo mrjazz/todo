@@ -216,7 +216,11 @@ export default class ItemsList extends Component {
 
   createItemHandler(id, text) {
     this.context.store.dispatch(TodoAction.updateTodo(id, text));
-    this.cancelEdit();
+    this.updateState({
+      editId: null,
+      dropHoverId: null,
+      focusedItemState: TodoItemStateType.VIEW
+    });
   }
 
   createCancelHandler() {
