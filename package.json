@@ -53,7 +53,9 @@
     "sass-loader": "^3.0.0",
     "style-loader": "^0.13.0",
     "mocha": "2.4.5",
-    "should": "8.4.0"
+    "should": "8.4.0",
+    "datejs": "1.0.0-rc3",
+    "moment": "2.13.0"
   },
   "bugs": {
     "url": "https://github.com/mrjazz/todo/issues"

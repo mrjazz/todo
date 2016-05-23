@@ -18,3 +18,5 @@ export const MAKE_CHILD_OF_TODO = 'MAKE_CHILD_OF_TODO';
 export const REMOVE_TODO        = 'REMOVE_TODO';
 export const FLIP_TODO          = 'FLIP_TODO';
 export const SELECT_TODO        = 'SELECT_TODO';
+export const UPDATE_DATE_START  = 'UPDATE_DATE_START';
+export const UPDATE_DATE_END    = 'UPDATE_DATE_END';

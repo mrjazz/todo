@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
 import {HOWTO} from '../constants/Howto.jsx';
-import Popup from 'react-popup';
 
 import {searchr} from '../lib/CollectionUtils.js';
 

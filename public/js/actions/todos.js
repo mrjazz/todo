@@ -137,3 +137,19 @@ export function selectTodo(id) {
     id
   };
 }
+
+export function updateDateStart(id, date) {
+  return {
+    type: TodoAction.UPDATE_DATE_START,
+    id,
+    date
+  };
+}
+
+export function updateDateEnd(id, date) {
+  return {
+    type: TodoAction.UPDATE_DATE_END,
+    id,
+    date
+  };
+}

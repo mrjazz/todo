@@ -62,7 +62,7 @@ export default class ItemsList extends Component {
           className={this.stylesForItem(i)}
           todo={i}
           focus={this.state.editId == null && this.curState().focusId == i.id}
-          visible={!(this.state.focusedItemState !== TodoItemStateType.VIEW && i.id === this.state.editId)}
+          visible={this.isTodoVisible(i)}
           onDrop={this.dropItemHandler}
           highlight={this.highlightItem}
           onKeyDown={this.itemKeyPressHandler}
@@ -77,30 +77,46 @@ export default class ItemsList extends Component {
     );
   }
 
+  isTodoVisible(todo) {
+    if (todo.id === this.state.editId) {
+      if (this.state.focusedItemState === TodoItemStateType.DATE_START) return true;
+      if (this.state.focusedItemState === TodoItemStateType.DATE_END) return true;
+      if (this.state.focusedItemState !== TodoItemStateType.VIEW) return false;
+    }
+    return true;
+  }
+
   getItemComponent(todo) {
     if (todo.id === this.state.editId) {
       switch (this.state.focusedItemState) {
         case TodoItemStateType.CREATE:
           return <ItemAdd
-            value={todo.text}
-            onUpdate={this.createItemHandler.bind(this, todo.id)}
-            onCancel={this.createCancelHandler.bind(this, todo.id)} />;
+                    value={todo.text}
+                    onUpdate={this.createItemHandler.bind(this, todo.id)}
+                    onCancel={this.createCancelHandler.bind(this, todo.id)} />;
         case TodoItemStateType.EDIT:
           return <ItemAdd
-            value={todo.text}
-            onUpdate={this.updateItemHandler.bind(this, todo.id)}
-            onCancel={this.updateCancelHandler.bind(this, todo.id)} />;
-        case TodoItemStateType.DATE_START:
-          return <div>
-                    <label className="lbl">{todo.text}</label>
-                    <ItemDatePicker
-                      onUpdate={this.updateItemHandler.bind(this, todo.id)}
-                      onCancel={this.updateCancelHandler.bind(this, todo.id)}/>
-                  </div>;
+                    value={todo.text}
+                    onUpdate={this.updateItemHandler.bind(this, todo.id)}
+                    onCancel={this.updateCancelHandler.bind(this, todo.id)} />;
         case TodoItemStateType.DATE_START:
           return <ItemDatePicker
-            onUpdate={this.updateItemHandler.bind(this, todo.id)}
-            onCancel={this.updateCancelHandler.bind(this, todo.id)}/>;
+                    placeholder="Start date"
+                    onUpdate={(date) => {
+                      // console.info(date); // dispatch update
+                      this.context.store.dispatch(TodoAction.updateDateStart(todo.id, date));
+                      this.updateCancelHandler(todo.id);
+                    }}
+                    onCancel={this.updateCancelHandler.bind(this, todo.id)}/>;
+        case TodoItemStateType.DATE_END:
+          return <ItemDatePicker
+                    placeholder="End date"
+                    onUpdate={(date) => {
+                      // console.info(date); // dispatch update
+                      this.context.store.dispatch(TodoAction.updateDateEnd(todo.id, date));
+                      this.updateCancelHandler(todo.id);
+                    }}
+                    onCancel={this.updateCancelHandler.bind(this, todo.id)}/>;
       }
     }
 
@@ -176,7 +192,7 @@ export default class ItemsList extends Component {
   }
 
   updateCancelHandler(id) {
-    this.updateState({editId: null, focusedItemState: TodoItemStateType.VIEW});
+    this.cancelEdit();
     this.itemFocusHandler(id);
   }
 
@@ -186,7 +202,12 @@ export default class ItemsList extends Component {
     } else {
       this.context.store.dispatch(TodoAction.selectTodo(id));
     }
+
     //this._handleItemFocus(id);
+    this.cancelEdit();
+  }
+
+  cancelEdit() {
     this.updateState({
       editId: null,
       focusedItemState: TodoItemStateType.VIEW
@@ -195,20 +216,12 @@ export default class ItemsList extends Component {
 
   createItemHandler(id, text) {
     this.context.store.dispatch(TodoAction.updateTodo(id, text));
-    this.updateState({
-      editId: null,
-      dropHoverId: null,
-      focusedItemState: TodoItemStateType.VIEW
-    });
+    this.cancelEdit();
   }
 
   createCancelHandler() {
     this.context.store.dispatch(TodoAction.cancelCreateTodo());
-    this.updateState({
-      editId: null,
-      dropHoverId: null,
-      focusedItemState: TodoItemStateType.VIEW
-    });
+    this.cancelEdit();
   }
 
   findIndexById(id) {
@@ -446,7 +459,9 @@ export default class ItemsList extends Component {
         this.updateState({
           editId: id,
           focusedItemState: TodoItemStateType.DATE_START
-        })
+        });
+        e.stopPropagation();
+        e.preventDefault();
       },
 
       'D_E' : () => {
@@ -454,7 +469,9 @@ export default class ItemsList extends Component {
         this.updateState({
           editId: id,
           focusedItemState: TodoItemStateType.DATE_END
-        })
+        });
+        e.stopPropagation();
+        e.preventDefault();
       }
 
     };
@@ -493,7 +510,6 @@ export default class ItemsList extends Component {
 
   stylesForItem(i) {
     let styles = ['item'];
-    if (i.done) styles.push('complete');
 
     if (i.id == this.state.editId) {
       // create/edit item

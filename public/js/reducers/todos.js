@@ -176,6 +176,22 @@ export function todos(state = initialState, action) {
       );
     },
 
+    UPDATE_DATE_START() {
+      state.todos = mapr(state.todos, todo =>
+        todo.id === action.id ?
+          Object.assign(Object.create(todo), todo, { dateStart: action.date }) :
+          todo
+      );
+    },
+
+    UPDATE_DATE_END() {
+      state.todos = mapr(state.todos, todo =>
+        todo.id === action.id ?
+          Object.assign(Object.create(todo), todo, { dateEnd: action.date }) :
+          todo
+      );
+    },
+
     MOVE_ABOVE_TODO() {
       state.todos = insert(insertrBefore, state.todos, action.id, action.parentId);
     },

@@ -3,6 +3,10 @@ import React, { Component } from 'react';
 
 export default class ItemAdd extends Component {
 
+  static propTypes = {
+    onUpdate: React.PropTypes.func.isRequired
+  };
+
   _inputHandler(e) {
     switch (e.key) {
       case 'Enter':
@@ -25,6 +29,7 @@ export default class ItemAdd extends Component {
     // onUpdate
     return <input
               type="text"
+              placeholder="New todo"
               autoFocus="true"
               ref="ctrlInput"
               defaultValue={this.props.value}

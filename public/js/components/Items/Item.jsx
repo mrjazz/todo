@@ -98,6 +98,8 @@ export default class Item extends Component {
     const { todo, draggingItem, connectDragSource, connectDropTarget } = this.props;
     const opacity = draggingItem !== null && draggingItem.id == todo.id ? 0.4 : 1;
 
+    // {todo.dateStart.toString()} - {todo.dateEnd.toString()}
+
     return connectDragSource(
       connectDropTarget(
         <div style={{opacity}} className={this.props.className}>
@@ -111,7 +113,7 @@ export default class Item extends Component {
             onBlur={this.props.onFocusOut}
             onFocus={this.props.onFocus}
             onChange={this._checkTodo}/>
-          {this.props.visible ? <label onClick={this.props.onFocus}>{todo.text}<sup>{todo.id}</sup></label> : ''}
+          {this.props.visible ? <label className={todo.done ? 'complete' : ''} onClick={this.props.onFocus}>{todo.text} - {todo.id}</label> : ''}
           {this.props.children}
         </div>
       )
