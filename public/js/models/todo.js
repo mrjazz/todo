@@ -10,6 +10,8 @@ export default class Todo {
     this.done = done;
     this.children = children;
     this.open = false;
+    this.dateStart = null;
+    this.dateEnd = null;
   }
 
   add(todo) {

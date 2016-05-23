@@ -111,7 +111,7 @@ export default class Item extends Component {
             onBlur={this.props.onFocusOut}
             onFocus={this.props.onFocus}
             onChange={this._checkTodo}/>
-          {this.props.visible ? <label onClick={this.props.onFocus}>{todo.text}<sup>{todo.id}</sup></label> : ''}
+          {this.props.visible ? <label className={todo.done ? 'complete' : ''} onClick={this.props.onFocus}>{todo.text} - {todo.id}</label> : ''}
           {this.props.children}
         </div>
       )
