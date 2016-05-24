@@ -52,7 +52,7 @@
     "rimraf": "^2.5.0",
     "sass-loader": "^3.0.0",
     "style-loader": "^0.13.0",
-    "mocha": "2.5.1",
+    "mocha": "2.5.2",
     "should": "8.4.0",
     "datejs": "1.0.0-rc3",
     "moment": "2.13.0"
