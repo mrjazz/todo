@@ -78,7 +78,6 @@ export function todos(state = initialState, action) {
     PASTE_TODO() {
       // state.clipboard = searchr(state.todos, (i) => action.id === i.id);
       if (state.clipboard != null) {
-        console.log(action.todo);
         const todo = Object.assign(clone(action.todo), { id: newId() });
         state.todos = insertrAfter(state.todos, todo, (i) => i.id == action.id);
         state.clipboard = null;

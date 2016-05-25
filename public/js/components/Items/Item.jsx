@@ -4,8 +4,8 @@ import { DragSource, DropTarget } from 'react-dnd';
 import * as HighlightType from '../../constants/HighlightTypes';
 import Todo from '../../models/todo';
 
-import {checkTodo, flipTodo} from '../../actions/todos';
-
+import {flipTodo} from '../../actions/todos';
+import moment from 'moment';
 
 const dropSource = {
   beginDrag(props) {
@@ -68,30 +68,18 @@ export default class Item extends Component {
     focus: PropTypes.bool.isRequired, // is true when need set focus on Item
     visible: PropTypes.bool.isRequired,
     highlight: PropTypes.func.isRequired,
-    onChange : PropTypes.func.isRequired,
+    onChange: PropTypes.func.isRequired,
+    onFlipTodo: PropTypes.func.isRequired,
+    onCheckTodo: PropTypes.func.isRequired,
     connectDragSource: PropTypes.func.isRequired,
     connectDropTarget: PropTypes.func.isRequired
     //moveCard: PropTypes.func.isRequired
   };
 
-  constructor() {
-    super();
-    this._flipItem  = this._flipItem.bind(this);
-    this._checkTodo = this._checkTodo.bind(this);
-  }
-
   _focus(elm) {
     if (elm !== null && this.props.focus) {
       elm.focus();
     }
-  }
-
-  _flipItem() {
-    this.context.store.dispatch(flipTodo(this.props.todo.id));
-  }
-
-  _checkTodo() {
-    this.context.store.dispatch(checkTodo(this.props.todo.id));
   }
 
   render() {
@@ -112,12 +100,22 @@ export default class Item extends Component {
             onKeyDown={this.props.onKeyDown}
             onBlur={this.props.onFocusOut}
             onFocus={this.props.onFocus}
-            onChange={this._checkTodo}/>
+            onChange={this.props.onCheckTodo}
+          />
           {this.props.visible ? <label className={todo.done ? 'complete' : ''} onClick={this.props.onFocus}>{todo.text} - {todo.id}</label> : ''}
+          {this.getDateControl(todo)}
           {this.props.children}
         </div>
       )
     );
+  }
+
+  getDateControl(todo) {
+    const dateStart = todo.dateStart ? moment(todo.dateStart).fromNow().toString() : '';
+    const dateEnd = todo.dateEnd ? moment(todo.dateEnd).fromNow().toString() : '';
+    return <span className="date" onClick={this.props.onFocus}>
+            <div className="start">{dateStart}</div><div className="end">{dateEnd}</div>
+          </span>
   }
 
   _getIcon() {
@@ -128,9 +126,9 @@ export default class Item extends Component {
     }
 
     if (todo.open) {
-      return <i className="icon-open" onClick={this._flipItem}></i>;
+      return <i className="icon-open" onClick={this.props.onFlipTodo}></i>;
     } else {
-      return <i className="icon-closed" onClick={this._flipItem}></i>;
+      return <i className="icon-closed" onClick={this.props.onFlipTodo}></i>;
     }
 
   }

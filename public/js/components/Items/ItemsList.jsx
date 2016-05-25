@@ -55,6 +55,7 @@ export default class ItemsList extends Component {
   }
 
   renderItems(items) {
+    const store = this.context.store;
     return items.map(
       (i, j) => <div key={j} className="items">
         <Item
@@ -69,12 +70,30 @@ export default class ItemsList extends Component {
           onFocus={() => this.itemFocusHandler(i.id)}
           onFocusOut={() => this.focusOutHandler()}
           onChange={() => this.props.checkTodo(i.id)}
+          onFlipTodo={() => store.dispatch(TodoAction.flipTodo(i.id))}
+          onCheckTodo={() => {
+            this.keepPositionAfterAction(i.id, () => store.dispatch(TodoAction.checkTodo(i.id)));
+          }}
         >
           {this.getItemComponent(i)}
         </Item>
         {i.children != undefined && i.children.length > 0 && i.open ? this.renderItems(i.children) : ''}
       </div>
     );
+  }
+
+  keepPositionAfterAction(id, action) {
+    let idx = this.findIndexById(id); // index before action
+    action();
+    let newId = false;
+    while (true) {
+      newId = this.findIdByIndex(idx--);
+      if (newId != undefined || idx < 0) break;
+    }
+    if (newId != undefined) {
+      // set focus if item exists
+      this.context.store.dispatch(TodoAction.selectTodo(newId));
+    }
   }
 
   isTodoVisible(todo) {
@@ -229,11 +248,11 @@ export default class ItemsList extends Component {
   }
 
   findIndexById(id) {
-    return searchrIndex(this.curState().todos, function (i) { return i.id == id});
+    return searchrIndex(this.curItems(), function (i) { return i.id == id});
   }
 
   findIdByIndex(index) {
-    return searchrByIndex(this.curState().todos, index).id;
+    return searchrByIndex(this.curItems(), index).id;
   }
 
   itemKeyPressHandler(e) {
@@ -262,14 +281,6 @@ export default class ItemsList extends Component {
           setFocus(todos[0].id);
         }
       }
-    }
-
-    function prevOrNext() {
-      let selNextTodo = lookupNext(todos, id); // next
-      if (selNextTodo === false) {
-        selNextTodo = lookupPrev(todos, id); // previous
-      }
-      return selNextTodo;
     }
 
     // Shortcut functions
@@ -302,9 +313,7 @@ export default class ItemsList extends Component {
 
       'Delete' : () => {
         // Delete item
-        const next = prevOrNext();
-        store.dispatch(TodoAction.deleteTodo(id));
-        store.dispatch(TodoAction.selectTodo(next.id));
+        this.keepPositionAfterAction(id, () => store.dispatch(TodoAction.deleteTodo(id)));
       },
 
       'CtrlShiftArrowRight' : () => {
@@ -439,7 +448,7 @@ export default class ItemsList extends Component {
       },
 
       'CtrlX' : () => {
-        const nextTodo = prevOrNext();
+        const nextTodo = this.prevOrNext(todos, id);
         store.dispatch(TodoAction.cutTodo(id));
         if (nextTodo) {
           this.itemFocusHandler(nextTodo.id);
@@ -459,7 +468,6 @@ export default class ItemsList extends Component {
       },
 
       'D_S' : () => {
-        console.log("date start");
         this.updateState({
           editId: id,
           focusedItemState: TodoItemStateType.DATE_START
@@ -469,7 +477,6 @@ export default class ItemsList extends Component {
       },
 
       'D_E' : () => {
-        console.log("date end");
         this.updateState({
           editId: id,
           focusedItemState: TodoItemStateType.DATE_END
@@ -531,6 +538,22 @@ export default class ItemsList extends Component {
 
   updateState(stateProps) {
     this.setState(Object.assign(this.state, stateProps));
+  }
+
+  prevOrNext(todos, id) {
+    let selNextTodo = lookupPrev(todos, id); // previous
+    if (selNextTodo === false) {
+      selNextTodo = lookupNext(todos, id); // next
+    }
+    return selNextTodo;
+  }
+
+  nextOrPrev(todos, id) {
+    let selNextTodo = lookupNext(todos, id); // next
+    if (selNextTodo === false) {
+      selNextTodo = lookupPrev(todos, id); // previous
+    }
+    return selNextTodo;
   }
 
 }

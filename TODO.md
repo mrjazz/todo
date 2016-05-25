@@ -12,13 +12,14 @@ Refactoring:
 
 Fixes:
 
- - [ ] Delete items with children doesn't set focus correctly
+ - [X] Delete items with children doesn't set focus correctly
+ - [X] For filtered view focus doesn't set by complete
  - [X] Add item replace existing todos
 
 Add new shortcuts:
 
- - [ ] D+S - Shortcut for _Date Start_
- - [ ] D+E - Shortcut for _Date Start_
+ - [X] D+S - Shortcut for _Date Start_
+ - [X] D+E - Shortcut for _Date Start_
  - [ ] Ctrl+F - Search
  - [ ] ? - Help
  - [ ] Set colors by 1..6 keys
@@ -26,9 +27,8 @@ Add new shortcuts:
 
 Features:
 
- - [ ] Add description
- - [ ] Add notes in right panel
- - [ ] Add date start, date end in right panel
+ - [ ] Add notes with markdown support
+ - [X] Add date start, date end
  - [ ] Parse hashtags
  - [ ] Create _todo next_ view
  - [ ] Add animation for deleted item
@@ -71,6 +71,7 @@ Shortcuts:
  - [X] If item has children and closed, expand by →
  - [X] If item has children and open, collapse by ←
  - [X] If item has children and open, jump to first item by →
+
 
 Fixes:
 

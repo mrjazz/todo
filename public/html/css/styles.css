@@ -72,6 +72,13 @@
   line-height: 1;
 }
 
+.item .date {
+  float: right;
+  right: 0px;
+  text-align: center;
+  font-size: 0.6em;
+}
+
 .icon-empty {
   display: inline-block;
   width: 20px;
