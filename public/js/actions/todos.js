@@ -153,3 +153,11 @@ export function updateDateEnd(id, date) {
     date
   };
 }
+
+export function updateNote(id, note) {
+  return {
+    type: TodoAction.UPDATE_NOTE,
+    id,
+    note
+  };
+}

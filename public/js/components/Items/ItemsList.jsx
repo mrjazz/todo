@@ -5,6 +5,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import ItemsFilter from './ItemsFilter.jsx';
 import ItemDatePicker from './ItemDatePicker.jsx';
+import ItemNote from './ItemNote.jsx';
 import ItemAdd from './ItemAdd.jsx';
 import Item from './Item.jsx';
 
@@ -100,6 +101,7 @@ export default class ItemsList extends Component {
     if (todo.id === this.state.editId) {
       if (this.state.focusedItemState === TodoItemStateType.DATE_START) return true;
       if (this.state.focusedItemState === TodoItemStateType.DATE_END) return true;
+      if (this.state.focusedItemState === TodoItemStateType.NOTE) return true;
       if (this.state.focusedItemState !== TodoItemStateType.VIEW) return false;
     }
     return true;
@@ -108,6 +110,14 @@ export default class ItemsList extends Component {
   getItemComponent(todo) {
     if (todo.id === this.state.editId) {
       switch (this.state.focusedItemState) {
+        case TodoItemStateType.NOTE:
+          return <ItemNote
+            value={todo.note}
+            onUpdate={(note) => {
+              this.context.store.dispatch(TodoAction.updateNote(todo.id, note));
+              this.updateCancelHandler(todo.id);
+            }}
+            onCancel={this.updateCancelHandler.bind(this, todo.id)}/>;
         case TodoItemStateType.CREATE:
           return <ItemAdd
                     value={todo.text}
@@ -465,6 +475,15 @@ export default class ItemsList extends Component {
 
       'CtrlC' : () => {
         store.dispatch(TodoAction.copyTodo(id));
+      },
+
+      'N_N' : () => {
+        this.updateState({
+          editId: id,
+          focusedItemState: TodoItemStateType.NOTE
+        });
+        e.stopPropagation();
+        e.preventDefault();
       },
 
       'D_S' : () => {

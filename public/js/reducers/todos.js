@@ -191,6 +191,14 @@ export function todos(state = initialState, action) {
       );
     },
 
+    UPDATE_NOTE() {
+      state.todos = mapr(state.todos, todo =>
+        todo.id === action.id ?
+          Object.assign(Object.create(todo), todo, { note: action.note }) :
+          todo
+      );
+    },
+
     MOVE_ABOVE_TODO() {
       state.todos = insert(insertrBefore, state.todos, action.id, action.parentId);
     },

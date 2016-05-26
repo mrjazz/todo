@@ -18,17 +18,19 @@ Fixes:
 
 Add new shortcuts:
 
+ - [ ] Ctrl+→ - Display note for items with hidden note
+ - [ ] Ctrl+← - Hide note for items with visible note
  - [X] D+S - Shortcut for _Date Start_
  - [X] D+E - Shortcut for _Date Start_
  - [ ] Ctrl+F - Search
  - [ ] ? - Help
  - [ ] Set colors by 1..6 keys
 
-
 Features:
 
- - [ ] Add notes with markdown support
+ - [X] Add notes
  - [X] Add date start, date end
+ - [ ] Display notes with markdown
  - [ ] Parse hashtags
  - [ ] Create _todo next_ view
  - [ ] Add animation for deleted item

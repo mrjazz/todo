@@ -72,6 +72,31 @@
   line-height: 1;
 }
 
+.item .wrap {
+  width: 100%;
+  display: table;
+}
+
+.item .hint {
+  font-size: 0.6em;
+  text-align: right;
+  width: 98%;
+}
+
+.item .block, .item .control {
+  display: table-cell;
+  vertical-align: top;
+}
+
+.item .block {
+  width: 40px;
+}
+
+.item textarea {
+  height: 200px;
+  width: 98%;
+}
+
 .item .date {
   float: right;
   right: 0px;

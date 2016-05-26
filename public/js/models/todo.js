@@ -12,6 +12,7 @@ export default class Todo {
     this.open = false;
     this.dateStart = null;
     this.dateEnd = null;
+    this.note = null;
   }
 
   add(todo) {
