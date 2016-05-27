@@ -30,7 +30,7 @@ Features:
 
  - [X] Add notes
  - [X] Add date start, date end
- - [ ] Display notes with markdown
+ - [ ] View mode for notes with markdown
  - [ ] Parse hashtags
  - [ ] Create _todo next_ view
  - [ ] Add animation for deleted item
