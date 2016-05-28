@@ -34,6 +34,7 @@ Features:
  - [ ] Parse hashtags
  - [ ] Create _todo next_ view
  - [ ] Add animation for deleted item
+ - [ ] After research add visual calendar as option for date selection
  - [ ] Calendar research. Options are:
 
    - https://vitalets.github.io/bootstrap-datepicker/
