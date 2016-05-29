@@ -31,7 +31,8 @@ Features:
  - [X] Add notes
  - [X] Add date start, date end
  - [ ] View mode for notes with markdown
- - [ ] Parse hashtags
+ - [ ] Parse hashtags (contexts)
+ - [ ] Parse contects (@ sign)
  - [ ] Create _todo next_ view
  - [ ] Add animation for deleted item
  - [ ] After research add visual calendar as option for date selection
