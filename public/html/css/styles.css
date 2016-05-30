@@ -104,6 +104,16 @@
   font-size: 0.6em;
 }
 
+.icon-note {
+  background: url("../img/note.png");
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin-left: 10px;
+  position: relative;
+  top: 2px;
+}
+
 .icon-empty {
   display: inline-block;
   width: 20px;
