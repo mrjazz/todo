@@ -21,3 +21,4 @@ export const SELECT_TODO        = 'SELECT_TODO';
 export const UPDATE_DATE_START  = 'UPDATE_DATE_START';
 export const UPDATE_DATE_END    = 'UPDATE_DATE_END';
 export const UPDATE_NOTE        = 'UPDATE_NOTE';
+export const PREVIEW_NOTE       = 'PREVIEW_NOTE';

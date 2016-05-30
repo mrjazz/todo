@@ -13,6 +13,7 @@ export default class Todo {
     this.dateStart = null;
     this.dateEnd = null;
     this.note = null;
+    this.previewNote = false;
   }
 
   add(todo) {

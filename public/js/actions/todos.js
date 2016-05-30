@@ -161,3 +161,10 @@ export function updateNote(id, note) {
     note
   };
 }
+
+export function previewNote(id) {
+  return {
+    type: TodoAction.PREVIEW_NOTE,
+    id
+  };
+}

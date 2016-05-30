@@ -30,6 +30,7 @@ Features:
 
  - [X] Add notes
  - [X] Add date start, date end
+ - [ ] Add icon for date when date exists
  - [ ] View mode for notes with markdown
  - [ ] Parse hashtags (contexts)
  - [ ] Parse contects (@ sign)

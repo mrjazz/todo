@@ -486,6 +486,13 @@ export default class ItemsList extends Component {
         e.preventDefault();
       },
 
+      'N_P' : () => {
+        const curTodo = focusedTodo();
+        if (curTodo.note != null) {
+          store.dispatch(TodoAction.previewNote(id));
+        }
+      },
+
       'D_S' : () => {
         this.updateState({
           editId: id,

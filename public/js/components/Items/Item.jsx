@@ -103,11 +103,25 @@ export default class Item extends Component {
             onChange={this.props.onCheckTodo}
           />
           {this.props.visible ? <label className={todo.done ? 'complete' : ''} onClick={this.props.onFocus}>{todo.text} - {todo.id}</label> : ''}
+          {this.getPreviewIcon(todo)}
           {this.getDateControl(todo)}
+          {this.getPreview(todo)}
           {this.props.children}
         </div>
       )
     );
+  }
+
+  getPreview(todo) {
+    if (todo.note && todo.previewNote) {
+      return <div>preview</div>;
+    }
+  }
+
+  getPreviewIcon(todo) {
+    if (todo.note && !todo.previewNote) {
+      return <i className="icon-note"></i>;
+    }
   }
 
   getDateControl(todo) {
