@@ -55,7 +55,8 @@
     "mocha": "2.5.3",
     "should": "9.0.0",
     "datejs": "1.0.0-rc3",
-    "moment": "2.13.0"
+    "moment": "2.13.0",
+    "markdown": "0.5.0"
   },
   "bugs": {
     "url": "https://github.com/mrjazz/todo/issues"

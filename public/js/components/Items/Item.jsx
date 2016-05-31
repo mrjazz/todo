@@ -3,8 +3,8 @@ import React, { Component, PropTypes } from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
 import * as HighlightType from '../../constants/HighlightTypes';
 import Todo from '../../models/todo';
+import Markdown from './Markdown';
 
-import {flipTodo} from '../../actions/todos';
 import moment from 'moment';
 
 const dropSource = {
@@ -114,7 +114,12 @@ export default class Item extends Component {
 
   getPreview(todo) {
     if (todo.note && todo.previewNote) {
-      return <div>preview</div>;
+      return <div className="wrap">
+        <div className="block"></div>
+        <div className="control note">
+          <Markdown text={todo.note}/>
+        </div>
+      </div>;
     }
   }
 
