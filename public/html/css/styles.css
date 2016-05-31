@@ -156,6 +156,14 @@
   font-size: 0.8em;
 }
 
+.date-picker p {
+  font-size: 0.8em;
+}
+
+.date-picker p.correct {
+  font-weight: bold;
+}
+
 .error {
   margin: 5px;
   padding: 2px 4px;

@@ -20,18 +20,18 @@ Add new shortcuts:
 
  - [X] N+N - Create note
  - [X] N+P - Preview note with markdown
- - [ ] Ctrl+→ - Display note for items with hidden note
- - [ ] Ctrl+← - Hide note for items with visible note
  - [X] D+S - Shortcut for _Date Start_
  - [X] D+E - Shortcut for _Date Start_
  - [ ] Ctrl+F - Search
  - [ ] ? - Help
- - [ ] Set colors by 1..6 keys
+ - [ ] Set colors/icons by 1..6 keys
 
 Features:
 
  - [X] Add notes
  - [X] Add date start, date end
+ - [X] Add validation for dates (date start can't be after date end and otherwise)
+ - [X] Hints for dates and correct date confirmation with separate style
  - [ ] Add icon for date when date exists
  - [ ] View mode for notes with markdown
  - [ ] Parse hashtags (contexts)

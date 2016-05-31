@@ -131,6 +131,7 @@ export default class ItemsList extends Component {
         case TodoItemStateType.DATE_START:
           return <ItemDatePicker
                     placeholder="Start date"
+                    maxDate={todo.dateEnd}
                     onUpdate={(date) => {
                       // console.info(date); // dispatch update
                       this.context.store.dispatch(TodoAction.updateDateStart(todo.id, date));
@@ -140,6 +141,7 @@ export default class ItemsList extends Component {
         case TodoItemStateType.DATE_END:
           return <ItemDatePicker
                     placeholder="End date"
+                    minDate={todo.dateStart}
                     onUpdate={(date) => {
                       // console.info(date); // dispatch update
                       this.context.store.dispatch(TodoAction.updateDateEnd(todo.id, date));
