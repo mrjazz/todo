@@ -32,7 +32,8 @@ Features:
  - [X] Add date start, date end
  - [X] Add validation for dates (date start can't be after date end and otherwise)
  - [X] Hints for dates and correct date confirmation with separate style
- - [ ] Add icon for date when date exists
+ - [X] Add icon for date when date exists
+ - [ ] Add separate style for expired end date
  - [ ] View mode for notes with markdown
  - [ ] Parse hashtags (contexts)
  - [ ] Parse contects (@ sign)

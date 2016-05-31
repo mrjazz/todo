@@ -102,6 +102,11 @@
   right: 0px;
   text-align: center;
   font-size: 0.6em;
+  height: 20px;
+
+  display: inline-block;
+  background: url("../img/calendar.png") no-repeat;
+  padding-left: 23px;
 }
 
 .item .note {

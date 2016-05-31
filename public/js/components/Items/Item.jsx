@@ -129,6 +129,7 @@ export default class Item extends Component {
   }
 
   getDateControl(todo) {
+    if (!todo.dateStart && !todo.dateEnd) return "";
     const dateStart = todo.dateStart ? moment(todo.dateStart).fromNow().toString() : '';
     const dateEnd = todo.dateEnd ? moment(todo.dateEnd).fromNow().toString() : '';
     return <span className="date" onClick={this.props.onFocus}>
