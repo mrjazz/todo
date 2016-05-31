@@ -18,6 +18,8 @@ Fixes:
 
 Add new shortcuts:
 
+ - [X] N+N - Create note
+ - [X] N+P - Preview note with markdown
  - [ ] Ctrl+→ - Display note for items with hidden note
  - [ ] Ctrl+← - Hide note for items with visible note
  - [X] D+S - Shortcut for _Date Start_

@@ -104,6 +104,12 @@
   font-size: 0.6em;
 }
 
+.item .note {
+  padding: 10px 0px 10px 0px;
+  font-size: 0.8em;
+  color: #222222;
+}
+
 .icon-note {
   background: url("../img/note.png");
   width: 16px;

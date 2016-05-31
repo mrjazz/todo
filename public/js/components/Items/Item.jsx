@@ -3,8 +3,8 @@ import React, { Component, PropTypes } from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
 import * as HighlightType from '../../constants/HighlightTypes';
 import Todo from '../../models/todo';
+import Markdown from './Markdown';
 
-import {flipTodo} from '../../actions/todos';
 import moment from 'moment';
 
 const dropSource = {
@@ -102,8 +102,7 @@ export default class Item extends Component {
             onFocus={this.props.onFocus}
             onChange={this.props.onCheckTodo}
           />
-          {this.props.visible ? <label className={todo.done ? 'complete' : ''} onClick={this.props.onFocus}>{todo.text} - {todo.id}</label> : ''}
-          {this.getPreviewIcon(todo)}
+          {this.props.visible ? <label className={todo.done ? 'complete' : ''} onClick={this.props.onFocus}>{todo.text} - {todo.id} {this.getPreviewIcon(todo)}</label> : ''}
           {this.getDateControl(todo)}
           {this.getPreview(todo)}
           {this.props.children}
@@ -113,8 +112,13 @@ export default class Item extends Component {
   }
 
   getPreview(todo) {
-    if (todo.note && todo.previewNote) {
-      return <div>preview</div>;
+    if (this.props.visible && todo.note && todo.previewNote) {
+      return <div className="wrap">
+        <div className="block"></div>
+        <div className="control note">
+          <Markdown text={todo.note}/>
+        </div>
+      </div>;
     }
   }
 
