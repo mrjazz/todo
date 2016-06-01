@@ -102,7 +102,7 @@ export default class Item extends Component {
             onFocus={this.props.onFocus}
             onChange={this.props.onCheckTodo}
           />
-          {this.props.visible ? <label className={todo.done ? 'complete' : ''} onClick={this.props.onFocus}>{todo.text} - {todo.id} {this.getPreviewIcon(todo)}</label> : ''}
+          {this.props.visible ? <label className={todo.done ? 'complete' : ''} onClick={this.props.onFocus}>{todo.text} {this.getPreviewIcon(todo)}</label> : ''}
           {this.getDateControl(todo)}
           {this.getPreview(todo)}
           {this.props.children}
@@ -132,9 +132,18 @@ export default class Item extends Component {
     if (!todo.dateStart && !todo.dateEnd) return "";
     const dateStart = todo.dateStart ? moment(todo.dateStart).fromNow().toString() : '';
     const dateEnd = todo.dateEnd ? moment(todo.dateEnd).fromNow().toString() : '';
-    return <span className="date" onClick={this.props.onFocus}>
-            <div className="start">{dateStart}</div><div className="end">{dateEnd}</div>
-          </span>
+    const dateType = getDateTypeForItem(todo.dateStart, todo.dateEnd);
+
+    // console.log(dateType);
+    return <span onClick={this.props.onFocus} className="date">
+            {dateType == ItemDateType.STANDARD ?
+              <div className={getStyleForDate(dateType)}>
+                <div className="start">{dateStart}</div><div className="end">{dateEnd}</div>
+              </div> :
+              <div className={getStyleForDate(dateType)}>
+                <div className="due">{dateEnd}</div>
+              </div>}
+          </span>;
   }
 
   _getIcon() {
@@ -149,7 +158,6 @@ export default class Item extends Component {
     } else {
       return <i className="icon-closed" onClick={this.props.onFlipTodo}></i>;
     }
-
   }
 }
 
@@ -164,3 +172,39 @@ Item = DragSource('todoItem', dropSource, (connect, monitor) => ({
 }))(Item) || Item;
 
 export default Item;
+
+export const ItemDateType = {
+  'STANDARD'    : 0,
+  'EXPIRED'     : 1,
+  'TODAY'       : 2,
+  'IN_PROGRESS' : 3
+};
+
+export function getDateTypeForItem(dateStart, dateEnd) {
+  if (!dateEnd) return ItemDateType.STANDARD;
+  const today = moment();
+  if (moment(today).isAfter(dateEnd)) {
+    return ItemDateType.EXPIRED;
+  } else if (moment(dateEnd).isAfter(moment().startOf('day')) && moment(dateEnd).isBefore(moment().endOf('day'))) {
+    return ItemDateType.TODAY;
+  } else if (moment(today).isAfter(dateStart) && moment(today).isBefore(dateEnd)) {
+    return ItemDateType.IN_PROGRESS;
+  }
+
+  return ItemDateType.STANDARD;
+}
+
+export function getStyleForDate(type) {
+  switch (type) {
+    case ItemDateType.EXPIRED:
+          return "expired";
+    case ItemDateType.TODAY:
+      return "today";
+    case ItemDateType.IN_PROGRESS:
+      return "in-progress";
+    default:
+      return "";
+  }
+
+  return styles;
+}

@@ -29,14 +29,14 @@ Add new shortcuts:
 Features:
 
  - [X] Add notes
- - [X] Add date start, date end
- - [X] Add validation for dates (date start can't be after date end and otherwise)
+ - [X] Add _date start_, _date end_
+ - [X] Add validation for dates (date start can't be after _date end_ and otherwise)
  - [X] Hints for dates and correct date confirmation with separate style
  - [X] Add icon for date when date exists
- - [ ] Add separate style for expired end date
+ - [ ] Add separate style for expired _end date_
  - [ ] View mode for notes with markdown
  - [ ] Parse hashtags (contexts)
- - [ ] Parse contects (@ sign)
+ - [ ] Parse contacts (@ sign)
  - [ ] Create _todo next_ view
  - [ ] Add animation for deleted item
  - [ ] After research add visual calendar as option for date selection
@@ -52,6 +52,14 @@ Features:
  Display date:
   - http://momentjs.com/
 
+Design
+
+ Change pallette to:
+  - #F7F9FE
+  - #ECF1F2
+  - #DCE8EB
+  - #CBDBE0
+  - #BED2D9
 
 v0.0.3
 

@@ -3,6 +3,14 @@
     font-size: 1.1em;
 }
 
+.odd {
+  background-color: #F7F9FE;
+}
+
+.even {
+  background-color: #ECF1F2;
+}
+
 .todo-view {
     float: left;
     width: 100%;
@@ -18,23 +26,23 @@
 }
 
 .todos .item-selected {
-    background-color: #00FF00;
+    background-color: #BED2D9;
 }
 
 .todos .item-hover {
-  background-color: #B8FFB8;
+  background-color: #BED2D9;
 }
 
 .todos .item-above {
-  background-color: #F2FFF2;
-  border-top: 3px solid #B8FFB8;
+  background-color: #ECF1F2;
+  border-top: 3px solid #BED2D9;
   padding-top: 2px;
 }
 
 .todos .item-below {
-  background-color: #F2FFF2;
+  background-color: #ECF1F2;
   padding-bottom: 2px;
-  border-bottom: 3px solid #B8FFB8;
+  border-bottom: 3px solid #BED2D9;
 }
 
 .todos .filters li.active {
@@ -58,15 +66,15 @@
 }
 
 .todos .all-items {
-  margin-left: -20px;
+  /*margin-left: -20px;*/
 }
 
 .todos .all-items .items {
-  padding-left: 20px;
+  padding-left: 16px;
 }
 
 .item {
-  padding: 5px 5px 5px 12px;
+  padding: 5px;
   display: block;
   vertical-align: middle;
   line-height: 1;
@@ -99,14 +107,44 @@
 
 .item .date {
   float: right;
-  right: 0px;
   text-align: center;
   font-size: 0.6em;
   height: 20px;
+  top:-3px;
+  position: relative;
 
+  /*
+  right: 0px;
   display: inline-block;
   background: url("../img/calendar.png") no-repeat;
   padding-left: 23px;
+  */
+}
+
+.item .expired {
+  background-color: #E8456D;
+  border-radius: 3px;
+  padding: 3px;
+}
+
+.item .start, .item .end {
+  height: 14px;
+}
+
+.item .date .due {
+  font-size: 1.7em;
+}
+
+.item .today {
+  background-color: #F3B171;
+  border-radius: 2px;
+  padding: 3px;
+}
+
+.item .in-progress {
+  background-color: #F7D26A;
+  border-radius: 2px;
+  padding: 3px;
 }
 
 .item .note {

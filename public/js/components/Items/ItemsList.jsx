@@ -44,43 +44,48 @@ export default class ItemsList extends Component {
   };
 
   render() {
+
+    let counter = 0;
+    const store = this.context.store;
+
+    const renderItems = (items) => {
+      return items.map(
+        (i, j) => <div key={j}>
+          <Item
+            ref={j}
+            className={this.stylesForItem(i, counter++)}
+            todo={i}
+            focus={this.state.editId == null && this.curState().focusId == i.id}
+            visible={this.isTodoVisible(i)}
+            onDrop={this.dropItemHandler}
+            highlight={this.highlightItem}
+            onKeyDown={this.itemKeyPressHandler}
+            onFocus={() => this.itemFocusHandler(i.id)}
+            onFocusOut={() => this.focusOutHandler()}
+            onChange={() => this.props.checkTodo(i.id)}
+            onFlipTodo={() => store.dispatch(TodoAction.flipTodo(i.id))}
+            onCheckTodo={() => {
+              this.keepPositionAfterAction(i.id, () => store.dispatch(TodoAction.checkTodo(i.id)));
+            }}
+          >
+            {this.getItemComponent(i)}
+          </Item>
+          {i.children != undefined && i.children.length > 0 && i.open ?
+           <div className="items">{renderItems(i.children)}</div>
+           : ''}
+        </div>
+      );
+    };
+
     // console.log(this.props.todos);
     return <ItemsFilter onFilter={this.handleFilter}>
-      {this.renderItems(this.curItems())}
+      {renderItems(this.curItems())}
       <p className="debug">focusedItemState: {this.state.focusedItemState},
         focusId: {this.curState().focusId},
         editId: {this.state.editId},
         dropId: {this.state.dropHoverId},
         dropStyle: {this.state.dropHoverStyle}</p>
     </ItemsFilter>;
-  }
-
-  renderItems(items) {
-    const store = this.context.store;
-    return items.map(
-      (i, j) => <div key={j} className="items">
-        <Item
-          ref={j}
-          className={this.stylesForItem(i)}
-          todo={i}
-          focus={this.state.editId == null && this.curState().focusId == i.id}
-          visible={this.isTodoVisible(i)}
-          onDrop={this.dropItemHandler}
-          highlight={this.highlightItem}
-          onKeyDown={this.itemKeyPressHandler}
-          onFocus={() => this.itemFocusHandler(i.id)}
-          onFocusOut={() => this.focusOutHandler()}
-          onChange={() => this.props.checkTodo(i.id)}
-          onFlipTodo={() => store.dispatch(TodoAction.flipTodo(i.id))}
-          onCheckTodo={() => {
-            this.keepPositionAfterAction(i.id, () => store.dispatch(TodoAction.checkTodo(i.id)));
-          }}
-        >
-          {this.getItemComponent(i)}
-        </Item>
-        {i.children != undefined && i.children.length > 0 && i.open ? this.renderItems(i.children) : ''}
-      </div>
-    );
   }
 
   keepPositionAfterAction(id, action) {
@@ -554,16 +559,16 @@ export default class ItemsList extends Component {
     }
   }
 
-  stylesForItem(i) {
-    let styles = ['item'];
+  stylesForItem(item, counter) {
+    let styles = ['item', counter % 2 ? 'odd' : 'even'];
 
-    if (i.id == this.state.editId) {
+    if (item.id == this.state.editId) {
       // create/edit item
       styles.push(this.getHighlightCSS(HighlightType.HOVER));
-    } else if (i.id == this.state.dropHoverId) {
+    } else if (item.id == this.state.dropHoverId) {
       // hover style during drag&drop
       styles.push(this.getHighlightCSS(this.state.dropHoverStyle));
-    } else if (i.id == this.curState().focusId) {
+    } else if (item.id == this.curState().focusId) {
       // selected item
       styles.push('item-selected');
     }
