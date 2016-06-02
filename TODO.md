@@ -6,41 +6,28 @@ Refactoring:
 
  - [ ] Move functionality from shortcut mapping to reducer
  - [ ] Make Items list more lightweight, move out shortcut handlers
- - [X] Add mapping for shortcuts, maybe some kind of pattern matching
  - [ ] Caching for cur items
 
 
 Fixes:
 
- - [X] Delete items with children doesn't set focus correctly
- - [X] For filtered view focus doesn't set by complete
- - [X] Add item replace existing todos
 
 Add new shortcuts:
 
- - [X] N+N - Create note
- - [X] N+P - Preview note with markdown
- - [X] D+S - Shortcut for _Date Start_
- - [X] D+E - Shortcut for _Date Start_
  - [ ] Ctrl+F - Search
  - [ ] ? - Help
  - [ ] Set colors/icons by 1..6 keys
 
 Features:
 
- - [X] Add notes
- - [X] Add _date start_, _date end_
- - [X] Add validation for dates (date start can't be after _date end_ and otherwise)
- - [X] Hints for dates and correct date confirmation with separate style
- - [X] Add icon for date when date exists
- - [ ] Add separate style for expired _end date_
- - [ ] View mode for notes with markdown
  - [ ] Parse hashtags (contexts)
  - [ ] Parse contacts (@ sign)
  - [ ] Create _todo next_ view
  - [ ] Add animation for deleted item
- - [ ] After research add visual calendar as option for date selection
- - [ ] Calendar research. Options are:
+
+__Calendar research__
+
+ Options are:
 
    - https://vitalets.github.io/bootstrap-datepicker/
    - http://amsul.ca/pickadate.js/date/
@@ -52,7 +39,7 @@ Features:
  Display date:
   - http://momentjs.com/
 
-Design
+__Design__
 
  Change pallette to:
   - #F7F9FE
@@ -60,6 +47,35 @@ Design
   - #DCE8EB
   - #CBDBE0
   - #BED2D9
+
+v0.0.4
+
+Features:
+
+ - [X] Add notes
+ - [X] Add _date start_, _date end_
+ - [X] Add validation for dates (date start can't be after _date end_ and otherwise)
+ - [X] Hints for dates and correct date confirmation with separate style
+ - [X] Add icon for date when date exists
+ - [X] Add separate style for expired _end date_
+ - [X] View mode for notes with markdown
+
+Fixes:
+
+ - [X] Delete items with children doesn't set focus correctly
+ - [X] For filtered view focus doesn't set by complete
+ - [X] Add item replace existing todos
+
+Shortcuts:
+
+ - [X] N+N - Create note
+ - [X] N+P - Preview note with markdown
+ - [X] D+S - Shortcut for _Date Start_
+ - [X] D+E - Shortcut for _Date Start_
+
+Refactoring:
+
+ - [X] Add mapping for shortcuts, maybe some kind of pattern matching
 
 v0.0.3
 

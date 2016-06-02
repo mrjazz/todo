@@ -29,5 +29,9 @@ export const HOWTO = <div>
     <li>If item has children and closed, expand by →</li>
     <li>If item has children and open, collapse by ←</li>
     <li>If item has children and open, jump to first item by →</li>
+    <li>N&N - Create note</li>
+    <li>N&P - Preview note with markdown</li>
+    <li>D&S - Shortcut for _Date Start_</li>
+    <li>D&E - Shortcut for _Date Start_</li>
   </ul>
 </div>;
