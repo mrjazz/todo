@@ -62,7 +62,7 @@
 .howto {
   font-size: 0.8em;
   padding-top: 20px;
-  /*display: none;*/
+  display: none;
 }
 
 .todos .all-items {
@@ -78,6 +78,19 @@
   display: block;
   vertical-align: middle;
   line-height: 1;
+}
+
+.item label .context, .item label .contact {
+  border-radius: 3px;
+  padding: 0px 4px 0px 4px;
+}
+
+.item label .contact {
+  background-color: #98E4FF;
+}
+
+.item label .context {
+  background-color: #FFFE98;
 }
 
 .item .wrap {

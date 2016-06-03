@@ -102,13 +102,21 @@ export default class Item extends Component {
             onFocus={this.props.onFocus}
             onChange={this.props.onCheckTodo}
           />
-          {this.props.visible ? <label className={todo.done ? 'complete' : ''} onClick={this.props.onFocus}>{todo.text} {this.getPreviewIcon(todo)}</label> : ''}
+          {this.props.visible ? <label
+            className={todo.done ? 'complete' : ''}
+            onClick={this.props.onFocus}
+            dangerouslySetInnerHTML={{__html: this.getLabel(todo)}}></label> : ''}
           {this.getDateControl(todo)}
           {this.getPreview(todo)}
           {this.props.children}
         </div>
       )
     );
+  }
+
+  getLabel(todo) {
+    // return todo.text + this.getPreviewIcon(todo);
+    return getTodoLabel(todo.text) + this.getPreviewIcon(todo);
   }
 
   getPreview(todo) {
@@ -124,8 +132,9 @@ export default class Item extends Component {
 
   getPreviewIcon(todo) {
     if (todo.note && !todo.previewNote) {
-      return <i className="icon-note"></i>;
+      return "<i class='icon-note'></i>";
     }
+    return '';
   }
 
   getDateControl(todo) {
@@ -207,4 +216,10 @@ export function getStyleForDate(type) {
   }
 
   return styles;
+}
+
+export function getTodoLabel(label) {
+  return label
+    .replace(/(#\S*)/g, (x) => `<span class="context">${x}</span>`)
+    .replace(/(@\S*)/g, (x) => `<span class="contact">${x}</span>`);
 }

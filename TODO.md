@@ -20,8 +20,8 @@ Add new shortcuts:
 
 Features:
 
- - [ ] Parse hashtags (contexts)
- - [ ] Parse contacts (@ sign)
+ - [X] Parse hashtags (contexts)
+ - [X] Parse contacts (@ sign)
  - [ ] Create _todo next_ view
  - [ ] Add animation for deleted item
 

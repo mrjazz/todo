@@ -397,6 +397,12 @@ export default class ItemsList extends Component {
       },
 
       'ArrowUp' : () => {
+
+        if (this.start) {
+          console.info(new Date().getTime() - this.start);
+        }
+        this.start = new Date().getTime();
+
         // arrows handling (move up, move down)
         if (id == null) return; // if not focused
         let nextTodo = false;

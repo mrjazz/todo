@@ -12,10 +12,24 @@ const initialState = {
     new Todo(0, 'Learn React'),
     new Todo(1, 'Learn Redux', true, [
       new Todo(4, 'Read manual'),
-      new Todo(5, 'Write the code')
+      new Todo(5, 'Write the code'),
+      new Todo(6, 'Read manual'),
+      new Todo(7, 'Write the code'),
+      new Todo(8, 'Read manual'),
+      new Todo(9, 'Write the code')
     ]),
-    new Todo(2, 'Learn HTML', true),
-    new Todo(3, 'Learn CSS')
+    new Todo(2,  'item0', true),
+    new Todo(10, 'item1'),
+    new Todo(11, 'item2', true),
+    new Todo(12, 'item3'),
+    new Todo(13, 'item4'),
+    new Todo(14, 'item5'),
+    new Todo(15, 'item6'),
+    new Todo(16, 'item7'),
+    new Todo(17, 'item8'),
+    new Todo(18, 'item9 #context and @contact'),
+    new Todo(19, 'item10 @contact'),
+    new Todo(20, 'item11 #context')
   ]
 };
 
