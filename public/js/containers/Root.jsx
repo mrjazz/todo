@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Router, Route, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 
 import { connect } from 'react-redux';
@@ -6,23 +7,22 @@ import { bindActionCreators } from 'redux';
 
 import * as TodoActions from '../actions/todos'
 
-import ItemsView from '../containers/ItemsView.jsx';
-import DetailsView from '../containers/DetailsView.jsx';
+import TodoView from '../containers/TodoView.jsx';
 
 export default class Root extends Component {
 
   static propTypes = {
-    store: PropTypes.object.isRequired
+    store: PropTypes.object.isRequired,
+    todos: PropTypes.object.isRequired
   };
 
   render() {
     const { todos, store } = this.props;
     return <Provider store={store}>
-      <div>
-        <ItemsView todos={todos} />
-        <DetailsView todos={todos} />
-      </div>
-    </Provider>
+            <Router history={browserHistory}>
+              <Route path="/" component={TodoView}/>
+            </Router>
+          </Provider>
   }
 }
 
@@ -39,4 +39,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Root)
+)(Root);
