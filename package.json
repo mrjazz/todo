@@ -47,7 +47,7 @@
     "react-addons-test-utils": "^15.0.2",
     "webpack": "^1.8.11",
     "webpack-dev-server": "^1.8.2",
-    "webpack-merge": "^0.13.0",
+    "webpack-merge": "^0.14.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "babel-polyfill": "^6.3.14",
     "rimraf": "^2.5.0",
