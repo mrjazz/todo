@@ -15,10 +15,6 @@ describe('date test', function() {
     const d1 = moment().add(-2, 'day');
     const d2 = moment().add(-1, 'day');
     getDateTypeForItem(d1, d2).should.equal(ItemDateType.EXPIRED);
-
-    /*const today = moment();
-    console.log(today.toString(), d2.toString());
-    console.log(moment(d2).isAfter(today));*/
   });
 
   it('today', () => {
