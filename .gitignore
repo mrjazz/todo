@@ -1,6 +1,8 @@
 # project specific files and directories
 .idea
 test.bat
+public/html/test.html
 
+docs
 dist
 node_modules
