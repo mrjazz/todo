@@ -9,12 +9,17 @@ function getToken() {
 }
 
 router([
-  'auth\/getToken' => 'getToken'
+  'GET:auth/token' => 'getToken'
 ]);
 
 function router($routes) {
-  foreach ($routes as $url => $func) {
-    if (preg_match("/$url/i", $_SERVER['REQUEST_URI'])) {
+  foreach ($routes as $rule => $func) {
+    $parts = explode(':', $rule);
+    if (
+      count($parts) == 2
+      && $_SERVER['REQUEST_METHOD'] == $parts[0]
+      && preg_match('/' . addcslashes($parts[1], '/') . '/i', $_SERVER['REQUEST_URI'])
+    ) {
       if (function_exists($func)) {
         return $func();
       } else {
@@ -22,7 +27,7 @@ function router($routes) {
       }
     }
   }
-  echo 'Default page';
+  echo 'Endpoint "' . $_SERVER['REQUEST_METHOD'] . ' ' . $_SERVER['REQUEST_URI'] . '" not found';
 }
 
 function dump($o) {
