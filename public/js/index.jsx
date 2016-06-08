@@ -8,12 +8,12 @@ import configureStore from './store/configureStore';
 
 const store = configureStore();
 
-const token = localStorage.getItem('token');
-if (token !== null) {
-  store.dispatch(loginUserSuccess(token));
-} else {
-  loginUser("denis", "password")(store.dispatch);
-}
+// const token = localStorage.getItem('token');
+// if (token !== null) {
+//   store.dispatch(loginUserSuccess(token));
+// } else {
+//   loginUser("denis", "password")(store.dispatch);
+// }
 
 ReactDOM.render(
   <Root store={store}/>,

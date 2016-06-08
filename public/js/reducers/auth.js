@@ -10,7 +10,9 @@ const initialState = {
 };
 
 export function auth(state = initialState, action = {}) {
-  console.info(action);
+
+  // console.info(action);
+  
   switch (action.type) {
     case LOGIN_USER_REQUEST:
         return Object.assign({}, state, {

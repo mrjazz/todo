@@ -59,9 +59,9 @@ const dropTarget = {
 
 export default class Item extends Component {
 
-  static contextTypes = {
-    store: PropTypes.object.isRequired
-  };
+  // static contextTypes = {
+  //   store: PropTypes.object.isRequired
+  // };
 
   static propTypes = {
     todo: PropTypes.instanceOf(Todo).isRequired,
@@ -80,6 +80,10 @@ export default class Item extends Component {
     if (elm !== null && this.props.focus) {
       elm.focus();
     }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.todo !== this.props.todo;
   }
 
   render() {
