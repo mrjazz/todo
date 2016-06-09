@@ -205,7 +205,7 @@
 
 .debug {
   font-size: 10px;
-  display: none;
+  /*display: none;*/
 }
 
 .date-picker {

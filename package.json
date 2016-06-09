@@ -58,7 +58,8 @@
     "datejs": "1.0.0-rc3",
     "moment": "2.13.0",
     "markdown": "0.5.0",
-    "jwt-decode": "^1.4.0"
+    "jwt-decode": "^1.4.0",
+    "reselect": "2.5.1"
   },
   "bugs": {
     "url": "https://github.com/mrjazz/todo/issues"
