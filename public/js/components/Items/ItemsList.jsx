@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import { createSelector } from 'reselect';
 
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -22,6 +23,10 @@ export default class ItemsList extends Component {
 
   state;
 
+  static contextTypes = {
+    store: PropTypes.object.isRequired
+  };
+
   constructor() {
     super();
     this.state = {
@@ -37,11 +42,28 @@ export default class ItemsList extends Component {
     this.highlightItem    = this.highlightItem.bind(this);
     this.handleFilter    = this.handleFilter.bind(this);
     this.itemKeyPressHandler = this.itemKeyPressHandler.bind(this);
+
+    this.selectTodos = () => this.curState().todos;
+    this.selectFilter = () => this.state.filter;
+
+    this.curItems = createSelector(
+      [this.selectTodos, this.selectFilter],
+      (todos, filter) => {
+        return filterr(todos, (i) => this.filterStrategy(i, filter));
+      }
+    );
   }
 
-  static contextTypes = {
-    store: PropTypes.object.isRequired
-  };
+  filterStrategy(item, filter) {
+    switch(filter) {
+      case 'active':
+        return !item.done;
+      case 'completed':
+        return item.done;
+      default:
+        return true;
+    }
+  }
 
   render() {
 
@@ -77,7 +99,6 @@ export default class ItemsList extends Component {
       );
     };
 
-    // console.log(this.props.todos);
     return <ItemsFilter onFilter={this.handleFilter}>
       {renderItems(this.curItems())}
       <p className="debug">focusedItemState: {this.state.focusedItemState},
@@ -205,20 +226,7 @@ export default class ItemsList extends Component {
   curState() {
     return this.context.store.getState().todos;
   }
-
-  curItems() {
-    return filterr(this.curState().todos, (i) => {
-      switch(this.state.filter) {
-        case 'active':
-          return !i.done;
-        case 'completed':
-          return i.done;
-        default:
-          return true;
-      }
-    });
-  }
-
+  
   handleFilter(filter) {
     this.updateState({filter});
   }

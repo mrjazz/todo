@@ -83,7 +83,8 @@ export default class Item extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.todo !== this.props.todo;
+    return nextProps.todo !== this.props.todo ||
+      nextProps.className !== this.props.className;
   }
 
   render() {
@@ -120,7 +121,7 @@ export default class Item extends Component {
 
   getLabel(todo) {
     // return todo.text + this.getPreviewIcon(todo);
-    return getTodoLabel(todo.text) + this.getPreviewIcon(todo);
+    return getTodoLabel(todo.text) + ' - ' + this.props.className + this.getPreviewIcon(todo);
   }
 
   getPreview(todo) {
