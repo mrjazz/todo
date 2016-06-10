@@ -54,7 +54,7 @@
     "sass-loader": "^3.0.0",
     "style-loader": "^0.13.0",
     "mocha": "2.5.3",
-    "should": "9.0.1",
+    "should": "9.0.2",
     "datejs": "1.0.0-rc3",
     "moment": "2.13.0",
     "markdown": "0.5.0",
