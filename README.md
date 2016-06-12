@@ -11,6 +11,11 @@ Simple application with keyboard management, drag&drop, quick adding todos and f
 Changelog and features
 ----------------------
 
+Features:
+
+ - New view for only current todos
+ - Performance optimize for drag&drop and list rendering
+
 v0.0.4
 
 Features:
