@@ -15,6 +15,8 @@ Features:
 
  - New view for only current todos
  - Performance optimize for drag&drop and list rendering
+ - Persistence (local storage or server)
+ - Undo and Redo functions
 
 v0.0.4
 
@@ -44,6 +46,7 @@ Shortcuts:
 Refactoring:
 
  - Add mapping for shortcuts, maybe some kind of pattern matching
+
 
 v0.0.3
 
