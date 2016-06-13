@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
 import * as HighlightType from '../../constants/HighlightTypes';
 import Todo from '../../models/todo';
-import Markdown from './Markdown';
+import Markdown from '../Markdown';
 
 import moment from 'moment';
 
@@ -64,7 +64,7 @@ export default class Item extends Component {
   // };
 
   static propTypes = {
-    todo: PropTypes.instanceOf(Todo).isRequired,
+    todo: PropTypes.object.isRequired,
     focus: PropTypes.bool.isRequired, // is true when need set focus on Item
     visible: PropTypes.bool.isRequired,
     highlight: PropTypes.func.isRequired,

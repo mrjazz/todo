@@ -15,7 +15,9 @@ Features:
 
   [ ] New view for only current todos
   [X] Performance optimize for drag&drop and list rendering
-  [ ] Persistence (local storage or server)
+  [X] Persistence in local storage
+  [ ] Persistence on the server
+  [ ] Encrypt data in storage
   [ ] Undo and Redo functions
   [ ] Search instead of add field
   [ ] Extended help functionality

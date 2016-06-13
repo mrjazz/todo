@@ -5,8 +5,15 @@ import Root from './containers/Root.jsx';
 import {loginUser, loginUserSuccess} from './actions/auth';
 
 import configureStore from './store/configureStore';
+import {saveState, loadState} from "./api/localStorage";
 
-const store = configureStore();
+const store = configureStore(loadState());
+
+let timer; // save not often than every two seconds
+store.subscribe(() => {
+  clearInterval(timer);
+  timer = setTimeout(() => saveState(store.getState()), 2000);
+});
 
 // const token = localStorage.getItem('token');
 // if (token !== null) {

@@ -226,7 +226,7 @@ export default class ItemsList extends Component {
   curState() {
     return this.context.store.getState().todos;
   }
-  
+
   handleFilter(filter) {
     this.updateState({filter});
   }
@@ -407,7 +407,7 @@ export default class ItemsList extends Component {
       'ArrowUp' : () => {
 
         if (this.start) {
-          console.info(new Date().getTime() - this.start);
+          // console.info(new Date().getTime() - this.start);
         }
         this.start = new Date().getTime();
 
