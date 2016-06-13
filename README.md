@@ -13,10 +13,13 @@ Changelog and features
 
 Features:
 
- - New view for only current todos
- - Performance optimize for drag&drop and list rendering
- - Persistence (local storage or server)
- - Undo and Redo functions
+  [ ] New view for only current todos
+  [X] Performance optimize for drag&drop and list rendering
+  [ ] Persistence (local storage or server)
+  [ ] Undo and Redo functions
+  [ ] Search instead of add field
+  [ ] Extended help functionality
+
 
 v0.0.4
 
