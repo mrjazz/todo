@@ -12,7 +12,6 @@ export default class Root extends Component {
   };
 
   render() {
-    console.log("root");
     const { store } = this.props;
     return <Provider store={store}>
             <Router history={browserHistory}>

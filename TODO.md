@@ -25,9 +25,9 @@ Features:
  - [ ] Undo and Redo functions
  - [ ] Search instead of add field
  - [ ] Extended help functionality
- - [ ] Create _todo next_ view
  - [ ] Add animation for deleted item
  - [ ] Make note icon clickable and preview note by click
+ - [ ] Import todos from Markdown format
 
 __Calendar research__
 

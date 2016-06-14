@@ -56,6 +56,8 @@ export default class ItemsList extends Component {
 
   filterStrategy(item, filter) {
     switch(filter) {
+      case 'current':
+        return item.children == undefined || item.children.length === 0;
       case 'active':
         return !item.done;
       case 'completed':
@@ -97,7 +99,7 @@ export default class ItemsList extends Component {
            : ''}
         </div>
       );
-    };
+    }
 
     return <ItemsFilter onFilter={this.handleFilter}>
       {renderItems(this.curItems())}

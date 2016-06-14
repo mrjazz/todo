@@ -21,7 +21,7 @@ export default class ItemsList extends Component {
   render() {
     return <div className="todos">
       <ul className="filters">
-        {['all', 'completed', 'active'].map((title, key) =>
+        {['all', 'current', 'completed', 'active'].map((title, key) =>
           <li key={key} className={this.state.filter === title ? 'active' : ''}>
             {this.state.filter === title ?
               title :

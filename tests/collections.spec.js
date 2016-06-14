@@ -108,4 +108,13 @@ describe('collections test', function() {
       getParentFor(arr, (i) => i.label == 'a').should.equal(false);
     });
 
+    it('filtering in deep', () => {
+      const result = filterr(arr, function (o) {
+        return !o.children;
+      });
+
+      console.log(result);
+
+    });
+
 });
