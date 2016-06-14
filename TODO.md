@@ -2,11 +2,11 @@ TODO
 ----
 
 
+
 Refactoring:
 
  - [ ] Move functionality from shortcut mapping to reducer
  - [ ] Make Items list more lightweight, move out shortcut handlers
- - [ ] Caching for cur items
 
 
 Fixes:
@@ -14,16 +14,20 @@ Fixes:
 
 Add new shortcuts:
 
- - [ ] Ctrl+F - Search
  - [ ] ? - Help
  - [ ] Set colors/icons by 1..6 keys
 
 Features:
 
- - [X] Parse hashtags (contexts)
- - [X] Parse contacts (@ sign)
+ - [ ] New view for only current todos
+ - [ ] Persistence on the server
+ - [ ] Encrypt data in storage
+ - [ ] Undo and Redo functions
+ - [ ] Search instead of add field
+ - [ ] Extended help functionality
  - [ ] Create _todo next_ view
  - [ ] Add animation for deleted item
+ - [ ] Make note icon clickable and preview note by click
 
 __Calendar research__
 
@@ -47,6 +51,14 @@ __Design__
   - #DCE8EB
   - #CBDBE0
   - #BED2D9
+
+v0.0.5
+
+ - [X] Performance optimize for drag&drop and list rendering
+ - [X] Persistence in local storage
+ - [X] Parse hashtags (contexts)
+ - [X] Parse contacts (@ sign)
+ - [X] Design update
 
 v0.0.4
 

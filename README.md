@@ -11,17 +11,16 @@ Simple application with keyboard management, drag&drop, quick adding todos and f
 Changelog and features
 ----------------------
 
+
+v0.0.5
+
 Features:
 
-  [ ] New view for only current todos
-  [X] Performance optimize for drag&drop and list rendering
-  [X] Persistence in local storage
-  [ ] Persistence on the server
-  [ ] Encrypt data in storage
-  [ ] Undo and Redo functions
-  [ ] Search instead of add field
-  [ ] Extended help functionality
-
+ - Performance optimize for drag&drop and list rendering
+ - Persistence in local storage
+ - Parse hashtags (contexts)
+ - Parse contacts (@ sign)
+ - Design update
 
 v0.0.4
 
