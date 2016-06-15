@@ -1,10 +1,11 @@
 import * as TodoAction from '../constants/TodoActionTypes';
 import Todo from '../models/todo';
-import {callr, searchr, mapr, filterr, insertrAfter, insertrBefore} from '../lib/CollectionUtils.js';
+import {callr, findr, mapr, filterr, insertrAfter, insertrBefore} from '../lib/collectionUtils.js';
 
 
 const initialState = {
   focusId: null,
+  filter: null,
   lastInsertId: null,
   cancelId: null,
   clipboard: null,
@@ -51,6 +52,11 @@ export function todos(state = initialState, action) {
   }
 
   const todoActions = {
+
+    UPDATE_FILTER() {
+      state.filter = action.filter;
+    },
+
     SELECT_TODO() {
       state.focusId = action.id;
     },
@@ -76,7 +82,7 @@ export function todos(state = initialState, action) {
     },
 
     PASTE_TODO() {
-      // state.clipboard = searchr(state.todos, (i) => action.id === i.id);
+      // state.clipboard = findr(state.todos, (i) => action.id === i.id);
       if (state.clipboard != null) {
         const todo = Object.assign(clone(action.todo), { id: newId() });
         state.todos = insertrAfter(state.todos, todo, (i) => i.id == action.id);
@@ -86,11 +92,11 @@ export function todos(state = initialState, action) {
     },
 
     COPY_TODO() {
-      state.clipboard = searchr(state.todos, (i) => action.id === i.id);
+      state.clipboard = findr(state.todos, (i) => action.id === i.id);
     },
 
     CUT_TODO() {
-      state.clipboard = searchr(state.todos, (i) => action.id === i.id);
+      state.clipboard = findr(state.todos, (i) => action.id === i.id);
       state.todos = filterr(state.todos, (i) => i.id !== action.id);
     },
 
@@ -104,7 +110,7 @@ export function todos(state = initialState, action) {
       // if current item in children, we should set focus on top level parent of it
       for (let i in state.todos) {
         if (state.todos[i].id == state.focusId) break;
-        if (searchr(state.todos[i].children, (todo) => todo.id === state.focusId)) {
+        if (findr(state.todos[i].children, (todo) => todo.id === state.focusId)) {
           state.focusId = state.todos[i].id;
           break;
         }

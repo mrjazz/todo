@@ -1,6 +1,6 @@
 import 'should';
 import { createSelector } from 'reselect';
-import {filterr} from '../public/js/lib/CollectionUtils.js';
+import {filterr} from '../public/js/lib/collectionUtils.js';
 
 
 const initialState = {

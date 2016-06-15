@@ -15,7 +15,7 @@ import Todo from '../../models/todo';
 import * as HighlightType from '../../constants/HighlightTypes';
 import * as TodoItemStateType from '../../constants/TodoItemStateTypes';
 
-import {getParentFor, isParentOf, searchr, filterr, searchrIndex, searchrByIndex} from '../../lib/CollectionUtils.js';
+import {getParentFor, isParentOf, searchr, findr, filterr, findrIndex, findrByIndex} from '../../lib/collectionUtils.js';
 import * as TodoAction from '../../actions/todos';
 
 
@@ -31,39 +31,37 @@ export default class ItemsList extends Component {
     super();
     this.state = {
       // cards: [],
-      filter: 'all',
       focusedItemState: TodoItemStateType.VIEW,
       prevKey: null,
       editId: null,
       dropHoverStyle: HighlightType.NONE,
       dropHoverId: null
     };
-    this.dropItemHandler         = this.dropItemHandler.bind(this);
-    this.highlightItem    = this.highlightItem.bind(this);
-    this.handleFilter    = this.handleFilter.bind(this);
+    this.dropItemHandler     = this.dropItemHandler.bind(this);
+    this.highlightItem       = this.highlightItem.bind(this);
     this.itemKeyPressHandler = this.itemKeyPressHandler.bind(this);
 
-    this.selectTodos = () => this.curState().todos;
-    this.selectFilter = () => this.state.filter;
+    this.selectTodos  = () => this.curState().todos;
+    this.selectFilter = () => this.curState().filter;
 
     this.curItems = createSelector(
       [this.selectTodos, this.selectFilter],
       (todos, filter) => {
-        return filterr(todos, (i) => this.filterStrategy(i, filter));
+        return this.applyFilter(todos, filter);
       }
     );
   }
 
-  filterStrategy(item, filter) {
+  applyFilter(todos, filter) {
     switch(filter) {
       case 'current':
-        return item.children == undefined || item.children.length === 0;
+        return searchr(todos, (i) => (!Array.isArray(i.children) || i.children.length == 0) && !i.done);
       case 'active':
-        return !item.done;
+        return filterr(todos, (i) => !i.done);
       case 'completed':
-        return item.done;
+        return filterr(todos, (i) => i.done);
       default:
-        return true;
+        return todos;
     }
   }
 
@@ -99,9 +97,9 @@ export default class ItemsList extends Component {
            : ''}
         </div>
       );
-    }
+    };
 
-    return <ItemsFilter onFilter={this.handleFilter}>
+    return <ItemsFilter>
       {renderItems(this.curItems())}
       <p className="debug">focusedItemState: {this.state.focusedItemState},
         focusId: {this.curState().focusId},
@@ -229,10 +227,6 @@ export default class ItemsList extends Component {
     return this.context.store.getState().todos;
   }
 
-  handleFilter(filter) {
-    this.updateState({filter});
-  }
-
   itemFocusHandler(id) {
     this.context.store.dispatch(TodoAction.selectTodo(id));
   }
@@ -275,11 +269,11 @@ export default class ItemsList extends Component {
   }
 
   findIndexById(id) {
-    return searchrIndex(this.curItems(), function (i) { return i.id == id});
+    return findrIndex(this.curItems(), function (i) { return i.id == id});
   }
 
   findIdByIndex(index) {
-    return searchrByIndex(this.curItems(), index).id;
+    return findrByIndex(this.curItems(), index).id;
   }
 
   itemKeyPressHandler(e) {
@@ -293,7 +287,7 @@ export default class ItemsList extends Component {
     const setFocus = this.itemFocusHandler.bind(this); // need for passing in jumpOnTop()
 
     function focusedTodo() {
-      return searchr(todos, function (i) {
+      return findr(todos, function (i) {
         return i.id == id
       });
     }

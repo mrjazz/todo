@@ -62,13 +62,36 @@ export function callr(items, callback, childField = 'children') {
 }
 
 /**
- * Search element by condition in tree
+ * Search all elements found by condition in tree
+ *
  * @param items
  * @param check
  * @param childField
  * @returns {*}
  */
 export function searchr(items, check, childField = 'children') {
+  const result = [];
+  function process (arr) {
+    for (let i in arr) {
+      const value = arr[i];
+      if (check(value)) result.push(value);
+      if (value[childField]) {
+        process(value[childField]);
+      }
+    }
+    return result;
+  }
+  return process(items);
+}
+
+/**
+ * Search first element found by condition in tree
+ * @param items
+ * @param check
+ * @param childField
+ * @returns {*}
+ */
+export function findr(items, check, childField = 'children') {
   function process (arr) {
     for (let i in arr) {
       const value = arr[i];
@@ -90,10 +113,10 @@ export function searchr(items, check, childField = 'children') {
  * @param childField
  * @returns {number}
  */
-export function searchrIndex(items, check, childField = 'children') {
+export function findrIndex(items, check, childField = 'children') {
   let index = -1;
   if (
-    searchr(items, (i) => {
+    findr(items, (i) => {
       index++;
       return check(i);
     }, childField) !== false
@@ -110,9 +133,9 @@ export function searchrIndex(items, check, childField = 'children') {
  * @param index
  * @param childField
  */
-export function searchrByIndex(items, index, childField = 'children') {
+export function findrByIndex(items, index, childField = 'children') {
   let idx = 0;
-  return searchr(items, () => idx++ == index, childField);
+  return findr(items, () => idx++ == index, childField);
 }
 
 /**
@@ -167,9 +190,9 @@ export function getParentFor(items, condition, childField = 'children') {
 }
 
 export function isParentOf(items, conditionParent, conditionItem, childField = 'children') {
-  const parent = searchr(items, conditionParent, childField);
+  const parent = findr(items, conditionParent, childField);
   if (parent && parent[childField]) {
-    return searchr(parent[childField], conditionItem, childField) !== false;
+    return findr(parent[childField], conditionItem, childField) !== false;
   }
   return false;
 }

@@ -1,5 +1,13 @@
 import * as TodoAction from '../constants/TodoActionTypes';
 
+export function updateTodo(id, text) {
+  return {
+    type: TodoAction.UPDATE_TODO,
+    id,
+    text
+  };
+}
+
 export function deleteTodo(id) {
   return {
     type: TodoAction.DELETE_TODO,
@@ -85,11 +93,10 @@ export function checkTodo(id) {
   };
 }
 
-export function updateTodo(id, text) {
+export function updateFilter(filter) {
   return {
-    type: TodoAction.UPDATE_TODO,
-    id,
-    text
+    type: TodoAction.UPDATE_FILTER,
+    filter
   };
 }
 

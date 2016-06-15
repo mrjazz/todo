@@ -5,14 +5,15 @@ import {
   callr,
   filterr,
   searchr,
-  searchrIndex,
-  searchrByIndex,
+  findr,
+  findrIndex,
+  findrByIndex,
   lengthr,
   isParentOf,
   insertrAfter,
   insertrBefore,
   getParentFor
-} from '../public/js/lib/CollectionUtils.js';
+} from '../public/js/lib/collectionUtils.js';
 
 describe('collections test', function() {
 
@@ -75,19 +76,19 @@ describe('collections test', function() {
       result[0].children.length.should.equal(1);
     });
 
-    it('searchr', () => {
-      searchr(arr, (i) => i.label == 'a2', 'children').label.should.equal('a2');
+    it('findr', () => {
+      findr(arr, (i) => i.label == 'a2', 'children').label.should.equal('a2');
     });
 
-    it('searchrIndex', () => {
-      searchrIndex(arr, (i) => i.label == 'a2', 'children').should.equal(2);
-      searchrIndex(arr, (i) => i.label == 'a', 'children').should.equal(0);
+    it('findrIndex', () => {
+      findrIndex(arr, (i) => i.label == 'a2', 'children').should.equal(2);
+      findrIndex(arr, (i) => i.label == 'a', 'children').should.equal(0);
     });
 
-    it('searchrByIndex', () => {
-      //searchrIndex(arr, function (i) { return i.label == 'a2'}, 'children').should.equal(2);
-      searchrByIndex(arr, 0, 'children').label.should.equal('a');
-      searchrByIndex(arr, 2, 'children').label.should.equal('a2');
+    it('findrByIndex', () => {
+      //findrIndex(arr, function (i) { return i.label == 'a2'}, 'children').should.equal(2);
+      findrByIndex(arr, 0, 'children').label.should.equal('a');
+      findrByIndex(arr, 2, 'children').label.should.equal('a2');
     });
 
     it('lengthr', () => {
@@ -108,13 +109,14 @@ describe('collections test', function() {
       getParentFor(arr, (i) => i.label == 'a').should.equal(false);
     });
 
+    it('searchr', () => {
+      const result = searchr(arr, (o) => true);
+      result.length.should.equal(4);
+    });
+
     it('filtering in deep', () => {
-      const result = filterr(arr, function (o) {
-        return !o.children;
-      });
-
-      console.log(result);
-
+      const result = searchr(arr, (o)  => !o.children);
+      result.length.should.equal(3);
     });
 
 });

@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import {updateFilter} from '../../actions/todos';
 
 export default class ItemsList extends Component {
 
@@ -9,21 +10,21 @@ export default class ItemsList extends Component {
     };
   }
 
-  static propTypes = {
-    onFilter: React.PropTypes.func.isRequired
+  static contextTypes = {
+    store: PropTypes.object.isRequired
   };
 
   handleFilter(filter) {
-    this.setState(Object.assign(this.state, {filter}));
-    this.props.onFilter(filter);
+    this.context.store.dispatch(updateFilter(filter));
   }
 
   render() {
+    const selectFilter = () => this.context.store.getState().todos.filter;
     return <div className="todos">
       <ul className="filters">
         {['all', 'current', 'completed', 'active'].map((title, key) =>
-          <li key={key} className={this.state.filter === title ? 'active' : ''}>
-            {this.state.filter === title ?
+          <li key={key} className={selectFilter() === title ? 'active' : ''}>
+            {selectFilter() === title ?
               title :
               <a href="#"
                  onClick={() => this.handleFilter(title)}

@@ -1,5 +1,5 @@
 import { LOGIN_USER_FAILURE, LOGIN_USER_REQUEST, LOGIN_USER_SUCCESS } from '../constants/AuthTypes';
-import { checkHttpStatus, parseJSON } from '../lib/HttpUtils';
+import { checkHttpStatus, parseJSON } from '../lib/httpUtils';
 import jwtDecode from 'jwt-decode';
 
 
