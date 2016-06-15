@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {updateFilter} from '../../actions/todos';
+import * as FilterTypes from '../../constants/FilterTypes';
 
 export default class ItemsList extends Component {
 
@@ -19,10 +20,16 @@ export default class ItemsList extends Component {
   }
 
   render() {
-    const selectFilter = () => this.context.store.getState().todos.filter;
+    const selectFilter = () => this.context.store.getState().todos.filter ?
+      this.context.store.getState().todos.filter : FilterTypes.FILTER_ALL;
     return <div className="todos">
       <ul className="filters">
-        {['all', 'current', 'completed', 'active'].map((title, key) =>
+        {[
+          FilterTypes.FILTER_ALL,
+          FilterTypes.FILTER_TODO,
+          FilterTypes.FILTER_ACTIVE,
+          FilterTypes.FILTER_COMPLETED
+        ].map((title, key) =>
           <li key={key} className={selectFilter() === title ? 'active' : ''}>
             {selectFilter() === title ?
               title :

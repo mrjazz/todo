@@ -19,7 +19,7 @@ Add new shortcuts:
 
 Features:
 
- - [ ] New view for only current todos
+ - [X] New view for only active todos
  - [ ] Persistence on the server
  - [ ] Encrypt data in storage
  - [ ] Undo and Redo functions

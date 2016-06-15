@@ -14,6 +14,7 @@ import Todo from '../../models/todo';
 
 import * as HighlightType from '../../constants/HighlightTypes';
 import * as TodoItemStateType from '../../constants/TodoItemStateTypes';
+import * as FilterTypes from '../../constants/FilterTypes';
 
 import {getParentFor, isParentOf, searchr, findr, filterr, findrIndex, findrByIndex} from '../../lib/collectionUtils.js';
 import * as TodoAction from '../../actions/todos';
@@ -54,11 +55,11 @@ export default class ItemsList extends Component {
 
   applyFilter(todos, filter) {
     switch(filter) {
-      case 'current':
+      case FilterTypes.FILTER_TODO:
         return searchr(todos, (i) => (!Array.isArray(i.children) || i.children.length == 0) && !i.done);
-      case 'active':
+      case FilterTypes.FILTER_ACTIVE:
         return filterr(todos, (i) => !i.done);
-      case 'completed':
+      case FilterTypes.FILTER_COMPLETED:
         return filterr(todos, (i) => i.done);
       default:
         return todos;
