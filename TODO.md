@@ -19,10 +19,10 @@ Add new shortcuts:
 
 Features:
 
+ - [X] Internationalization for dates
  - [X] New view for only active todos
  - [ ] Persistence on the server
  - [ ] Encrypt data in storage
- - [ ] Undo and Redo functions
  - [ ] Search instead of add field
  - [ ] Extended help functionality
  - [ ] Add animation for deleted item
