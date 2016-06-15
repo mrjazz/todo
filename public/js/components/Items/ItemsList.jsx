@@ -498,16 +498,24 @@ export default class ItemsList extends Component {
       'N_N' : () => {
         this.updateState({
           editId: id,
-          focusedItemState: TodoItemStateType.NOTE
+          focusedItemState: TodoItemStateType.NOTE,
+          prevKey: null
         });
         e.stopPropagation();
         e.preventDefault();
+
+        // hide preview if displayed
+        const curTodo = focusedTodo();
+        if (curTodo.previewNote) {
+          store.dispatch(TodoAction.previewNote(id));
+        }
       },
 
       'N_P' : () => {
         const curTodo = focusedTodo();
         if (curTodo.note != null) {
           store.dispatch(TodoAction.previewNote(id));
+          this.updateState({prevKey: null});
         }
       },
 
@@ -521,7 +529,8 @@ export default class ItemsList extends Component {
       'D_S' : () => {
         this.updateState({
           editId: id,
-          focusedItemState: TodoItemStateType.DATE_START
+          focusedItemState: TodoItemStateType.DATE_START,
+          prevKey: null
         });
         e.stopPropagation();
         e.preventDefault();
@@ -530,7 +539,8 @@ export default class ItemsList extends Component {
       'D_E' : () => {
         this.updateState({
           editId: id,
-          focusedItemState: TodoItemStateType.DATE_END
+          focusedItemState: TodoItemStateType.DATE_END,
+          prevKey: null
         });
         e.stopPropagation();
         e.preventDefault();
@@ -658,7 +668,7 @@ function getShortcut(e) {
   if (e.shiftKey) result += 'Shift';
 
   if (e.key !== "Unidentified") {
-    if (e.key !== "Alt" && e.key !== "Control" && e.key !== "Shift") result += e.key;
+    if (e.key !== "Alt" && e.key !== "Control" && e.key !== "Shift") result += e.key.toUpperCase();
   } else {
     result += String.fromCharCode(e.keyCode).toUpperCase();
   }
