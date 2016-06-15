@@ -48,22 +48,9 @@ export default class ItemsList extends Component {
     this.curItems = createSelector(
       [this.selectTodos, this.selectFilter],
       (todos, filter) => {
-        return this.applyFilter(todos, filter);
+        return applyFilter(todos, filter);
       }
     );
-  }
-
-  applyFilter(todos, filter) {
-    switch(filter) {
-      case FilterTypes.FILTER_TODO:
-        return searchr(todos, (i) => (!Array.isArray(i.children) || i.children.length == 0) && !i.done);
-      case FilterTypes.FILTER_ACTIVE:
-        return filterr(todos, (i) => !i.done);
-      case FilterTypes.FILTER_COMPLETED:
-        return filterr(todos, (i) => i.done);
-      default:
-        return todos;
-    }
   }
 
   render() {
@@ -661,6 +648,24 @@ export function lookup(items, id, step = 1) {
   return process(items);
 }
 
+function applyFilter(todos, filter) {
+  const now = new Date();
+  switch(filter) {
+    case FilterTypes.FILTER_TODO:
+      return searchr(todos, (i) =>
+        (!Array.isArray(i.children) || i.children.length == 0) &&
+        !i.done &&
+        (!i.dateStart || i.dateStart < now)
+      );
+    case FilterTypes.FILTER_ACTIVE:
+      return filterr(todos, (i) => !i.done);
+    case FilterTypes.FILTER_COMPLETED:
+      return filterr(todos, (i) => i.done);
+    default:
+      return todos;
+  }
+}
+
 function getShortcut(e) {
   let result = '';
   if (e.ctrlKey) result += 'Ctrl';
@@ -668,7 +673,9 @@ function getShortcut(e) {
   if (e.shiftKey) result += 'Shift';
 
   if (e.key !== "Unidentified") {
-    if (e.key !== "Alt" && e.key !== "Control" && e.key !== "Shift") result += e.key.toUpperCase();
+    if (e.key !== "Alt" && e.key !== "Control" && e.key !== "Shift") {
+      result += e.key.length > 1 ? e.key : e.key.toUpperCase();
+    }
   } else {
     result += String.fromCharCode(e.keyCode).toUpperCase();
   }
