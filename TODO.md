@@ -21,6 +21,7 @@ Features:
 
  - [X] Internationalization for dates
  - [X] New view for only active todos
+ - [ ] Implement commands interface
  - [ ] Persistence on the server
  - [ ] Encrypt data in storage
  - [ ] Search instead of add field

@@ -2,7 +2,6 @@ import { findDOMNode } from 'react-dom';
 import React, { Component, PropTypes } from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
 import * as HighlightType from '../../constants/HighlightTypes';
-import Todo from '../../models/todo';
 import Markdown from '../Markdown';
 
 import moment from 'moment';
@@ -212,7 +211,7 @@ export function getDateTypeForItem(dateStart, dateEnd) {
 export function getStyleForDate(type) {
   switch (type) {
     case ItemDateType.EXPIRED:
-          return "expired";
+      return "expired";
     case ItemDateType.TODAY:
       return "today";
     case ItemDateType.IN_PROGRESS:

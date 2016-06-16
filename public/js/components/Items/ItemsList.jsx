@@ -38,9 +38,6 @@ export default class ItemsList extends Component {
       dropHoverStyle: HighlightType.NONE,
       dropHoverId: null
     };
-    this.dropItemHandler     = this.dropItemHandler.bind(this);
-    this.highlightItem       = this.highlightItem.bind(this);
-    this.itemKeyPressHandler = this.itemKeyPressHandler.bind(this);
 
     this.selectTodos  = () => this.curState().todos;
     this.selectFilter = () => this.curState().filter;
@@ -67,9 +64,9 @@ export default class ItemsList extends Component {
             todo={i}
             focus={this.state.editId == null && this.curState().focusId == i.id}
             visible={this.isTodoVisible(i)}
-            onDrop={this.dropItemHandler}
-            highlight={this.highlightItem}
-            onKeyDown={this.itemKeyPressHandler}
+            onDrop={this.dropItemHandler.bind(this)}
+            highlight={this.highlightItem.bind(this)}
+            onKeyDown={this.itemKeyPressHandler.bind(this)}
             onFocus={() => this.itemFocusHandler(i.id)}
             onFocusOut={() => this.focusOutHandler()}
             onChange={() => this.props.checkTodo(i.id)}

@@ -16,6 +16,10 @@
     /*height: 500px;*/
 }
 
+.todo-view .command input{
+  width: calc(100% - 8px);
+}
+
 /*.todos div {
     padding: 3px 0px 3px;
 }*/
@@ -73,6 +77,10 @@
   padding-left: 16px;
 }
 
+.all-items input[type="text"]{
+  width: calc(100% - 50px);
+}
+
 .item {
   padding: 5px;
   display: block;
@@ -98,10 +106,14 @@
   display: table;
 }
 
-.item .hint {
+.item .hint, .command .hint {
   font-size: 0.6em;
   text-align: right;
   width: 98%;
+}
+
+.command p {
+  font-size: 0.7em;
 }
 
 .item .block, .item .control {

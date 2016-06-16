@@ -2,9 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import ItemsList from '../components/Items/ItemsList.jsx';
-import ItemAdd from '../components/Items/ItemAdd.jsx';
-
-import {addTodo} from '../actions/todos';
+import CommandLine from '../components/CommandLine.jsx';
 
 
 export default class ItemsView extends Component {
@@ -16,7 +14,7 @@ export default class ItemsView extends Component {
   render() {
     const {dispatch} = this.props;
     return <div className="todo-view">
-          <ItemAdd onUpdate={(text) => dispatch(addTodo(text))} />
+          <CommandLine dispatch={dispatch} />
           <ItemsList/>
         </div>
   }

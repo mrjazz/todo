@@ -4,8 +4,8 @@ import 'datejs';
 import moment from 'moment';
 
 import {getLocale} from '../../lib/i18n';
+import {getDateHint} from '../../lib/hints';
 
-const LOCALE = getLocale();
 
 export default class ItemDatePicker extends Component {
 
@@ -14,6 +14,7 @@ export default class ItemDatePicker extends Component {
   constructor() {
     super();
     this.state = { date: null, error: null };
+    this.locale = getLocale();
   }
 
   static propTypes = {
@@ -21,7 +22,7 @@ export default class ItemDatePicker extends Component {
     onUpdate: React.PropTypes.func.isRequired
   };
 
-  _inputHandler(e) {
+  inputHandler(e) {
     switch (e.key) {
       case 'Enter':
         if (this.state.date == null) {
@@ -53,7 +54,7 @@ export default class ItemDatePicker extends Component {
     }
   }
 
-  _changeHandler() {
+  changeHandler() {
     const date = Date.parse(this.refs.ctrlInput.value);
     this.setState(Object.assign(this.state, {
       date,
@@ -62,22 +63,13 @@ export default class ItemDatePicker extends Component {
   }
 
   render() {
-    const options = [
-      "today", "tomorrow", "July 2008", "next friday",
-      "last April", "2004.08.07", "6/4/2005", "8:15 PM",
-      "22:30:45", "+5years", "t + 5 d (today + 5 days)",
-      "t (today)", "n (now)", "+2h (in 2 hours)"
-    ];
-
-    const hint = options[Math.floor(Math.random() * options.length)];
-
     const date = this.state.date || this.props.date;
 
     const dateLabel = this.state.date != null ?
-        moment(this.state.date).locale(LOCALE).format('llll').toString() :
-        `You can use something like "${hint}"`;
+        moment(this.state.date).locale(this.locale).format('llll').toString() :
+        getDateHint();
 
-    const dateValue = date ? moment(this.props.date).locale(LOCALE).format('LLL') : null;
+    const dateValue = date ? moment(this.props.date).locale(this.locale).format('LLL') : null;
 
     return <div className="date-picker">
             <input
@@ -87,8 +79,8 @@ export default class ItemDatePicker extends Component {
               ref="ctrlInput"
               defaultValue={dateValue}
               onBlur={this.props.onCancel}
-              onChange={this._changeHandler.bind(this)}
-              onKeyDown={this._inputHandler.bind(this)} />
+              onChange={this.changeHandler.bind(this)}
+              onKeyDown={this.inputHandler.bind(this)} />
               {this.state.error ? <span className="error">{this.state.error}</span> : ""}
             <p className={this.state.date == null ? '' : 'correct'}>{dateLabel}</p>
           </div>

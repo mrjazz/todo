@@ -7,7 +7,7 @@ export default class ItemAdd extends Component {
     onUpdate: React.PropTypes.func.isRequired
   };
 
-  _inputHandler(e) {
+  inputHandler(e) {
     switch (e.key) {
       case 'Enter':
         this.props.onUpdate(this.refs.ctrlInput.value);
@@ -34,6 +34,6 @@ export default class ItemAdd extends Component {
               ref="ctrlInput"
               defaultValue={this.props.value}
               onBlur={this.props.onCancel}
-              onKeyDown={this._inputHandler.bind(this)} />
+              onKeyDown={this.inputHandler.bind(this)} />
   }
 }
