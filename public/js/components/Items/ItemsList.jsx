@@ -10,7 +10,7 @@ import ItemNote from './ItemNote.jsx';
 import ItemAdd from './ItemAdd.jsx';
 import Item from './Item.jsx';
 
-import Todo from '../../models/todo';
+import Todo from '../../models/Todo';
 
 import * as HighlightType from '../../constants/HighlightTypes';
 import * as TodoItemStateType from '../../constants/TodoItemStateTypes';

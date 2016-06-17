@@ -9,6 +9,11 @@ export default class CommandLine extends Component {
     dispatch: PropTypes.func.isRequired
   };
 
+  constructor() {
+    super();
+    this.state = { hint: getCommandHint() };
+  }
+
   inputHandler(e) {
     switch (e.key) {
       case 'Enter':
@@ -21,13 +26,18 @@ export default class CommandLine extends Component {
         this.refs.ctrlInput.value = '';
         break;
       default:
-        validateCommand(this.refs.ctrlInput.value);
+        if (this.refs.ctrlInput.value.trim == '') {
+          this.setState({ hint: getCommandHint() });
+        } else {
+          const commands = validateCommand(this.refs.ctrlInput.value);
+          if (commands.length > 0) {
+            this.setState({ hint: commands.join(', ') });
+          }
+        }
     }
   }
 
-
   render() {
-    const hint = getCommandHint();
     return <div className="command">
             <input
               type="text"
@@ -36,7 +46,7 @@ export default class CommandLine extends Component {
               ref="ctrlInput"
               onKeyUp={this.inputHandler.bind(this)}
               />
-            <p>{hint}</p>
+            <p>{this.state.hint}</p>
           </div>
   }
 

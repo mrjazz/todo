@@ -1,5 +1,5 @@
 import * as TodoAction from '../constants/TodoActionTypes';
-import Todo from '../models/todo';
+import Todo from '../models/Todo';
 import {callr, findr, mapr, filterr, insertrAfter, insertrBefore} from '../lib/collectionUtils.js';
 
 

@@ -2,7 +2,7 @@ import 'should';
 
 import * as TodoActions from '../public/js/actions/todos.js';
 import {todos} from '../public/js/reducers/todos.js';
-import Todo from '../public/js/models/todo';
+import Todo from '../public/js/models/Todo';
 
 describe('collections test', function() {
 
