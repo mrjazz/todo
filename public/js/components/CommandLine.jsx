@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import {getCommandHint} from '../lib/hints';
-import {validateCommand} from '../lib/commands';
+import {validateCommand, execCommand} from '../lib/commands';
 
 
 export default class CommandLine extends Component {
 
-  static propTypes = {
-    dispatch: PropTypes.func.isRequired
+  static contextTypes = {
+    store: PropTypes.object.isRequired
   };
 
   constructor() {
@@ -17,7 +17,7 @@ export default class CommandLine extends Component {
   inputHandler(e) {
     switch (e.key) {
       case 'Enter':
-        console.log("do");
+        execCommand(this.refs.ctrlInput.value, this.context.store);
         break;
       case 'Tab':
         console.log("complete");
@@ -26,7 +26,7 @@ export default class CommandLine extends Component {
         this.refs.ctrlInput.value = '';
         break;
       default:
-        if (this.refs.ctrlInput.value.trim == '') {
+        if (this.refs.ctrlInput.value.trim() == '') {
           this.setState({ hint: getCommandHint() });
         } else {
           const commands = validateCommand(this.refs.ctrlInput.value);

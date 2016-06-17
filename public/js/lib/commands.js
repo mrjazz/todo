@@ -1,46 +1,26 @@
 import * as TodoActions from '../actions/todos';
+import Command from '../models/Command';
 
-const IGNORE_SUFFIXES = ['Todo'];
+// const IGNORE_SUFFIXES = ['Todo'];
 
 export function checkString(command, str) {
-  const strLower = str.toLowerCase();
+  return command.toLowerCase().substr(0, str.length) === str.toLowerCase();
+}
 
-  if (command === str) return true;
-  const parts = [];
-  let cur = '';
-  for(let i in command) {
-    const letter = command[i];
-    if (letter.toUpperCase() == letter) {
-      parts.push(cur);
-      cur = letter.toLowerCase();
-    } else {
-      cur += letter;
-    }
-  }
-
-  parts.push(cur);
-
-  if (
-    command.substr(0, str.length) === strLower ||
-    parts.join('-').substr(0, str.length) === strLower ||
-    parts.join('_').substr(0, str.length) === strLower ||
-    parts.join('').substr(0, str.length) === strLower
-  ) {
-    return true;
-  }
-  return false;
+export function getParams(cmd) {
+  return cmd.trim().search(" ") > 0 && cmd.substr(cmd.search(" ") + 1).trim() || '';
 }
 
 export function validateCommand(cmd) {
-  if (cmd.trim() == '') return [];
+  if (!cmd || cmd.trim() == '') return [];
 
   const commands = cmd.split(' ');
 
   if (commands.length === 0) return [];
   const command = commands[0];
-
   const matches = [];
-  for(const action in TodoActions) {
+
+  for (const action in TodoActions) {
 
     /*IGNORE_SUFFIXES.forEach( (suff) => {
       if (action.substr(action.length - suff.length, suff.length) == suff) {
@@ -50,9 +30,27 @@ export function validateCommand(cmd) {
     });*/
 
     if (checkString(action, command)) {
-      matches.push(action);
+      const command = new Command(action, getParams(cmd), TodoActions[action]());
+      matches.push(command);
     }
   }
 
   return matches;
+}
+
+export function execCommand(cmd, store) {
+  const command = validateCommand(cmd);
+  if (!command || command.length != 1) return; // nothing to process
+  const signature = command[0].signature;
+  for (let i in signature) {
+    if (i == 'type') continue;
+    if (i == 'id' && store) {
+      const id = store.getState().todos.focusId;
+      if (!Number.isInteger(id)) return false; // noone element selected
+      signature['id'] = id;
+      continue;
+    }
+    signature[i] = getParams(cmd);
+  }
+  store.dispatch(signature);
 }

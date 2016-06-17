@@ -6,7 +6,8 @@ const dateHints = [
 ];
 
 const commandHints = [
-  'import (import markdown todos from Clipboard)'
+  'import (import markdown todos from Clipboard)',
+  'addTodo buy a milk'
 ];
 
 function randomHint(hints) {

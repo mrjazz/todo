@@ -12,9 +12,8 @@ export default class ItemsView extends Component {
   };
 
   render() {
-    const {dispatch} = this.props;
     return <div className="todo-view">
-          <CommandLine dispatch={dispatch} />
+          <CommandLine/>
           <ItemsList/>
         </div>
   }

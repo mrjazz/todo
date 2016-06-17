@@ -257,7 +257,7 @@ export function todos(state = initialState, action) {
     }
   };
 
-  // console.info(action);
+  console.info(action);
 
   state = clone(state);
 
