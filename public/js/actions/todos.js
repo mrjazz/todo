@@ -15,6 +15,12 @@ export function deleteTodo(id) {
   };
 }
 
+export function deleteAll() {
+  return {
+    type: TodoAction.DELETE_ALL
+  };
+}
+
 export function copyTodo(id) {
   return {
     type: TodoAction.COPY_TODO,
@@ -119,13 +125,6 @@ export function moveBelowTodo(id, parentId) {
 export function flipTodo(id) {
   return {
     type: TodoAction.FLIP_TODO,
-    id
-  };
-}
-
-export function removeTodo(id) {
-  return {
-    type: TodoAction.REMOVE_TODO,
     id
   };
 }

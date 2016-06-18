@@ -53,6 +53,10 @@ export function todos(state = initialState, action) {
 
   const todoActions = {
 
+    DELETE_ALL() {
+      state = initialState;
+    },
+
     UPDATE_FILTER() {
       state.filter = action.filter;
     },
@@ -241,12 +245,6 @@ export function todos(state = initialState, action) {
           todo.add(item);
         }
         return todo;
-      });
-    },
-
-    REMOVE_TODO() {
-      state.todos = filterr(state.todos, (todo) => {
-        return todo.id !== action.id;
       });
     },
 

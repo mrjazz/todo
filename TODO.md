@@ -19,6 +19,7 @@ Add new shortcuts:
 
 Features:
 
+ - [X] Delete all action added
  - [X] Internationalization for dates
  - [X] New view for only active todos
  - [ ] Implement commands interface

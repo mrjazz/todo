@@ -9,6 +9,7 @@ export const COLLAPSE_ALL       = 'COLLAPSE_ALL';
 export const EXPAND_ALL         = 'EXPAND_ALL';
 export const ADD_AS_CHILD       = 'ADD_AS_CHILD';
 export const DELETE_TODO        = 'DELETE_TODO';
+export const DELETE_ALL         = 'DELETE_ALL';
 export const CHECK_TODO         = 'CHECK_TODO';
 export const UPDATE_TODO        = 'UPDATE_TODO';
 export const SWAP_TODOS         = 'SWAP_TODOS';
