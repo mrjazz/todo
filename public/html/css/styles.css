@@ -32,6 +32,10 @@
     background-color: #BED2D9;
 }
 
+.todos .item-last {
+  background-color: #D5D5D5;
+}
+
 .todos .item-hover {
   background-color: #BED2D9;
 }

@@ -19,6 +19,7 @@ Add new shortcuts:
 
 Features:
 
+ - [X] Apply commands to last selected todoItem and highlight it
  - [X] Delete all action added
  - [X] Internationalization for dates
  - [X] New view for only active todos
@@ -51,7 +52,7 @@ __Design__
   - #F7F9FE
   - #ECF1F2
   - #DCE8EB
-  - #CBDBE0
+  - #CBDBE0 (previously selected)
   - #BED2D9
 
 v0.0.5

@@ -568,7 +568,7 @@ export default class ItemsList extends Component {
 
   stylesForItem(item, counter) {
     let styles = ['item', counter % 2 ? 'odd' : 'even'];
-
+    
     if (item.id == this.state.editId) {
       // create/edit item
       styles.push(this.getHighlightCSS(HighlightType.HOVER));
@@ -578,6 +578,8 @@ export default class ItemsList extends Component {
     } else if (item.id == this.curState().focusId) {
       // selected item
       styles.push('item-selected');
+    } else if (item.id == this.curState().lastFocusId) {
+      styles.push('item-last');
     }
 
     return styles.join(' ');

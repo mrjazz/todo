@@ -45,12 +45,13 @@ export function execCommand(cmd, store) {
   for (let i in signature) {
     if (i == 'type') continue;
     if (i == 'id' && store) {
-      const id = store.getState().todos.focusId;
+      const id = store.getState().todos.focusId || store.getState().todos.lastFocusId;
       if (!Number.isInteger(id)) return false; // noone element selected
       signature['id'] = id;
       continue;
     }
     signature[i] = getParams(cmd);
   }
+
   store.dispatch(signature);
 }

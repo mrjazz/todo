@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {getCommandHint} from '../lib/hints';
 import {validateCommand, execCommand} from '../lib/commands';
-
+import {selectLastTodo} from '../actions/todos';
 
 export default class CommandLine extends Component {
 
@@ -24,6 +24,7 @@ export default class CommandLine extends Component {
         break;
       case 'Escape':
         this.refs.ctrlInput.value = '';
+        this.context.store.dispatch(selectLastTodo());
         break;
       default:
         if (this.refs.ctrlInput.value.trim() == '') {
@@ -40,6 +41,7 @@ export default class CommandLine extends Component {
   render() {
     return <div className="command">
             <input
+              id="cmd"
               type="text"
               placeholder="Enter command"
               autoFocus="true"

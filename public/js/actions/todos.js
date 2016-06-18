@@ -144,6 +144,10 @@ export function selectTodo(id) {
   };
 }
 
+export function selectLastTodo() {
+  return { type: TodoAction.SELECT_LAST_TODO };
+}
+
 export function updateDateStart(id, date) {
   return {
     type: TodoAction.UPDATE_DATE_START,

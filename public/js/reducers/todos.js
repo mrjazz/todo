@@ -5,6 +5,7 @@ import {callr, findr, mapr, filterr, insertrAfter, insertrBefore} from '../lib/c
 
 const initialState = {
   focusId: null,
+  lastFocusId: null,
   filter: null,
   lastInsertId: null,
   cancelId: null,
@@ -62,7 +63,16 @@ export function todos(state = initialState, action) {
     },
 
     SELECT_TODO() {
+      if (action.id == null) {
+        state.lastFocusId = state.focusId;
+      } else {
+        state.lastFocusId = null;
+      }
       state.focusId = action.id;
+    },
+
+    SELECT_LAST_TODO() {
+      state.focusId = state.lastFocusId;
     },
 
     PASTE_AS_CHILD_TODO() {
@@ -255,7 +265,7 @@ export function todos(state = initialState, action) {
     }
   };
 
-  // console.info(action);
+  //console.info(action);
 
   state = clone(state);
 

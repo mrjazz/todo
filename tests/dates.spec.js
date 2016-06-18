@@ -26,7 +26,6 @@ describe('date test', function() {
   it('in progress', () => {
     const d1 = moment().add(-1, 'day');
     const d2 = moment().add(1, 'day');
-    const today = moment();
     getDateTypeForItem(d1, d2).should.equal(ItemDateType.IN_PROGRESS);
   });
 
