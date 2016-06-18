@@ -63,7 +63,7 @@ describe('collections test', function() {
     });
 
     it('remove', () => {
-      const result = todos(initialState, TodoActions.removeTodo(0));
+      const result = todos(initialState, TodoActions.deleteTodo(0));
       result.todos.length.should.equal(3);
     });
 
