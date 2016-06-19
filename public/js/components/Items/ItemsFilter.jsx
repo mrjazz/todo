@@ -22,30 +22,30 @@ export default class ItemsList extends Component {
   render() {
     const selectFilter = () => this.context.store.getState().todos.filter ?
       this.context.store.getState().todos.filter : FilterTypes.FILTER_ALL;
-    return <div className="todos">
-      <ul className="filters">
-        {[
-          FilterTypes.FILTER_ALL,
-          FilterTypes.FILTER_TODO,
-          FilterTypes.FILTER_ACTIVE,
-          FilterTypes.FILTER_COMPLETED
-        ].map((title, key) =>
-          <li key={key} className={selectFilter() === title ? 'active' : ''}>
-            {selectFilter() === title ?
-              title :
-              <a href="#"
-                 onClick={() => this.handleFilter(title)}
-                 onKeyPress={() => this.handleFilter(title)}>
-                {title}
-              </a>
-            }
-          </li>
-        )}
-      </ul>
-      <div className="all-items">
-        {this.props.children}
-      </div>
-    </div>
+    return (<div className="todos">
+              <ul className="filters">
+                {[
+                  FilterTypes.FILTER_ALL,
+                  FilterTypes.FILTER_TODO,
+                  FilterTypes.FILTER_ACTIVE,
+                  FilterTypes.FILTER_COMPLETED
+                ].map((title, key) =>
+                  <li key={key} className={selectFilter() === title ? 'active' : ''}>
+                    {selectFilter() === title ?
+                      title :
+                      <a href="#"
+                         onClick={() => this.handleFilter(title)}
+                         onKeyPress={() => this.handleFilter(title)}>
+                        {title}
+                      </a>
+                    }
+                  </li>
+                )}
+              </ul>
+              <div className="all-items">
+                {this.props.children}
+              </div>
+            </div>);
   }
 
 }

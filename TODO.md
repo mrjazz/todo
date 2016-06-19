@@ -14,8 +14,10 @@ Fixes:
 
 Add new shortcuts:
 
+ - [X] Switch between commands and todos by Escape
  - [ ] ? - Help
  - [ ] Set colors/icons by 1..6 keys
+
 
 Features:
 
@@ -31,6 +33,7 @@ Features:
  - [ ] Add animation for deleted item
  - [ ] Make note icon clickable and preview note by click
  - [ ] Import todos from Markdown format
+
 
 __Calendar research__
 

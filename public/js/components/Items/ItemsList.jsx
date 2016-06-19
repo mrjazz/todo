@@ -18,6 +18,7 @@ import * as FilterTypes from '../../constants/FilterTypes';
 
 import {getParentFor, isParentOf, searchr, findr, filterr, findrIndex, findrByIndex} from '../../lib/collectionUtils.js';
 import * as TodoAction from '../../actions/todos';
+import * as AppAction from '../../actions/app';
 
 
 export default class ItemsList extends Component {
@@ -57,41 +58,43 @@ export default class ItemsList extends Component {
 
     const renderItems = (items) => {
       return items.map(
-        (i, j) => <div key={j}>
-          <Item
-            ref={j}
-            className={this.stylesForItem(i, counter++)}
-            todo={i}
-            focus={this.state.editId == null && this.curState().focusId == i.id}
-            visible={this.isTodoVisible(i)}
-            onDrop={this.dropItemHandler.bind(this)}
-            highlight={this.highlightItem.bind(this)}
-            onKeyDown={this.itemKeyPressHandler.bind(this)}
-            onFocus={() => this.itemFocusHandler(i.id)}
-            onFocusOut={() => this.focusOutHandler()}
-            onChange={() => this.props.checkTodo(i.id)}
-            onFlipTodo={() => store.dispatch(TodoAction.flipTodo(i.id))}
-            onCheckTodo={() => {
-              this.keepPositionAfterAction(i.id, () => store.dispatch(TodoAction.checkTodo(i.id)));
-            }}
-          >
-            {this.getItemComponent(i)}
-          </Item>
-          {i.children != undefined && i.children.length > 0 && i.open ?
-           <div className="items">{renderItems(i.children)}</div>
-           : ''}
-        </div>
+        (i, j) => (<div key={j}>
+                    <Item
+                      ref={j}
+                      className={this.stylesForItem(i, counter++)}
+                      todo={i}
+                      focus={this.state.editId == null && this.curState().focusId == i.id}
+                      visible={this.isTodoVisible(i)}
+                      onDrop={this.dropItemHandler.bind(this)}
+                      highlight={this.highlightItem.bind(this)}
+                      onKeyDown={this.itemKeyPressHandler.bind(this)}
+                      onFocus={() => this.itemFocusHandler(i.id)}
+                      onFocusOut={() => this.focusOutHandler()}
+                      onChange={() => this.props.checkTodo(i.id)}
+                      onFlipTodo={() => store.dispatch(TodoAction.flipTodo(i.id))}
+                      onCheckTodo={() => {
+                        this.keepPositionAfterAction(i.id, () => store.dispatch(TodoAction.checkTodo(i.id)));
+                      }}
+                    >
+                      {this.getItemComponent(i)}
+                    </Item>
+                    {i.children != undefined && i.children.length > 0 && i.open ?
+                     <div className="items">{renderItems(i.children)}</div>
+                     : ''}
+                  </div>)
       );
     };
 
-    return <ItemsFilter>
-      {renderItems(this.curItems())}
-      <p className="debug">focusedItemState: {this.state.focusedItemState},
-        focusId: {this.curState().focusId},
-        editId: {this.state.editId},
-        dropId: {this.state.dropHoverId},
-        dropStyle: {this.state.dropHoverStyle}</p>
-    </ItemsFilter>;
+    return (
+      <ItemsFilter>
+        {renderItems(this.curItems())}
+        <p className="debug">focusedItemState: {this.state.focusedItemState},
+          focusId: {this.curState().focusId},
+          editId: {this.state.editId},
+          dropId: {this.state.dropHoverId},
+          dropStyle: {this.state.dropHoverStyle}</p>
+      </ItemsFilter>
+    );
   }
 
   keepPositionAfterAction(id, action) {
@@ -509,6 +512,10 @@ export default class ItemsList extends Component {
         const curTodo = focusedTodo();
         if (curTodo.note && curTodo.previewNote) {
           store.dispatch(TodoAction.previewNote(id));
+        } else {
+          e.stopPropagation();
+          e.preventDefault();
+          store.dispatch(AppAction.selectCommandLine());
         }
       },
 
@@ -568,7 +575,7 @@ export default class ItemsList extends Component {
 
   stylesForItem(item, counter) {
     let styles = ['item', counter % 2 ? 'odd' : 'even'];
-    
+
     if (item.id == this.state.editId) {
       // create/edit item
       styles.push(this.getHighlightCSS(HighlightType.HOVER));
