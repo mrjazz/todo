@@ -1,16 +1,22 @@
 export default class Command {
 
-  constructor(action, param, signature) {
+  constructor(action, matchedAction, param, signature) {
     this.action = action;
+    this.matchedAction = matchedAction;
     this.param = param;
     this.signature = signature;
+    this.signatureValues = null;
   }
 
   toString() {
     const args = [];
     for (const i in this.signature) {
-      if (i == 'type' || i == 'id') continue;
-      args.push(i);
+      if (i == 'type') continue;
+      if (i == 'id') {
+        args.push('item');
+      } else {
+        args.push(i);
+      }
     }
     return `${this.action} [${args.join('] [')}]`;
   }

@@ -18,11 +18,13 @@ export default class CommandLine extends Component {
   keyDownHandler(e) {
     switch (e.key) {
       case 'Escape':
-        e.stopPropagation();
-        e.preventDefault();
-
         this.refs.ctrlInput.value = '';
         this.context.store.dispatch(selectLastTodo());
+        stopEvent(e);
+        break;
+      case 'Tab':
+        console.log("complete");
+        stopEvent(e);
         break;
     }
   }
@@ -32,19 +34,20 @@ export default class CommandLine extends Component {
       case 'Enter':
         execCommand(this.refs.ctrlInput.value, this.context.store);
         break;
-      case 'Tab':
-        console.log("complete");
-        break;
       default:
         if (this.refs.ctrlInput.value.trim() == '') {
           this.setState({ hint: getCommandHint() });
         } else {
-          const commands = validateCommand(this.refs.ctrlInput.value);
+          const commands = validateCommand(this.refs.ctrlInput.value, this.context.store.getState());
           if (commands.length > 0) {
             this.setState({ hint: commands.join(', ') });
           }
         }
     }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.hint !== this.state.hint;
   }
 
   focusHandler() {
@@ -60,19 +63,24 @@ export default class CommandLine extends Component {
   }
 
   render() {
-    return <div className="command">
-            <input
-              id="cmd"
-              type="text"
-              placeholder="Enter command"
-              autoFocus="true"
-              ref="ctrlInput"
-              onFocus={this.focusHandler.bind(this)}
-              onKeyUp={this.keyUpHandler.bind(this)}
-              onKeyDown={this.keyDownHandler.bind(this)}
-              />
-            <p>{this.state.hint}</p>
-          </div>
+    return (<div className="command">
+              <input
+                id="cmd"
+                type="text"
+                placeholder="Enter command"
+                autoFocus="true"
+                ref="ctrlInput"
+                onFocus={this.focusHandler.bind(this)}
+                onKeyUp={this.keyUpHandler.bind(this)}
+                onKeyDown={this.keyDownHandler.bind(this)}
+                />
+              <p>{this.state.hint}</p>
+            </div>);
   }
 
+}
+
+function stopEvent(e) {
+  e.stopPropagation();
+  e.preventDefault();
 }

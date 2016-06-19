@@ -7,6 +7,8 @@ Refactoring:
 
  - [ ] Move functionality from shortcut mapping to reducer
  - [ ] Make Items list more lightweight, move out shortcut handlers
+ - [ ] Split libs and app code in webpack
+ - [ ] Optimize webpack build
 
 
 Fixes:
