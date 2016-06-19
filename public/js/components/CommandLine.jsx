@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import {getCommandHint} from '../lib/hints';
 import {validateCommand, execCommand} from '../lib/commands';
 import {selectLastTodo} from '../actions/todos';
+import {selectedCommandLine} from '../actions/app';
 
 export default class CommandLine extends Component {
 
@@ -14,17 +15,25 @@ export default class CommandLine extends Component {
     this.state = { hint: getCommandHint() };
   }
 
-  inputHandler(e) {
+  keyDownHandler(e) {
+    switch (e.key) {
+      case 'Escape':
+        e.stopPropagation();
+        e.preventDefault();
+
+        this.refs.ctrlInput.value = '';
+        this.context.store.dispatch(selectLastTodo());
+        break;
+    }
+  }
+
+  keyUpHandler(e) {
     switch (e.key) {
       case 'Enter':
         execCommand(this.refs.ctrlInput.value, this.context.store);
         break;
       case 'Tab':
         console.log("complete");
-        break;
-      case 'Escape':
-        this.refs.ctrlInput.value = '';
-        this.context.store.dispatch(selectLastTodo());
         break;
       default:
         if (this.refs.ctrlInput.value.trim() == '') {
@@ -38,6 +47,18 @@ export default class CommandLine extends Component {
     }
   }
 
+  focusHandler() {
+    const store = this.context.store;
+    store.dispatch(selectedCommandLine());
+  }
+
+  componentDidUpdate() {
+    const store = this.context.store;
+    if (store.getState().app.focusCommandLine) {
+      this.refs.ctrlInput.focus();
+    }
+  }
+
   render() {
     return <div className="command">
             <input
@@ -46,7 +67,9 @@ export default class CommandLine extends Component {
               placeholder="Enter command"
               autoFocus="true"
               ref="ctrlInput"
-              onKeyUp={this.inputHandler.bind(this)}
+              onFocus={this.focusHandler.bind(this)}
+              onKeyUp={this.keyUpHandler.bind(this)}
+              onKeyDown={this.keyDownHandler.bind(this)}
               />
             <p>{this.state.hint}</p>
           </div>

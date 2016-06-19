@@ -1,14 +1,21 @@
 import * as AppAction from '../constants/AppActionTypes';
-import AppState from '../models/AppState';
+
+const initialState = {
+  focusCommandLine: false
+};
+
+const updateState = (state, props) => Object.assign(Object.create(state), state, props);
 
 
-export function app(state = new AppState(), action = {}) {
+export function app(state = initialState, action = {}) {
 
   // console.info(action);
 
   switch (action.type) {
-    case AppAction.SELECT_TODO:
-      return Object.assign(Object.create(state), state, { currentTodo: action.todo });
+    case AppAction.SELECT_CMD:
+      return updateState(state, { focusCommandLine: true });
+    case AppAction.SELECTED_CMD:
+      return updateState(state, { focusCommandLine: false });
     default:
       return state;
   }

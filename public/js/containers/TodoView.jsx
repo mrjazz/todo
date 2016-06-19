@@ -7,9 +7,9 @@ import DetailsView from '../containers/DetailsView.jsx';
 export default class TodoView extends Component {
 
   render() {
-    return <div className="todo-view">
-            <ItemsView />
-            <DetailsView />
-          </div>
+    return (<div className="todo-view">
+              <ItemsView />
+              <DetailsView />
+            </div>);
   }
 }
