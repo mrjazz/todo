@@ -70,7 +70,7 @@ export function matchCommand(command, input) {
 }
 
 export function getParams(cmd) {
-  return cmd.trim().search(" ") > 0 && cmd.substr(cmd.search(" ") + 1).trim() || '';
+  return cmd.trim().search(' ') > 0 && cmd.substr(cmd.search(' ') + 1).trim() || '';
 }
 
 export function validateCommand(cmd, state) {

@@ -1,9 +1,10 @@
 var path = require('path'),
-  webpack = require('webpack');
+  webpack = require('webpack'),
+  polyfill = require('babel-polyfill');
 
 module.exports = {
   debug: true,
-  devtool: 'sourcemap',
+  devtool: 'inline-source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()

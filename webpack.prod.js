@@ -3,7 +3,7 @@ var path = require('path'),
 
 module.exports = {
   debug: true,
-  devtool: 'sourcemap',
+  devtool: 'inline-source-map',
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {

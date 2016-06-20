@@ -1,11 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Root from './containers/Root.jsx';
-
-import {loginUser, loginUserSuccess} from './actions/auth';
-
 import configureStore from './store/configureStore';
 import {saveState, loadState} from "./api/localStorage";
+//import {loginUser, loginUserSuccess} from './actions/auth';
 
 const store = configureStore(loadState());
 
