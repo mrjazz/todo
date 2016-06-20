@@ -46,9 +46,10 @@ export default class CommandLine extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextState.hint !== this.state.hint;
-  }
+  // TODO : think how to check app state and allow re-render
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return nextState.hint !== this.state.hint;
+  // }
 
   focusHandler() {
     const store = this.context.store;
