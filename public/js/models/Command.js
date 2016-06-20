@@ -5,7 +5,6 @@ export default class Command {
     this.matchedAction = matchedAction;
     this.param = param;
     this.signature = signature;
-    this.signatureValues = null;
   }
 
   toString() {

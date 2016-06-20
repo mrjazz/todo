@@ -29,6 +29,12 @@ describe('commands test', function() {
   });
 
   it('suggestions2', () => {
+    const result = validateCommand('aT some task', state);
+    // console.log(result);
+    result[0].action.should.equal('addTodo');
+  });
+
+  it('suggestions3', () => {
     validateCommand().length.should.equal(0);
     validateCommand('').length.should.equal(0);
     validateCommand(' ').length.should.equal(0);

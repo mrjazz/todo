@@ -14,7 +14,6 @@ export function checkStringOld(command, str) {
 
 /**
  * Calculate relevance of matching command in input
- * TODO: ignore spaces and minuses
  *
  * @param command
  * @param input
@@ -60,7 +59,7 @@ export function matchCommand(command, input) {
       result.relevance += 3;
     }
 
-    result.command += str[i];
+    result.command += input[i];
     lastPos += pos + 1;
     i++;
   }
@@ -77,10 +76,6 @@ export function getParams(cmd) {
 export function validateCommand(cmd, state) {
   if (!cmd || cmd.trim() == '') return [];
 
-  const commands = cmd.split(' ');
-
-  if (commands.length === 0) return [];
-  const command = commands[0];
   const matches = [];
 
   for (const action in TodoActions) {
@@ -92,7 +87,7 @@ export function validateCommand(cmd, state) {
       }
     });*/
 
-    const result = matchCommand(action, command);
+    const result = matchCommand(action, cmd);
     if (result.relevance > 0) {
       result.action = action;
       matches.push(result);
@@ -101,11 +96,12 @@ export function validateCommand(cmd, state) {
 
   return take(matches.sort((a, b) => b.relevance - a.relevance), 3) // sorted by relevance and take 3 top
     .map((o) => {
+      const signature = TodoActions[o.action]();
       return new Command(
         o.action,
         o.command,
         o.params,
-        TodoActions[o.action]()
+        getSignature(signature, o, state)
       );
       // TODO : parse arguments
     });
@@ -128,4 +124,29 @@ export function execCommand(cmd, store) {
   }
 
   store.dispatch(signature);
+}
+
+/**
+ * Process signature and try to predict arguments from params
+ *
+ * @param signature
+ * @param obj matched result
+ * @param state
+ * @returns {*}
+ */
+function getSignature(signature, obj, state) {
+  for (let i in signature) {
+    switch (i) {
+      case 'type': continue;
+      // case 'id':
+      //   const id = state.todos.focusId || state.todos.lastFocusId;
+      //   if (!Number.isInteger(id)) return false; // noone element selected
+      //   signature['id'] = id;
+      //   break;
+      default:
+        signature[i] = obj.param;
+    }
+  }
+  //console.log(signature);
+  return signature;
 }
