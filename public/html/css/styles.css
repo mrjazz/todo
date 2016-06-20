@@ -110,14 +110,15 @@
   display: table;
 }
 
-.item .hint, .command .hint {
+.item .hint {
   font-size: 0.6em;
   text-align: right;
   width: 98%;
 }
 
-.command p {
+.command .hint {
   font-size: 0.7em;
+  padding-top: 10px;
 }
 
 .item .block, .item .control {

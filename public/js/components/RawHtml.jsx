@@ -9,6 +9,6 @@ export default class RawHtml extends Component {
 
   render() {
     const html = { __html : this.props.html };
-    return <div dangerouslySetInnerHTML={html}/>;
+    return <div className={this.props.className} dangerouslySetInnerHTML={html}/>;
   }
 }

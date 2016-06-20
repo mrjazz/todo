@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {getCommandHint} from '../lib/hints';
+import RawHtml from './RawHtml';
 import {validateCommand, execCommand} from '../lib/commands';
 import {selectLastTodo} from '../actions/todos';
 import {selectedCommandLine} from '../actions/app';
@@ -75,7 +76,7 @@ export default class CommandLine extends Component {
                 onKeyUp={this.keyUpHandler.bind(this)}
                 onKeyDown={this.keyDownHandler.bind(this)}
                 />
-              <p>{this.state.hint}</p>
+              <RawHtml html={this.state.hint} className="hint"/>
             </div>);
   }
 
