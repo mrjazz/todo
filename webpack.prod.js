@@ -6,16 +6,14 @@ module.exports = {
   devtool: 'inline-source-map',
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"production"',
-      },
-      __DEVELOPMENT__: false,
+      // A common mistake is not stringifying the "production" string.
+      'process.env.NODE_ENV': JSON.stringify('production')
     }),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compress: {
-        warnings: false,
+        warnings: false
       },
     })
   ],

@@ -24,6 +24,16 @@
   "author": "Denis Sheremetov (http://github.com/mrjazz)",
   "license": "MIT",
   "homepage": "https://github.com/mrjazz/todo",
+  "babel": {
+    "env": {
+      "production": {
+        "plugins": [
+          "transform-react-constant-elements",
+          "transform-react-inline-elements"
+        ]
+      }
+    }
+  },
   "dependencies": {
     "react": "^15.0.2",
     "react-dom": "^15.0.2",
