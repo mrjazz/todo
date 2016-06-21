@@ -1,15 +1,13 @@
-import * as TodoActions from '../actions/todos';
 import Command from '../models/Command';
-import {take} from 'lodash';
+import * as TodoActions from '../actions/todos';
+import * as FilterTypes from '../constants/FilterTypes';
+import {findr} from '../lib/collectionUtils';
+import {dateParse} from '../lib/dates';
+import {take, keys, values} from 'lodash';
 
-// const IGNORE_SUFFIXES = ['Todo'];
 
 export function parseCommand(cmd) {
   if (!cmd || cmd.trim() == '') return [];
-}
-
-export function checkStringOld(command, str) {
-  return command.toLowerCase().substr(0, str.length) === str.toLowerCase();
 }
 
 /**
@@ -127,6 +125,34 @@ export function execCommand(cmd, store) {
 }
 
 /**
+ * Choose value for type or propose options
+ * TODO : implement option proposition
+ *
+ * @param value
+ * @param type
+ * @param state
+ * @returns {*}
+ */
+export function valueOfTypeByState(value, type, state) {
+  switch (type) {
+    case 'id':
+    case 'parentId':
+      if (value.trim() === '') {
+        return findr(state.todos, (todo) => todo.id === state.lastFocusId);
+      } else {
+        return findr(state.todos, (todo) => todo.text.toLowerCase().search(value.toLowerCase()) >= 0);
+      }
+      break;
+    case 'filter':
+      return findr(values(FilterTypes), (i) => i.toLowerCase().search(value.toLowerCase()) >= 0);
+    case 'date':
+      return dateParse(value);
+    default:
+      return value;
+  }
+}
+
+/**
  * Process signature and try to predict arguments from params
  *
  * @param signature
@@ -134,19 +160,30 @@ export function execCommand(cmd, store) {
  * @param state
  * @returns {*}
  */
-function getSignature(signature, obj, state) {
-  for (let i in signature) {
-    switch (i) {
-      case 'type': continue;
-      // case 'id':
-      //   const id = state.todos.focusId || state.todos.lastFocusId;
-      //   if (!Number.isInteger(id)) return false; // noone element selected
-      //   signature['id'] = id;
-      //   break;
-      default:
-        signature[i] = obj.param;
-    }
+function getSignature(signature, match, state) {
+  const args = keys(signature).filter((o) => o != 'type');
+  if (args.length < 1) {
+    return signature; // no need in parsing params
+  } else if (args.length == 1) {
+    signature[args[0]] = valueOfTypeByState(match.params, args[0], state); // everything is param
+  } else {
+    // parse values and apply them
+
   }
+
+  // for (let i in signature) {
+  //   switch (i) {
+  //     case 'type': continue;
+  //     // case 'id':
+  //     //   const id = state.todos.focusId || state.todos.lastFocusId;
+  //     //   if (!Number.isInteger(id)) return false; // noone element selected
+  //     //   signature['id'] = id;
+  //     //   break;
+  //     default:
+  //       signature[i] = obj.param;
+  //   }
+  // }
+
   //console.log(signature);
   return signature;
 }

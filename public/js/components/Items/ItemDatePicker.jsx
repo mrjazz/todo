@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 
-import 'datejs';
-import moment from 'moment';
-
+import * as Dates from '../../lib/dates';
 import {getLocale} from '../../lib/i18n';
 import {getDateHint} from '../../lib/hints';
 
@@ -29,11 +27,11 @@ export default class ItemDatePicker extends Component {
           this.setState(Object.assign(this.state, {
             error: "Use correct date or ESC to cancel"
           }));
-        } else if (this.props.minDate && moment(this.state.date).isBefore(this.props.minDate)) {
+        } else if (this.props.minDate && Dates.isDateBefore(this.state.date, this.props.minDate)) {
           this.setState(Object.assign(this.state, {
             error: "End date can't be before start"
           }));
-        } else if (this.props.maxDate && moment(this.state.date).isAfter(this.props.maxDate)) {
+        } else if (this.props.maxDate && Dates.isDateAfter(this.state.date, this.props.maxDate)) {
           this.setState(Object.assign(this.state, {
             error: "Start date can't be after end"
           }));
@@ -55,7 +53,7 @@ export default class ItemDatePicker extends Component {
   }
 
   changeHandler() {
-    const date = Date.parse(this.refs.ctrlInput.value);
+    const date = Dates.dateParse(this.refs.ctrlInput.value);
     this.setState(Object.assign(this.state, {
       date,
       error: date !== null ? null : this.state.error
@@ -66,10 +64,10 @@ export default class ItemDatePicker extends Component {
     const date = this.state.date || this.props.date;
 
     const dateLabel = this.state.date != null ?
-        moment(this.state.date).locale(this.locale).format('llll').toString() :
+        Dates.dateFormatFull(this.state.date, this.locale) :
         getDateHint();
 
-    const dateValue = date ? moment(this.props.date).locale(this.locale).format('LLL') : null;
+    const dateValue = date ? Dates.dateFormatShort(this.props.date) : null;
 
     return <div className="date-picker">
             <input
