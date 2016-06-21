@@ -19,4 +19,8 @@ export default class Todo {
   add(todo) {
     this.children.push(todo);
   }
+
+  toString() {
+    return this.text;
+  }
 }

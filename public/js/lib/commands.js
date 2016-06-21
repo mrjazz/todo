@@ -1,7 +1,8 @@
 import Command from '../models/Command';
+import CommandParam from '../models/CommandParam';
 import * as TodoActions from '../actions/todos';
 import * as FilterTypes from '../constants/FilterTypes';
-import {findr} from '../lib/collectionUtils';
+import {callr, findr} from '../lib/collectionUtils';
 import {dateParse} from '../lib/dates';
 import {take, keys, values} from 'lodash';
 
@@ -124,6 +125,23 @@ export function execCommand(cmd, store) {
   store.dispatch(signature);
 }
 
+function typeHint(type) {
+  switch (type) {
+    case 'id':
+    case 'parentId':
+      return 'id of todo or selected id by default';
+    case 'filter':
+      return keys(FilterTypes).join(', ');
+    case 'date':
+      return 'any date or current time by default';
+    case 'text':
+    case 'note':
+      return 'some text';
+    default:
+      return 'unknown type of param';
+  }
+}
+
 /**
  * Choose value for type or propose options
  * TODO : implement option proposition
@@ -131,24 +149,46 @@ export function execCommand(cmd, store) {
  * @param value
  * @param type
  * @param state
- * @returns {*}
+ * @returns CommandParam
  */
 export function valueOfTypeByState(value, type, state) {
+  const result = new CommandParam(type, typeHint(type));
   switch (type) {
     case 'id':
     case 'parentId':
       if (value.trim() === '') {
-        return findr(state.todos, (todo) => todo.id === state.lastFocusId);
+        const lastTodo = findr(state.todos, (todo) => todo.id === state.lastFocusId);
+        if (lastTodo) {
+          result.options.push(lastTodo);
+        }
       } else {
-        return findr(state.todos, (todo) => todo.text.toLowerCase().search(value.toLowerCase()) >= 0);
+        callr(state.todos, (todo) => {
+          const a = todo.text.toLowerCase();
+          const b = value.toLowerCase();
+          if (a == b) result.value = todo;
+          if (a.search(b) >= 0) {
+            result.options.push(todo);
+          }
+        });
       }
-      break;
+      return result;
     case 'filter':
-      return findr(values(FilterTypes), (i) => i.toLowerCase().search(value.toLowerCase()) >= 0);
+      values(FilterTypes).filter((i) => {
+        const a = i.toLowerCase();
+        const b = value.toLowerCase();
+        if (a == b) result.value = i;
+        if (a.search(b) >= 0) {
+          result.options.push(i);
+        }
+      });
+      return result;
     case 'date':
-      return dateParse(value);
+      result.value = dateParse(value);
+      result.options.push(new Date());
+      return result;
     default:
-      return value;
+      result.value = value;
+      return result;
   }
 }
 
@@ -168,7 +208,7 @@ function getSignature(signature, match, state) {
     signature[args[0]] = valueOfTypeByState(match.params, args[0], state); // everything is param
   } else {
     // parse values and apply them
-
+    // console.log(match.params.search(/[\"\'](.*?)[\"\']/g));
   }
 
   // for (let i in signature) {
