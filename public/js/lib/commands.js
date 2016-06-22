@@ -209,6 +209,8 @@ function getSignature(signature, match, state) {
   } else {
     // parse values and apply them
     // console.log(match.params.search(/[\"\'](.*?)[\"\']/g));
+    const res = /["'](.*?)["']/m.exec(match.params);
+    console.log(res);
   }
 
   // for (let i in signature) {

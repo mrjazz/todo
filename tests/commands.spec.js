@@ -34,7 +34,7 @@ describe('commands test', function() {
 
   it('mutliple params test', () => {
     const result = validateCommand('addAsChild "learn react" "learn webpack"', state);
-    console.log(result);
+    // console.log(result);
   });
 
   // it('date type matching', () => {
