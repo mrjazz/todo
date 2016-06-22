@@ -209,22 +209,16 @@ function getSignature(signature, match, state) {
   } else {
     // parse values and apply them
     // console.log(match.params.search(/[\"\'](.*?)[\"\']/g));
-    const res = /["'](.*?)["']/m.exec(match.params);
-    console.log(res);
-  }
+    const re = new RegExp(/["'](.*?)["']/g);
+    let res, i = 0;
 
-  // for (let i in signature) {
-  //   switch (i) {
-  //     case 'type': continue;
-  //     // case 'id':
-  //     //   const id = state.todos.focusId || state.todos.lastFocusId;
-  //     //   if (!Number.isInteger(id)) return false; // noone element selected
-  //     //   signature['id'] = id;
-  //     //   break;
-  //     default:
-  //       signature[i] = obj.param;
-  //   }
-  // }
+    while ((res = re.exec(match.params)) != null) {
+      // matches.push(match[1]);
+      signature[args[i]] = valueOfTypeByState(res[1], args[i], state); // everything is param
+      i++;
+    }
+
+  }
 
   //console.log(signature);
   return signature;
