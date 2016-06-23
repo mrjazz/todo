@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {getCommandHint} from '../lib/hints';
 import RawHtml from './RawHtml';
-import {validateCommand, execCommand} from '../lib/commands';
+import {getHint, validateCommand, execCommand} from '../lib/commands';
 import {selectLastTodo} from '../actions/todos';
 import {selectedCommandLine} from '../actions/app';
 
@@ -41,10 +41,8 @@ export default class CommandLine extends Component {
         } else {
           const commands = validateCommand(this.refs.ctrlInput.value, this.context.store.getState());
 
-          console.log(commands);
-
           if (commands.length > 0) {
-            this.setState({ hint: commands.join(', ') });
+            this.setState({ hint: getHint(commands) });
           }
         }
     }
@@ -82,7 +80,6 @@ export default class CommandLine extends Component {
               <RawHtml html={this.state.hint} className="hint"/>
             </div>);
   }
-
 }
 
 function stopEvent(e) {

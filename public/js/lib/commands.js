@@ -156,6 +156,7 @@ export function valueOfTypeByState(value, type, state) {
   switch (type) {
     case 'id':
     case 'parentId':
+      if(value == undefined) return result; // no sense continue without value;
       if (value.trim() === '') {
         const lastTodo = findr(state.todos, (todo) => todo.id === state.lastFocusId);
         if (lastTodo) {
@@ -221,11 +222,8 @@ function getSignature(signature, match, state) {
       values.push(res[1]);
     }
 
-    console.log(values);
-
-    keys(signature).map((name) => {
-      // console.log(values[i]);
-      // signature[name] = valueOfTypeByState(res[1], name, state); // everything is param
+    validArgs(signature).map((name, i) => {
+      signature[name] = valueOfTypeByState(values[i], name, state); // everything is param
     });
 
   }
@@ -240,10 +238,9 @@ export function getHint(commands) {
     const cmd = commands[0];
     result += '<b>' + cmd.action + '</b> ';
 
-
     return result + validArgs(cmd.signature)
         .map((name, i) => {
-          return !!cmd[name] ? `<b>${name}</b>` : `<i>${name} : ${cmd.signature[name]}</i>`;
+          return !!cmd[name] ? `[<b>${name}</b>]` : `[<i>${name} : ${cmd.signature[name].hint}</i>]`;
         })
         .join(', ');
   }
