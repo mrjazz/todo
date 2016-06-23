@@ -40,6 +40,9 @@ export default class CommandLine extends Component {
           this.setState({ hint: getCommandHint() });
         } else {
           const commands = validateCommand(this.refs.ctrlInput.value, this.context.store.getState());
+
+          console.log(commands);
+
           if (commands.length > 0) {
             this.setState({ hint: commands.join(', ') });
           }

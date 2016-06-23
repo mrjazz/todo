@@ -192,6 +192,10 @@ export function valueOfTypeByState(value, type, state) {
   }
 }
 
+function validArgs(signature) {
+  return keys(signature).filter((o) => o != 'type');
+}
+
 /**
  * Process signature and try to predict arguments from params
  *
@@ -201,7 +205,7 @@ export function valueOfTypeByState(value, type, state) {
  * @returns {*}
  */
 function getSignature(signature, match, state) {
-  const args = keys(signature).filter((o) => o != 'type');
+  const args = validArgs(signature);
   if (args.length < 1) {
     return signature; // no need in parsing params
   } else if (args.length == 1) {
@@ -210,16 +214,39 @@ function getSignature(signature, match, state) {
     // parse values and apply them
     // console.log(match.params.search(/[\"\'](.*?)[\"\']/g));
     const re = new RegExp(/["'](.*?)["']/g);
-    let res, i = 0;
+    let res;
+    const values = [];
 
     while ((res = re.exec(match.params)) != null) {
-      // matches.push(match[1]);
-      signature[args[i]] = valueOfTypeByState(res[1], args[i], state); // everything is param
-      i++;
+      values.push(res[1]);
     }
+
+    console.log(values);
+
+    keys(signature).map((name) => {
+      // console.log(values[i]);
+      // signature[name] = valueOfTypeByState(res[1], name, state); // everything is param
+    });
 
   }
 
   //console.log(signature);
   return signature;
+}
+
+export function getHint(commands) {
+  let result = '';
+  if (commands.length == 1) {
+    const cmd = commands[0];
+    result += '<b>' + cmd.action + '</b> ';
+
+
+    return result + validArgs(cmd.signature)
+        .map((name, i) => {
+          return !!cmd[name] ? `<b>${name}</b>` : `<i>${name} : ${cmd.signature[name]}</i>`;
+        })
+        .join(', ');
+  }
+
+  return commands.join(', ');
 }
