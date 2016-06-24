@@ -18,8 +18,8 @@ describe('date test', function() {
   });
 
   it('today', () => {
-    const d1 = moment().startOf('today');
-    const d2 = moment().endOf('today');
+    const d1 = moment().startOf('day');
+    const d2 = moment().endOf('day');
     getDateTypeForItem(d1, d2).should.equal(ItemDateType.TODAY);
   });
 

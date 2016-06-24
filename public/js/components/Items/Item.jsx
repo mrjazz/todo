@@ -194,14 +194,14 @@ export const ItemDateType = {
   'IN_PROGRESS' : 3
 };
 
-export function getDateTypeForItem(dateStart, dateEnd) {
+export function getDateTypeForItem(dateStart, dateEnd) {  
   if (!dateEnd) return ItemDateType.STANDARD;
   const today = moment();
-  if (moment(today).isAfter(dateEnd)) {
+  if (moment(today).isSameOrAfter(dateEnd)) {
     return ItemDateType.EXPIRED;
-  } else if (moment(dateEnd).isAfter(moment().startOf('day')) && moment(dateEnd).isBefore(moment().endOf('day'))) {
+  } else if (moment(dateEnd).isSameOrAfter(moment().startOf('day')) && moment(dateEnd).isSameOrBefore(moment().endOf('day'))) {
     return ItemDateType.TODAY;
-  } else if (moment(today).isAfter(dateStart) && moment(today).isBefore(dateEnd)) {
+  } else if (moment(today).isSameOrAfter(dateStart) && moment(today).isSameOrBefore(dateEnd)) {
     return ItemDateType.IN_PROGRESS;
   }
 
