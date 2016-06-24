@@ -157,7 +157,7 @@ export function valueOfTypeByState(value, type, state) {
     case 'id':
     case 'parentId':
       if(value == undefined) return result; // no sense continue without value;
-      if (value.trim() === '') {
+      if (value.trim() === '' && !!state.lastFocusId) {
         const lastTodo = findr(state.todos, (todo) => todo.id === state.lastFocusId);
         if (lastTodo) {
           result.options.push(lastTodo);
