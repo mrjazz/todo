@@ -38,7 +38,12 @@ export function matchCommand(command, input) {
 
     pos = cmd.substr(lastPos).search(str[i]);
     if (pos < 0) { // string doesn't match command anymore
-      if (i == 0 || str[i-1] != ' ') result.relevance = -1;
+      // if (command == 'addBelow') console.log(str[i-1], result.relevance);
+      if (i == 0 || str[i-1] != ' ') {
+        if (result.relevance < 15) {
+          result.relevance = -1;
+        }
+      }
       break;
     }
 

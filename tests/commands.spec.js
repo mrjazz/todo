@@ -47,11 +47,11 @@ describe('commands test', function() {
     hint.should.equal('<b>addBelow</b> [<b>id : Learn React</b>], [<i>todo : some text</i>]');
   });
 
-  // it('one param', () => {
-  //   const result = validateCommand('add something', state);
-  //   const hint = getHint(result);
-  //   hint.should.equal('<b>addTodo</b> [<i>text : <b>something</b></i>], addBelow [item] [todo], pasteAsChildTodo [item] [todo]');
-  // });
+  it('one param', () => {
+    const result = validateCommand('add something', state);
+    const hint = getHint(result);
+    hint.should.equal('<b>addTodo</b> [<b>text : something</b>], addBelow [item] [todo], pasteAsChildTodo [item] [todo]');
+  });
 
   it('mutliple params highlight', () => {
     const result = validateCommand('add', state);
@@ -59,14 +59,14 @@ describe('commands test', function() {
     hint.should.equal('<b>addTodo</b> [<i>text : some text</i>], addBelow [item] [todo], addAsChild [item] [text]');
   });
 
-  // it('mutliple params test', () => {
-  //   const result = validateCommand('addAsChild "learn react" "learn webpack"', state);
-  //   result[0].signature.id.value.id.should.equal(0);
-  //   result[0].signature.text.value.should.equal('learn webpack');
-  //
-  //   const hint = getHint(result);
-  //   hint.should.equal('<b>addAsChild</b> [<i>id : <b>Learn React</b></i>], [<i>text : <b>learn webpack</b></i>]');
-  // });
+  it('mutliple params test', () => {
+    const result = validateCommand('addAsChild "learn react" "learn webpack"', state);
+    result[0].signature.id.value.id.should.equal(0);
+    result[0].signature.text.value.should.equal('learn webpack');
+
+    const hint = getHint(result);
+    hint.should.equal('<b>addAsChild</b> [<b>id : Learn React</b>], [<b>text : learn webpack</b>]');
+  });
 
   it('mutliple params test 2', () => {
     const result = validateCommand('addAsChild', state);
@@ -132,7 +132,7 @@ describe('commands test', function() {
     matchCommand('addSomeThing', 'addst').relevance.should.equal(12);
 
     matchCommand('updateTodo', 'add').relevance.should.equal(-1);
-    matchCommand('addSomeThing', 'addSTo').relevance.should.equal(-1);
+    matchCommand('addSomeThing', 'addSTo').relevance.should.equal(18);
 
     matchCommand('addSomeThing', 'addThing').relevance.should.equal(24);
     matchCommand('addSomeThing', 'addsomething').relevance.should.equal(35);
