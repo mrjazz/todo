@@ -136,6 +136,7 @@ function typeHint(type) {
       return 'any date or current time by default';
     case 'text':
     case 'note':
+    case 'todo':
       return 'some text';
     default:
       return 'unknown type of param';
@@ -232,18 +233,45 @@ function getSignature(signature, match, state) {
   return signature;
 }
 
-export function getHint(commands) {
-  let result = '';
-  if (commands.length == 1) {
-    const cmd = commands[0];
-    result += '<b>' + cmd.action + '</b> ';
+function wrapWithTag(tag, html) {
+  return `<${tag}>${html}</${tag}>`;
+}
 
-    return result + validArgs(cmd.signature)
-        .map((name, i) => {
-          return !!cmd[name] ? `[<b>${name}</b>]` : `[<i>${name} : ${cmd.signature[name].hint}</i>]`;
-        })
-        .join(', ');
+function hintForNotMatchedParam(param) {
+  return param.hint;
+}
+
+function hintForParam(name, param) {
+  if (param.value) {
+    return wrapWithTag('b', `${name} : ${param.value}`);
+  } else {
+    return wrapWithTag('i', `${name} : ${hintForNotMatchedParam(param)}`);
   }
+}
 
-  return commands.join(', ');
+function hintForMatched(cmd) {
+  return wrapWithTag('b', cmd.action) + ' ' +
+    validArgs(cmd.signature).map((name) => {
+      return !!cmd[name] ? `[${wrapWithTag('b', name)}]` : `[${hintForParam(name, cmd.signature[name])}]`;
+    }).join(', ');
+}
+
+export function getHint(commands) {
+  return commands.map((command, i) => {
+    return i == 0 ? hintForMatched(command) : command; // highlight first matched command
+  }).join(', ');
+
+  // let result = '';
+  // if (commands.length == 1) {
+  //   const cmd = commands[0];
+  //   result += '<b>' + cmd.action + '</b> ';
+  //
+  //    return result + validArgs(cmd.signature)
+  //       .map((name, i) => {
+  //         return !!cmd[name] ? `[<b>${name}</b>]` : `[<i>${name} : ${cmd.signature[name].hint}</i>]`;
+  //       })
+  //       .join(', ');
+  // }
+  //
+  // return commands.join(', ');
 }

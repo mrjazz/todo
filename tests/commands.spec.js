@@ -33,14 +33,40 @@ const state = {
 
 describe('commands test', function() {
 
-  it('mutliple params test', () => {
-    const result = validateCommand('addAsChild "learn react" "learn webpack"', state);
-    result[0].signature.id.value.id.should.equal(0);
-    result[0].signature.text.value.should.equal('learn webpack');
+  // it('param with id', () => {
+  //   const result = validateCommand('addB learn', state);
+  //   console.log(result);
+  //   const hint = getHint(result);
+  //   console.log(hint);
+  //   // hint.should.equal('<b>addBelow</b> [<b>id : Learn React</b>], [<i>todo : some text</i>]');
+  // });
 
+  it('param with id defined', () => {
+    const result = validateCommand('addB "learn react"', state);
     const hint = getHint(result);
-    hint.should.equal('<b>addAsChild</b> [<i>id : id of todo or selected id by default</i>], [<i>text : some text</i>]');
+    hint.should.equal('<b>addBelow</b> [<b>id : Learn React</b>], [<i>todo : some text</i>]');
   });
+
+  // it('one param', () => {
+  //   const result = validateCommand('add something', state);
+  //   const hint = getHint(result);
+  //   hint.should.equal('<b>addTodo</b> [<i>text : <b>something</b></i>], addBelow [item] [todo], pasteAsChildTodo [item] [todo]');
+  // });
+
+  it('mutliple params highlight', () => {
+    const result = validateCommand('add', state);
+    const hint = getHint(result);
+    hint.should.equal('<b>addTodo</b> [<i>text : some text</i>], addBelow [item] [todo], addAsChild [item] [text]');
+  });
+
+  // it('mutliple params test', () => {
+  //   const result = validateCommand('addAsChild "learn react" "learn webpack"', state);
+  //   result[0].signature.id.value.id.should.equal(0);
+  //   result[0].signature.text.value.should.equal('learn webpack');
+  //
+  //   const hint = getHint(result);
+  //   hint.should.equal('<b>addAsChild</b> [<i>id : <b>Learn React</b></i>], [<i>text : <b>learn webpack</b></i>]');
+  // });
 
   it('mutliple params test 2', () => {
     const result = validateCommand('addAsChild', state);
@@ -49,7 +75,6 @@ describe('commands test', function() {
     const hint = getHint(result);
     hint.should.equal('<b>addAsChild</b> [<i>id : id of todo or selected id by default</i>], [<i>text : some text</i>]');
   });
-
 
   it('date type matching', () => {
     (valueOfTypeByState('tomorrow', 'date', state).value instanceof Date).should.true();
@@ -84,7 +109,6 @@ describe('commands test', function() {
 
   it('suggestions2', () => {
     const result = validateCommand('aT some task', state);
-    // console.log(result);
     result[0].action.should.equal('addTodo');
   });
 
@@ -126,5 +150,4 @@ describe('commands test', function() {
   it('parse command', () => {
     parseCommand('add');
   });
-
 });
