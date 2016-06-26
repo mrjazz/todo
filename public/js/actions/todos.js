@@ -35,20 +35,12 @@ export function cutTodo(id) {
   };
 }
 
-export function pasteTodo(id, todo) {
-  return {
-    type: TodoAction.PASTE_TODO,
-    id,
-    todo
-  };
+export function pasteTodo(id) {
+  return { type: TodoAction.PASTE_TODO, id };
 }
 
-export function pasteAsChildTodo(id, todo) {
-  return {
-    type: TodoAction.PASTE_AS_CHILD_TODO,
-    id,
-    todo
-  };
+export function pasteAsChildTodo(parentId) {
+  return { type: TodoAction.PASTE_AS_CHILD_TODO, parentId };
 }
 
 export function expandAll() {
@@ -76,11 +68,11 @@ export function cancelCreateTodo() {
   };
 }
 
-export function addBelow(id, todo) {
+export function addBelow(id, text) {
   return {
     type: TodoAction.ADD_BELOW,
     id,
-    todo
+    text
   };
 }
 

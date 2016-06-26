@@ -77,10 +77,10 @@ export function todos(state = initialState, action) {
 
     PASTE_AS_CHILD_TODO() {
       if (state.clipboard != null) {
-        const todo = Object.assign(clone(action.todo), { id: newId() });
+        const todo = Object.assign(clone(state.clipboard), { id: newId() });
 
         state.todos = mapr(state.todos, (i) => {
-          if (i.id === action.id) {
+          if (i.id === action.parentId) {
             i.open = true;
             i.children = [
               ...i.children,
@@ -98,7 +98,11 @@ export function todos(state = initialState, action) {
     PASTE_TODO() {
       // state.clipboard = findr(state.todos, (i) => action.id === i.id);
       if (state.clipboard != null) {
-        const todo = Object.assign(clone(action.todo), { id: newId() });
+        const todo = Object.assign(clone(state.clipboard), { id: newId() });
+
+        console.log(action.id);
+        console.log(todo);
+
         state.todos = insertrAfter(state.todos, todo, (i) => i.id == action.id);
         state.clipboard = null;
         state.focusId = state.lastInsertId;
@@ -166,7 +170,7 @@ export function todos(state = initialState, action) {
       state.focusId = newId();
       state.todos = insertrAfter(
         state.todos,
-        Object.assign(clone(action.todo), { id: state.focusId }),
+        new Todo(state.focusId, action.text),
         (i) => i.id == action.id
       );
     },
@@ -265,7 +269,7 @@ export function todos(state = initialState, action) {
     }
   };
 
-  // console.info(action);
+  console.info(action);
 
   state = clone(state);
 

@@ -425,7 +425,7 @@ export default class ItemsList extends Component {
           store.dispatch(TodoAction.addAsChild(id, ''));
         } else {
           // [Enter] add below current item
-          store.dispatch(TodoAction.addBelow(id, new Todo(-1)));
+          store.dispatch(TodoAction.addBelow(id, ''));
         }
 
         const newId = this.curState().lastInsertId;
@@ -473,11 +473,11 @@ export default class ItemsList extends Component {
       },
 
       'CtrlV' : () => {
-        store.dispatch(TodoAction.pasteTodo(id, this.curState().clipboard));
+        store.dispatch(TodoAction.pasteTodo());
       },
 
       'CtrlAltV' : () => {
-        store.dispatch(TodoAction.pasteAsChildTodo(id, this.curState().clipboard));
+        store.dispatch(TodoAction.pasteAsChildTodo(id));
       },
 
       'CtrlC' : () => {

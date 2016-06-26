@@ -6,7 +6,8 @@ import {
   getParams,
   matchCommand,
   getHint,
-  validateCommand
+  validateCommand,
+  execCommand
 } from '../public/js/lib/commands.js';
 
 import Todo from '../public/js/models/Todo';
@@ -14,7 +15,7 @@ import Todo from '../public/js/models/Todo';
 
 const state = {
   focusId: null,
-  lastFocusId: 0,
+  lastFocusId: 1,
   filter: null,
   lastInsertId: null,
   cancelId: null,
@@ -33,6 +34,54 @@ const state = {
 
 describe('commands test', function() {
 
+  it('exec paste action', () => {
+    let result = null;
+    const store = {
+      getState: () => {return {todos: state}},
+      dispatch: (action) => {result = action}
+    };
+
+    execCommand('paste', store);
+
+    result.type.should.equal('PASTE_TODO');
+    result.id.should.equal(1);
+  });
+
+  it('exec copy action', () => {
+    let result = null;
+    const store = {
+      getState: () => {return {todos: state}},
+      dispatch: (action) => {result = action}
+    };
+
+    execCommand('copy', store);
+
+    result.type.should.equal('COPY_TODO');
+    result.id.should.equal(1);
+  });
+
+  it('mutliple params test 2', () => {
+    const result = validateCommand('addAsChild', state);
+    result[0].action.should.equal('addAsChild');
+
+    const hint = getHint(result);
+    hint.should.equal('<b>addAsChild</b> [<i>id : "Learn Redux"?</i>], [<i>text : "some text"</i>]');
+  });
+
+  it('exec addBelow action', () => {
+    let result = null;
+    const store = {
+      getState: () => {return {todos: state}},
+      dispatch: (action) => {result = action}
+    };
+
+    execCommand('addB "learn redux" "test1"', store);
+
+    result.type.should.equal('ADD_BELOW');
+    result.id.should.equal(1);
+    result.text.should.equal('test1');
+  });
+
   it('id and parentId values matching', () => {
     const checkResult = (result) => {
       (result instanceof Todo).should.true();
@@ -45,40 +94,38 @@ describe('commands test', function() {
 
     const emptyValue = valueOfTypeByState('', 'id', state);
     (emptyValue.value === null).should.true();
-    emptyValue.options.length.should.equal(0);
+    emptyValue.options.length.should.equal(1);
     emptyValue.type.should.equal('id');
   });
 
-  it('mutliple params test 2', () => {
-    const result = validateCommand('addAsChild', state);
-    result[0].action.should.equal('addAsChild');
-
-    const hint = getHint(result);
-    hint.should.equal('<b>addAsChild</b> [<i>id : id of todo or selected id by default</i>], [<i>text : some text</i>]');
-  });
-
-  it('param with id', () => {
+  it('param with id1', () => {
     const result = validateCommand('addB react', state);
     const hint = getHint(result);
-    hint.should.equal('<b>addBelow</b> [<i>id : Learn React?</i>], [<i>todo : some text</i>]');
+    hint.should.equal('<b>addBelow</b> [<i>id : "Learn React"?</i>], [<i>text : "some text"</i>]');
+  });
+
+  it('param with id2', () => {
+    const result = validateCommand('addB re', state);
+    const hint = getHint(result);
+    hint.should.equal('<b>addBelow</b> [<i>id : "Learn React"?</i>], [<i>text : "some text"</i>]');
   });
 
   it('param with id defined', () => {
     const result = validateCommand('addB "learn react"', state);
     const hint = getHint(result);
-    hint.should.equal('<b>addBelow</b> [<b>id : Learn React</b>], [<i>todo : some text</i>]');
+    hint.should.equal('<b>addBelow</b> [<b>id : "Learn React"</b>], [<i>text : "some text"</i>]');
   });
 
   it('one param', () => {
     const result = validateCommand('add something', state);
     const hint = getHint(result);
-    hint.should.equal('<b>addTodo</b> [<b>text : something</b>], addBelow [item] [todo], pasteAsChildTodo [item] [todo]');
+    hint.should.equal('<b>addTodo</b> [<b>text : "something"</b>], addBelow [item] [text], pasteAsChildTodo [parentId]');
   });
 
   it('mutliple params highlight', () => {
     const result = validateCommand('add', state);
     const hint = getHint(result);
-    hint.should.equal('<b>addTodo</b> [<i>text : some text</i>], addBelow [item] [todo], addAsChild [item] [text]');
+    hint.should.equal('<b>addTodo</b> [<i>text : "some text"</i>], addBelow [item] [text], addAsChild [item] [text]');
   });
 
   it('mutliple params test', () => {
@@ -87,7 +134,7 @@ describe('commands test', function() {
     result[0].signature.text.value.should.equal('learn webpack');
 
     const hint = getHint(result);
-    hint.should.equal('<b>addAsChild</b> [<b>id : Learn React</b>], [<b>text : learn webpack</b>]');
+    hint.should.equal('<b>addAsChild</b> [<b>id : "Learn React"</b>], [<b>text : "learn webpack"</b>]');
   });
 
   it('date type matching', () => {
@@ -125,7 +172,7 @@ describe('commands test', function() {
     result[1].action.should.equal('addBelow');
     result[2].action.should.equal('addAsChild');
 
-    result[1].toString().should.equal('addBelow [item] [todo]');
+    result[1].toString().should.equal('addBelow [item] [text]');
   });
 
   it('checking strings', () => {

@@ -112,19 +112,16 @@ export function validateCommand(cmd, state) {
 }
 
 export function execCommand(cmd, store) {
-  const command = validateCommand(cmd);
-  if (!command || command.length != 1) return; // nothing to process
+  const commands = validateCommand(cmd, store.getState().todos);
 
-  const signature = command[0].signature;
+  if (!commands || commands.length == 0) return; // nothing to process
+
+  const command = commands[0];
+  const signature = command.signature;
+
   for (let i in signature) {
     if (i == 'type') continue;
-    if (i == 'id' && store) {
-      const id = store.getState().todos.focusId || store.getState().todos.lastFocusId;
-      if (!Number.isInteger(id)) return false; // noone element selected
-      signature['id'] = id;
-      continue;
-    }
-    signature[i] = getParams(cmd);
+    signature[i] = printValue(signature[i].value ? signature[i].value : signature[i].options[0]);
   }
 
   store.dispatch(signature);
@@ -142,7 +139,7 @@ function typeHint(type) {
     case 'text':
     case 'note':
     case 'todo':
-      return 'some text';
+      return '"some text"';
     default:
       return 'unknown type of param';
   }
@@ -164,7 +161,7 @@ export function valueOfTypeByState(value, type, state) {
     case 'parentId':
       if(value == undefined) return result; // no sense continue without value;
       if (value.trim() === '') {
-        if  (!!state.lastFocusId) {
+        if (!!state.lastFocusId) {
           const lastTodo = findr(state.todos, (todo) => todo.id === state.lastFocusId);
           if (lastTodo) {
             result.options.push(lastTodo);
@@ -215,6 +212,7 @@ function validArgs(signature) {
  */
 function getSignature(signature, match, state) {
   const args = validArgs(signature);
+
   if (args.length < 1) {
     return signature; // no need in parsing params
   } else if (args.length == 1) {
@@ -237,7 +235,6 @@ function getSignature(signature, match, state) {
     });
   }
 
-  //console.log(signature);
   return signature;
 }
 
@@ -245,13 +242,31 @@ function wrapWithTag(tag, html) {
   return `<${tag}>${html}</${tag}>`;
 }
 
+function printArgument(arg) {
+  switch (typeof arg) {
+    case 'object':
+      return arg.text;
+    default:
+        return arg.toString();
+  }
+}
+
+function printValue(arg) {
+  switch (typeof arg) {
+    case 'object':
+      return arg.id;
+    default:
+      return arg.toString();
+  }
+}
+
 function hintForNotMatchedParam(param) {
-  return !param.value && param.options.length > 0 ? param.options[0] + '?' : param.hint;
+  return !param.value && param.options.length > 0 ? '"' + printArgument(param.options[0]) + '"?' : param.hint;
 }
 
 function hintForParam(name, param) {
   if (param.value) {
-    return wrapWithTag('b', `${name} : ${param.value}`);
+    return wrapWithTag('b', `${name} : "${printArgument(param.value)}"`);
   } else {
     return wrapWithTag('i', `${name} : ${hintForNotMatchedParam(param)}`);
   }
