@@ -163,10 +163,12 @@ export function valueOfTypeByState(value, type, state) {
     case 'id':
     case 'parentId':
       if(value == undefined) return result; // no sense continue without value;
-      if (value.trim() === '' && !!state.lastFocusId) {
-        const lastTodo = findr(state.todos, (todo) => todo.id === state.lastFocusId);
-        if (lastTodo) {
-          result.options.push(lastTodo);
+      if (value.trim() === '') {
+        if  (!!state.lastFocusId) {
+          const lastTodo = findr(state.todos, (todo) => todo.id === state.lastFocusId);
+          if (lastTodo) {
+            result.options.push(lastTodo);
+          }
         }
       } else {
         callr(state.todos, (todo) => {
@@ -228,10 +230,11 @@ function getSignature(signature, match, state) {
       values.push(res[1]);
     }
 
+    if (values.length == 0) values.push(match.params);
+
     validArgs(signature).map((name, i) => {
       signature[name] = valueOfTypeByState(values[i], name, state); // everything is param
     });
-
   }
 
   //console.log(signature);
@@ -243,7 +246,7 @@ function wrapWithTag(tag, html) {
 }
 
 function hintForNotMatchedParam(param) {
-  return param.hint;
+  return !param.value && param.options.length > 0 ? param.options[0] + '?' : param.hint;
 }
 
 function hintForParam(name, param) {

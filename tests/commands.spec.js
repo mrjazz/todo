@@ -33,13 +33,35 @@ const state = {
 
 describe('commands test', function() {
 
-  // it('param with id', () => {
-  //   const result = validateCommand('addB learn', state);
-  //   console.log(result);
-  //   const hint = getHint(result);
-  //   console.log(hint);
-  //   // hint.should.equal('<b>addBelow</b> [<b>id : Learn React</b>], [<i>todo : some text</i>]');
-  // });
+  it('id and parentId values matching', () => {
+    const checkResult = (result) => {
+      (result instanceof Todo).should.true();
+      result.id.should.equal(0);
+      result.text.should.equal('Learn React');
+    };
+
+    checkResult(valueOfTypeByState('learn react', 'id', state).value);
+    checkResult(valueOfTypeByState('react', 'id', state).options[0]);
+
+    const emptyValue = valueOfTypeByState('', 'id', state);
+    (emptyValue.value === null).should.true();
+    emptyValue.options.length.should.equal(0);
+    emptyValue.type.should.equal('id');
+  });
+
+  it('mutliple params test 2', () => {
+    const result = validateCommand('addAsChild', state);
+    result[0].action.should.equal('addAsChild');
+
+    const hint = getHint(result);
+    hint.should.equal('<b>addAsChild</b> [<i>id : id of todo or selected id by default</i>], [<i>text : some text</i>]');
+  });
+
+  it('param with id', () => {
+    const result = validateCommand('addB react', state);
+    const hint = getHint(result);
+    hint.should.equal('<b>addBelow</b> [<i>id : Learn React?</i>], [<i>todo : some text</i>]');
+  });
 
   it('param with id defined', () => {
     const result = validateCommand('addB "learn react"', state);
@@ -68,14 +90,6 @@ describe('commands test', function() {
     hint.should.equal('<b>addAsChild</b> [<b>id : Learn React</b>], [<b>text : learn webpack</b>]');
   });
 
-  it('mutliple params test 2', () => {
-    const result = validateCommand('addAsChild', state);
-    result[0].action.should.equal('addAsChild');
-
-    const hint = getHint(result);
-    hint.should.equal('<b>addAsChild</b> [<i>id : id of todo or selected id by default</i>], [<i>text : some text</i>]');
-  });
-
   it('date type matching', () => {
     (valueOfTypeByState('tomorrow', 'date', state).value instanceof Date).should.true();
     (valueOfTypeByState('qwe', 'date', state).value == null).should.true();
@@ -88,18 +102,6 @@ describe('commands test', function() {
     (valueOfTypeByState('act', 'filter', state).value == null).should.true();
     valueOfTypeByState('act', 'filter', state).options.length.should.equal(1);
     valueOfTypeByState('act', 'filter', state).options[0].should.equal('Active');
-  });
-
-  it('id and parentId values matching', () => {
-    const checkResult = (result) => {
-      (result instanceof Todo).should.true();
-      result.id.should.equal(0);
-      result.text.should.equal('Learn React');
-    };
-
-    checkResult(valueOfTypeByState('learn react', 'id', state).value);
-    checkResult(valueOfTypeByState('react', 'id', state).options[0]);
-    checkResult(valueOfTypeByState('', 'id', state).options[0]);
   });
 
   it('suggestions1', () => {
