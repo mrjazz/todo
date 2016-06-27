@@ -28,18 +28,18 @@ describe('collections test', function() {
     });
 
     it('addBelow', () => {
-      const title = 'Test';
-      const todo = new Todo(-1, title);
-      const result1 = todos(initialState, TodoActions.addBelow(1, todo));
+      const title = 'Test';      
+      const result1 = todos(initialState, TodoActions.addBelow(1, title));
+      
       result1.todos[2].text.should.equal(title);
 
-      const result2 = todos(initialState, TodoActions.addBelow(5, todo));
+      const result2 = todos(initialState, TodoActions.addBelow(5, title));
       result2.todos[1].children[2].text.should.equal(title);
 
       const result3 = todos({
           todos: [new Todo(100, 'Learn React')]
         },
-        TodoActions.addBelow(100, todo)
+        TodoActions.addBelow(100, title)
       );
       result3.todos[1].id.should.equal(101); // make sure next id is bigger than all previous
     });
