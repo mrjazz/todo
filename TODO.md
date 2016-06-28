@@ -8,7 +8,7 @@ Refactoring:
  - [ ] Move functionality from shortcut mapping to reducer
  - [ ] Make Items list more lightweight, move out shortcut handlers
  - [ ] Split libs and app code in webpack
- - [ ] Optimize webpack build
+ - [X] Optimize webpack build
 
 
 Fixes:
@@ -27,10 +27,9 @@ Features:
  - [X] Delete all action added
  - [X] Internationalization for dates
  - [X] New view for only active todos
- - [ ] Implement commands interface
+ - [X] Implement commands interface
  - [ ] Persistence on the server
- - [ ] Encrypt data in storage
- - [ ] Search instead of add field
+ - [ ] Encrypt data in storage 
  - [ ] Extended help functionality
  - [ ] Add animation for deleted item
  - [ ] Make note icon clickable and preview note by click
