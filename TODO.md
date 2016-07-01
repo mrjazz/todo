@@ -28,6 +28,8 @@ Features:
  - [X] Internationalization for dates
  - [X] New view for only active todos
  - [X] Implement commands interface
+ - [ ] Group by functionality
+ - [ ] Order by functionality
  - [ ] Persistence on the server
  - [ ] Encrypt data in storage 
  - [ ] Extended help functionality
