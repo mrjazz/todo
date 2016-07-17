@@ -1,7 +1,7 @@
 import 'should';
 
 import * as TodoActions from '../public/js/actions/todos.js';
-import {todos} from '../public/js/reducers/todos.js';
+import {todos, fromJsonInTodo} from '../public/js/reducers/todos.js';
 import Todo from '../public/js/models/Todo';
 
 describe('collections test', function() {
@@ -18,6 +18,31 @@ describe('collections test', function() {
       ]
     };
 
+    it('fromJsonInTodo', () => {
+      const json = [
+        {'title' : 'item1.1', 'items' : [
+          {'title' : 'item2.1', 'items' : [
+            {'title' : 'item3.1', 'items' : []},
+            {'title' : 'item3.2', 'items' : []}
+          ]}
+        ]},
+        {'title' : 'item1.2', 'items' : []}
+      ];
+
+      const result = fromJsonInTodo(json);
+      result[0].id.should.equal(1);
+      result[0].text.should.equal('item1.1');
+
+      result[0].children[0].id.should.equal(2);
+      result[0].children[0].text.should.equal('item2.1');
+
+      result[0].children[0].children[0].id.should.equal(3);
+      result[0].children[0].children[0].text.should.equal('item3.1');
+
+      result[0].children[0].children[1].id.should.equal(4);
+      result[0].children[0].children[1].text.should.equal('item3.2');
+    });
+
     it('expandAndCollapse', () => {
       const result1 = todos(initialState, TodoActions.expandAll());
       result1.todos[1].open.should.equal(true);
@@ -28,9 +53,9 @@ describe('collections test', function() {
     });
 
     it('addBelow', () => {
-      const title = 'Test';      
+      const title = 'Test';
       const result1 = todos(initialState, TodoActions.addBelow(1, title));
-      
+
       result1.todos[2].text.should.equal(title);
 
       const result2 = todos(initialState, TodoActions.addBelow(5, title));

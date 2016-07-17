@@ -2,6 +2,7 @@
 .idea
 test.bat
 public/html/test.html
+public/html/test.md
 
 docs
 dist

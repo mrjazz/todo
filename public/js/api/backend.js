@@ -11,6 +11,10 @@ export function currentUser(token) {
   return callApi('user', token)
 }
 
+export function importByUrl(url) {
+  return callApi('import?url=' + url, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IlRlc3QgVXNlciJ9.J6n4-v0I85zk9MkxBHroZ9ZPZEES-IKeul9ozxYnoZ8');
+}
+
 /**
  * Private functions
  */
@@ -21,7 +25,7 @@ function callApi(endpoint, token, options = {method: 'get'}) {
   return fetch(url, {
     ...options,
     headers: {
-      'Authorization': `Bearer ${token}`,
+      // 'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     }
   })

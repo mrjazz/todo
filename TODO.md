@@ -30,8 +30,9 @@ Features:
  - [X] Implement commands interface
  - [ ] Group by functionality
  - [ ] Order by functionality
+ - [ ] Completion in command line by tab
  - [ ] Persistence on the server
- - [ ] Encrypt data in storage 
+ - [ ] Encrypt data in storage
  - [ ] Extended help functionality
  - [ ] Add animation for deleted item
  - [ ] Make note icon clickable and preview note by click

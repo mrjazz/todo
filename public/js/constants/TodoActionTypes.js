@@ -25,3 +25,5 @@ export const UPDATE_DATE_END    = 'UPDATE_DATE_END';
 export const UPDATE_NOTE        = 'UPDATE_NOTE';
 export const PREVIEW_NOTE       = 'PREVIEW_NOTE';
 export const UPDATE_FILTER      = 'UPDATE_FILTER';
+export const IMPORT_FROM_URL    = 'IMPORT_FROM_URL';
+

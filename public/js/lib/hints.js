@@ -6,7 +6,7 @@ const dateHints = [
 ];
 
 const commandHints = [
-  'import (import markdown todos from Clipboard)',
+  'collapseAll (collapse all nodes)',
   'addTodo buy a milk'
 ];
 

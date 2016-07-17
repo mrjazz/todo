@@ -170,3 +170,11 @@ export function previewNote(id) {
     id
   };
 }
+
+export function importFromUrl(url) {
+  return {
+    type: TodoAction.IMPORT_FROM_URL,
+    url
+  };
+}
+

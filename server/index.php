@@ -8,8 +8,16 @@ function getToken() {
   echo '{"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IlRlc3QgVXNlciJ9.J6n4-v0I85zk9MkxBHroZ9ZPZEES-IKeul9ozxYnoZ8"}';
 }
 
+function importByURL() {
+	header('Content-Type: application/json; charset=UTF-8');	
+
+    require_once ('markdownToJson.php');
+    echo convertMarkdownToJson($_GET['url']);
+}
+
 router([
-  'GET:auth/token' => 'getToken'
+  'GET:auth/token' => 'getToken',
+  'GET:import' => 'importByURL',
 ]);
 
 function router($routes) {
