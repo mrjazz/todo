@@ -26,4 +26,6 @@ export const UPDATE_NOTE        = 'UPDATE_NOTE';
 export const PREVIEW_NOTE       = 'PREVIEW_NOTE';
 export const UPDATE_FILTER      = 'UPDATE_FILTER';
 export const IMPORT_FROM_URL    = 'IMPORT_FROM_URL';
+export const IMPORT_FROM_URL_DONE = 'IMPORT_FROM_URL_DONE';
+
 

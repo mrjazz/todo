@@ -1,5 +1,6 @@
 import Command from '../models/Command';
 import CommandParam from '../models/CommandParam';
+import * as TodoAction from '../constants/TodoActionTypes';
 import * as TodoActions from '../actions/todos';
 import * as FilterTypes from '../constants/FilterTypes';
 import {callr, findr} from '../lib/collectionUtils';
@@ -29,6 +30,7 @@ export function matchCommand(command, input) {
     command: '',
     params: null
   };
+
   while (i < str.length) {
     if (str[i] == ' ' || str[i] == '_') { // ignore spaces and underscore
       result.command += str[i];
@@ -100,7 +102,7 @@ export function validateCommand(cmd, state) {
 
   return take(matches.sort((a, b) => b.relevance - a.relevance), 3) // sorted by relevance and take 3 top
     .map((o) => {
-      const signature = TodoActions[o.action]();
+      const signature = getSignatureForAction(o.action);
       return new Command(
         o.action,
         o.command,
@@ -109,6 +111,10 @@ export function validateCommand(cmd, state) {
       );
       // TODO : parse arguments
     });
+}
+
+function getSignatureForAction(action) {
+  return TodoActions[action]();
 }
 
 export function execCommand(cmd, store) {
@@ -124,6 +130,7 @@ export function execCommand(cmd, store) {
     signature[i] = printValue(signature[i].value ? signature[i].value : signature[i].options[0]);
   }
 
+  console.log(signature);
   store.dispatch(signature);
 }
 

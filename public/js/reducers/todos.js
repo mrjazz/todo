@@ -145,6 +145,7 @@ export function todos(state = initialState, action) {
 
     IMPORT_FROM_URL() {
       console.log('import');
+
       let id = 1;
       importByUrl(action.url).then(function (res) {
         const items = mapr(res.items, (item) => new Todo(id++, item.title), 'items');

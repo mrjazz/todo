@@ -90,8 +90,8 @@ export default class ItemsList extends Component {
         {renderItems(this.curItems())}
         <p className="debug">focusedItemState: {this.state.focusedItemState},
           focusId: {this.curState().focusId},
-          editId: {this.state.editId},
-          dropId: {this.state.dropHoverId},
+          editId:  {this.state.editId},
+          dropId:  {this.state.dropHoverId},
           dropStyle: {this.state.dropHoverStyle}</p>
       </ItemsFilter>
     );
