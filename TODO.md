@@ -28,6 +28,7 @@ Features:
  - [X] Internationalization for dates
  - [X] New view for only active todos
  - [X] Implement commands interface
+ - [X] Import todos from Markdown format
  - [ ] Group by functionality
  - [ ] Order by functionality
  - [ ] Completion in command line by tab
@@ -36,7 +37,6 @@ Features:
  - [ ] Extended help functionality
  - [ ] Add animation for deleted item
  - [ ] Make note icon clickable and preview note by click
- - [ ] Import todos from Markdown format
 
 
 __Calendar research__
