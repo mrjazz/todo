@@ -37,6 +37,8 @@ Features:
  - [ ] Extended help functionality
  - [ ] Add animation for deleted item
  - [ ] Make note icon clickable and preview note by click
+ - [ ] Add recurrent todos support
+ - [ ] Add notifications
 
 
 __Calendar research__
