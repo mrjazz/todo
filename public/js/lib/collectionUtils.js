@@ -17,6 +17,29 @@ export function mapr(items, callback, childField = 'children') {
 }
 
 /**
+ * Return flat array from tree hierarchy
+ *
+ * @param items
+ * @param childField
+ * @returns {Array}
+ */
+export function flatr(items, childField = 'children') {
+  const result = [];
+
+  mapr(items, (i) => {
+      result.push(i);
+      return i;
+    }, childField
+  );
+
+  // reset all children fore result
+  return result.map((i) => {
+    i[childField] = [];
+    return i;
+  });
+}
+
+/**
  * Filter tree by condition
  * @param items
  * @param condition

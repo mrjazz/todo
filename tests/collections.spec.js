@@ -2,6 +2,7 @@ import 'should';
 
 import {
   mapr,
+  flatr,
   callr,
   filterr,
   searchr,
@@ -14,6 +15,7 @@ import {
   insertrBefore,
   getParentFor
 } from '../public/js/lib/collectionUtils.js';
+
 
 describe('collections test', function() {
 
@@ -48,7 +50,6 @@ describe('collections test', function() {
     result2[0].children.length.should.equal(3);
     result2[0].children[2].test.should.equal('passed');
   });
-
 
   it('callr', () => {
     const result = [];
@@ -117,6 +118,15 @@ describe('collections test', function() {
   it('filtering in deep', () => {
     const result = searchr(arr, (o)  => !o.children);
     result.length.should.equal(3);
+  });
+
+  it('flatr', () => {
+    const result = flatr(arr);
+    result.length.should.equal(4);
+    result[0].label.should.equal('a');
+    result[1].label.should.equal('a1');
+    result[2].label.should.equal('a2');
+    result[3].label.should.equal('b');
   });
 
 });
