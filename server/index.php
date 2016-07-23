@@ -11,11 +11,13 @@ function getToken() {
 function importByURL() {
 	header('Content-Type: application/json; charset=UTF-8');	
 
+	if (empty($_GET['url'])) return 'URL is not defined';
+
     require_once ('markdownToJson.php');
     echo convertMarkdownToJson($_GET['url']);
 }
 
-router([
+echo router([
   'GET:auth/token' => 'getToken',
   'GET:import' => 'importByURL',
 ]);
