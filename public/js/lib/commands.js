@@ -130,7 +130,6 @@ export function execCommand(cmd, store) {
     signature[i] = printValue(signature[i].value ? signature[i].value : signature[i].options[0]);
   }
 
-  console.log(signature);
   store.dispatch(signature);
 }
 

@@ -2,7 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {updateFilter} from '../../actions/todos';
 import * as FilterTypes from '../../constants/FilterTypes';
 
-export default class ItemsList extends Component {
+export default class ItemsFilter extends Component {
 
   constructor() {
     super();

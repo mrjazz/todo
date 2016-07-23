@@ -4,18 +4,19 @@ import { createSelector } from 'reselect';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
 
-import ItemsFilter from './ItemsFilter.jsx';
 import ItemDatePicker from './ItemDatePicker.jsx';
+import ItemsFilter from './ItemsFilter.jsx';
 import ItemNote from './ItemNote.jsx';
 import ItemAdd from './ItemAdd.jsx';
 import Item from './Item.jsx';
 
 import Todo from '../../models/Todo';
 
-import * as HighlightType from '../../constants/HighlightTypes';
 import * as TodoItemStateType from '../../constants/TodoItemStateTypes';
+import * as HighlightType from '../../constants/HighlightTypes';
 import * as FilterTypes from '../../constants/FilterTypes';
 
+import {transformTodos} from '../../lib/todoTransformations';
 import {getParentFor, isParentOf, searchr, findr, filterr, findrIndex, findrByIndex} from '../../lib/collectionUtils.js';
 import * as TodoAction from '../../actions/todos';
 import * as AppAction from '../../actions/app';
@@ -55,6 +56,8 @@ export default class ItemsList extends Component {
 
     let counter = 0;
     const store = this.context.store;
+
+    console.log(this.curState().filter);
 
     const renderItems = (items) => {
       return items.map(
@@ -665,10 +668,13 @@ function applyFilter(todos, filter) {
         !i.done &&
         (!i.dateStart || i.dateStart < now)
       );
+
     case FilterTypes.FILTER_ACTIVE:
-      return filterr(todos, (i) => !i.done);
+      return transformTodos(todos, {filterBy: (i) => !i.done});
+
     case FilterTypes.FILTER_COMPLETED:
-      return filterr(todos, (i) => i.done);
+      return transformTodos(todos, {filterBy: (i) => i.done});
+
     default:
       return todos;
   }
