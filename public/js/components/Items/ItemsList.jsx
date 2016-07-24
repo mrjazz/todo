@@ -57,7 +57,7 @@ export default class ItemsList extends Component {
     let counter = 0;
     const store = this.context.store;
 
-    console.log(this.curState().filter);
+    // console.log(this.curState().filter);
 
     const renderItems = (items) => {
       return items.map(
@@ -663,17 +663,26 @@ function applyFilter(todos, filter) {
   const now = new Date();
   switch(filter) {
     case FilterTypes.FILTER_TODO:
-      return searchr(todos, (i) =>
+      return transformTodos(todos, {searchBy: (i) =>
         (!Array.isArray(i.children) || i.children.length == 0) &&
         !i.done &&
         (!i.dateStart || i.dateStart < now)
-      );
+      });
 
     case FilterTypes.FILTER_ACTIVE:
-      return transformTodos(todos, {filterBy: (i) => !i.done});
+      return transformTodos(todos, {filterBy: (i) => i.done});
 
     case FilterTypes.FILTER_COMPLETED:
-      return transformTodos(todos, {filterBy: (i) => i.done});
+      return transformTodos(todos, {searchBy: (i) => i.done});
+
+    case FilterTypes.FILTER_BY_CONTEXT:
+      return transformTodos(todos, {
+        filterBy: (i) =>
+          (!Array.isArray(i.children) || i.children.length == 0) &&
+          !i.done &&
+          (!i.dateStart || i.dateStart < now),
+        groupBy: (i) => i.text.match(/#(\S*)/g)
+      });
 
     default:
       return todos;

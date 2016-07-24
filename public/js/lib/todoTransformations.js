@@ -1,17 +1,23 @@
-import {mapr, flatr, filterr} from './collectionUtils.js';
+import {lengthr, mapr, searchr, flatr, filterr} from './collectionUtils.js';
 import TreeNode from '../models/TreeNode.js';
 
 
 /**
- * filterBy is function that return False for items we remove
+ * searchBy is function that prepare data before other operations
+ * filterBy is function that return False for items we remove (something like having in SQL)
+ *
  * @param todos
- * @param condition {groupBy : Function, filterBy : Function, orderBy : Function}
+ * @param condition {groupBy : Function, filterBy : Function, orderBy : Function, searchBy : Function}
  * @returns {{}}
  */
 export function transformTodos(todos, condition) {
 
   let result = [];
   const groups = {};
+
+  if (condition && condition['searchBy']) {
+    todos = searchr(todos, condition['searchBy']);
+  }
 
   function filterBy(i) {
     return condition && condition['filterBy'] ? !condition['filterBy'](i) : true;
@@ -53,7 +59,7 @@ export function transformTodos(todos, condition) {
     for (let j in groups) {
       // flat groups and apply filter condition if exists
       let children = flatr(groups[j]).filter((i) => filterBy(i));
-      result.push(new TreeNode(groupId--, j, children));
+      result.push(new TreeNode(groupId--, `${j} (${lengthr(children)})`, children));
     }
 
     if (condition && condition['orderBy']) {
@@ -68,8 +74,6 @@ export function transformTodos(todos, condition) {
   if (condition && condition['orderBy']) {
     result = mapr(result, (i) => orderBy(i));
   }
-
-
 
   return result;
 }

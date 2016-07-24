@@ -21,6 +21,19 @@ describe('todoList transformations', function() {
     return s.match(/#(\S*)/g);
   }
 
+  it('searchBy', () => {
+    const result = transformTodos(initialState.todos, {searchBy : (i) => {
+      const contexts = matchContext(i.text);
+      return Array.isArray(contexts) && contexts.length > 0;
+    }});
+
+    // console.log(result);
+
+    result.length.should.equal(2);
+    result[0].text.should.equal('Learn Redux #learning');
+    result[1].text.should.equal('Read manual #coding');
+  });
+
   it('filterBy', () => {
     const result = transformTodos(initialState.todos, {
       filterBy : (i) => (!Array.isArray(i.children) || i.children.length == 0)
@@ -34,8 +47,8 @@ describe('todoList transformations', function() {
     const result = transformTodos(initialState.todos, {'groupBy' : (i) => matchContext(i.text)});
     // console.log(result);
     result.length.should.equal(2); //['#coding'].length.should.equal(1);
-    result[0].text.should.equal('#learning');
-    result[1].text.should.equal('#coding');
+    result[0].text.should.equal('#learning (3)');
+    result[1].text.should.equal('#coding (1)');
 
     result[0].children.length.should.equal(3); // learning
     result[1].children.length.should.equal(1); // coding
@@ -64,8 +77,8 @@ describe('todoList transformations', function() {
     );
 
     result.length.should.equal(2);
-    result[0].text.should.equal('#learning');
-    result[1].text.should.equal('#coding');
+    result[0].text.should.equal('#learning (2)');
+    result[1].text.should.equal('#coding (1)');
 
     result[0].children.length.should.equal(2);
     result[1].children.length.should.equal(1);
@@ -85,8 +98,8 @@ describe('todoList transformations', function() {
     );
 
     result.length.should.equal(2);
-    result[0].text.should.equal('#coding');
-    result[1].text.should.equal('#learning');
+    result[0].text.should.equal('#coding (1)');
+    result[1].text.should.equal('#learning (2)');
 
     mapr(result[0].children, (i) => i.done.should.equal(false));
     mapr(result[1].children, (i) => i.done.should.equal(false));
