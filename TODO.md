@@ -8,9 +8,6 @@ Refactoring:
  - [ ] Move functionality from shortcut mapping to reducer
  - [ ] Make Items list more lightweight, move out shortcut handlers
  - [ ] Split libs and app code in webpack
- - [X] Optimize webpack build
- - [X] Webpack dashboard added
-
 
 
 Fixes:
@@ -18,19 +15,12 @@ Fixes:
 
 Add new shortcuts:
 
- - [X] Switch between commands and todos by Escape
  - [ ] ? - Help
  - [ ] Set colors/icons by 1..6 keys
 
 
 Features:
 
- - [X] Apply commands to last selected todoItem and highlight it
- - [X] Delete all action added
- - [X] Internationalization for dates
- - [X] New view for only active todos
- - [X] Implement commands interface
- - [X] Import todos from Markdown format
  - [ ] Group by functionality
  - [ ] Order by functionality
  - [ ] Completion in command line by tab

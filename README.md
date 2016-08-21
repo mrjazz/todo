@@ -11,6 +11,26 @@ Simple application with keyboard management, drag&drop, quick adding todos and f
 Changelog and features
 ----------------------
 
+v0.0.6
+
+New features:
+
+ - Apply commands to last selected todoItem and highlight it
+ - Delete all action added
+ - Internationalization for dates
+ - New view for only active todos
+ - Implement commands interface
+ - Import todos from Markdown format
+
+New shortcuts:
+
+ - Switch between commands and todos by Escape
+
+Refactoring:
+
+ - Optimize webpack build
+ - Webpack dashboard added
+
 
 v0.0.5
 

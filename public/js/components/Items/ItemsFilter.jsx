@@ -29,7 +29,7 @@ export default class ItemsFilter extends Component {
                   FilterTypes.FILTER_TODO,
                   FilterTypes.FILTER_ACTIVE,
                   FilterTypes.FILTER_COMPLETED,
-                  FilterTypes.FILTER_BY_CONTEXT
+                  //FilterTypes.FILTER_BY_CONTEXT
                 ].map((title, key) =>
                   <li key={key} className={selectFilter() === title ? 'active' : ''}>
                     {selectFilter() === title ?
