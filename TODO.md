@@ -2,13 +2,15 @@ TODO
 ----
 
 
-
 Refactoring:
 
+ - [ ] Use immutable.js for state
  - [ ] Move functionality from shortcut mapping to reducer
  - [ ] Make Items list more lightweight, move out shortcut handlers
  - [ ] Split libs and app code in webpack
  - [X] Optimize webpack build
+ - [X] Webpack dashboard added
+
 
 
 Fixes:

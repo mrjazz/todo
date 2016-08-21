@@ -2,12 +2,17 @@ var path = require('path'),
   webpack = require('webpack'),
   polyfill = require('babel-polyfill');
 
+var Dashboard = require('webpack-dashboard');
+var DashboardPlugin = require('webpack-dashboard/plugin');
+var dashboard = new Dashboard();
+
 module.exports = {
   debug: true,
   devtool: 'inline-source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
+    new DashboardPlugin(dashboard.setData)
   ],
   entry: [
     'webpack-dev-server/client?http://localhost:3000',
