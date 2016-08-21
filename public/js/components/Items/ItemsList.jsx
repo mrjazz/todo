@@ -91,13 +91,14 @@ export default class ItemsList extends Component {
     return (
       <ItemsFilter>
         {renderItems(this.curItems())}
-        <p className="debug">focusedItemState: {this.state.focusedItemState},
-          focusId: {this.curState().focusId},
-          editId:  {this.state.editId},
-          dropId:  {this.state.dropHoverId},
-          dropStyle: {this.state.dropHoverStyle}</p>
       </ItemsFilter>
     );
+
+    /*<p className="debug">focusedItemState: {this.state.focusedItemState},
+     focusId: {this.curState().focusId},
+     editId:  {this.state.editId},
+     dropId:  {this.state.dropHoverId},
+     dropStyle: {this.state.dropHoverStyle}</p>*/
   }
 
   keepPositionAfterAction(id, action) {

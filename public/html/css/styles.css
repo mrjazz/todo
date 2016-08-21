@@ -70,7 +70,7 @@
 .howto {
   font-size: 0.8em;
   padding-top: 20px;
-  display: none;
+  /*display: none;*/
 }
 
 .todos .all-items {

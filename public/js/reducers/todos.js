@@ -261,6 +261,8 @@ export function todos(state = initialState, action) {
 
     MAKE_CHILD_OF_TODO() {
       let item = false;
+
+      // get filter without current item
       const filtered = filterr(state.todos, (todo) => {
         if (todo.id === action.id) {
           item = clone(todo);
@@ -270,9 +272,10 @@ export function todos(state = initialState, action) {
         }
       });
 
+      // put item as child of previous item
       state.todos = mapr(filtered, (todo) => {
         if (item && todo.id === action.parentId) {
-          todo.add(item);
+          todo.children.push(item); // TODO : figure out why Object instead of Todo instance here
         }
         return todo;
       });

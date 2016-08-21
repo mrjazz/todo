@@ -1,6 +1,6 @@
 import TreeNode from './TreeNode';
 
-export default  class Todo extends TreeNode {
+export default class Todo extends TreeNode {
 
   /**
    * @param {Number} id
