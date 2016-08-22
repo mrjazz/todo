@@ -11,7 +11,8 @@ Refactoring:
 
 
 Fixes:
-
+ - [ ] When filter apply to old version of nodes
+ - [ ] Reload after import without page reload (related to async calls processing)
 
 Add new shortcuts:
 

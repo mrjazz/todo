@@ -1,6 +1,7 @@
 import Todo from '../models/Todo';
 import {callr, findr, mapr, filterr, insertrAfter, insertrBefore} from '../lib/collectionUtils.js';
 import {importByUrl} from '../api/backend';
+import fromJsonInTodo from '../lib/fromJsonInTodo';
 
 
 const initialState = {
@@ -144,18 +145,19 @@ export function todos(state = initialState, action) {
     },
 
     IMPORT_FROM_URL() {
-      console.log('import');
+      console.log('import', action.url);
 
       let id = 1;
       importByUrl(action.url).then(function (res) {
-        const items = mapr(res.items, (item) => new Todo(id++, item.title), 'items');
+        // const items = mapr(res.children, (item) => new Todo(id++, item.title), 'items');
 
         state.focusId = null;
         state.lastFocusId = null;
         state.filter = null;
         state.lastInsertId = null;
         state.cancelId = null;
-        state.todos = fromJsonInTodo(res.items);
+
+        state.todos = fromJsonInTodo(res.children);
       });
     },
 
@@ -297,18 +299,4 @@ export function todos(state = initialState, action) {
   }
 
   return state;
-}
-
-
-export function fromJsonInTodo(json) {
-  let id = 1;
-
-  const processAll = (items) => items.map((item) => new Todo(
-    id++,
-    item.title,
-    false,
-    item.items && item.items.length > 0 ? processAll(item.items) : []
-  ));
-
-  return processAll(json);
 }

@@ -88,8 +88,8 @@ class Item {
 			$items[] = $value->toArray();
 		}
         return array(
-        	'title' => $this->title,
-        	'items' => $items
+        	'text' => $this->title,
+        	'children' => $items
     	);
     }
 }

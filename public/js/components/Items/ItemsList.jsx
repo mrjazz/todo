@@ -45,7 +45,7 @@ export default class ItemsList extends Component {
     this.selectFilter = () => this.curState().filter;
 
     this.curItems = createSelector(
-      [this.selectTodos, this.selectFilter],
+      this.selectTodos, this.selectFilter,
       (todos, filter) => {
         return applyFilter(todos, filter);
       }

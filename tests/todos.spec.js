@@ -1,8 +1,10 @@
 import 'should';
 
 import * as TodoActions from '../public/js/actions/todos.js';
-import {todos, fromJsonInTodo} from '../public/js/reducers/todos.js';
+import {todos} from '../public/js/reducers/todos.js';
 import Todo from '../public/js/models/Todo';
+
+import fromJsonInTodo from '../public/js/lib/fromJsonInTodo.js';
 
 describe('collections test', function() {
 
@@ -20,16 +22,17 @@ describe('collections test', function() {
 
     it('fromJsonInTodo', () => {
       const json = [
-        {'title' : 'item1.1', 'items' : [
-          {'title' : 'item2.1', 'items' : [
-            {'title' : 'item3.1', 'items' : []},
-            {'title' : 'item3.2', 'items' : []}
+        {'text' : 'item1.1', 'children' : [
+          {'text' : 'item2.1', 'children' : [
+            {'text' : 'item3.1', 'children' : []},
+            {'text' : 'item3.2', 'children' : []}
           ]}
         ]},
-        {'title' : 'item1.2', 'items' : []}
+        {'text' : 'item1.2', 'children' : []}
       ];
 
       const result = fromJsonInTodo(json);
+
       result[0].id.should.equal(1);
       result[0].text.should.equal('item1.1');
 
@@ -135,5 +138,55 @@ describe('collections test', function() {
       const result2 = todos(result1, TodoActions.flipTodo(1));
       result2.todos[1].open.should.equal(false); // second flip (collapse)
     });
+
+  it('load todos', () => {
+    const json = [{
+      children: [{
+        children: [],
+        dateEnd: null,
+        dateStart: null,
+        done: true,
+        note: 'my note',
+        open: false,
+        previewNote: true,
+        text: 'taxes'
+      }],
+      dateEnd: null,
+      dateStart: null,
+      done: false,
+      note: null,
+      open: true,
+      previewNote:false,
+      text: '@business'
+    }, {
+      children: [],
+      dateEnd: null,
+      dateStart: null,
+      done: false,
+      note: null,
+      open: true,
+      previewNote:false,
+      text: '@clients'
+    }];
+
+    const result = fromJsonInTodo(json);
+
+    result.length.should.equal(2);
+    const typeCheck = result[0] instanceof Todo;
+    typeCheck.should.equal(true);
+
+    result[0].id.should.equal(1);
+    result[0].text.should.equal('@business');
+
+    result[1].id.should.equal(3);
+    result[1].text.should.equal('@clients');
+
+    result[0].children[0].id.should.equal(2);
+    result[0].children[0].text.should.equal('taxes');
+    result[0].children[0].note.should.equal('my note');
+
+    result[0].children[0].open.should.equal(false);
+    result[0].children[0].previewNote.should.equal(true);
+  });
 
 });

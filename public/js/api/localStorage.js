@@ -1,8 +1,6 @@
-/**
- * Created by denis on 6/3/2016.
- */
+import todoUnserialize from '../lib/fromJsonInTodo.js';
 
-const stateKey = 'state'
+const stateKey = 'state';
 
 export const loadState = () => {
   try {
@@ -10,7 +8,12 @@ export const loadState = () => {
     if (serializedState === null) {
       return undefined;
     }
-    return JSON.parse(serializedState);
+    const json = JSON.parse(serializedState);
+
+    // unserialize todos from json
+    json.todos.todos = todoUnserialize(json.todos.todos);
+
+    return json;
   } catch (err) {
     return undefined;
   }
