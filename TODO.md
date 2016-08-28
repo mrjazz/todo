@@ -22,6 +22,7 @@ Add new shortcuts:
 
 Features:
 
+ - [X] Make the whole row clickable for row focus
  - [ ] Group by functionality
  - [ ] Order by functionality
  - [ ] Completion in command line by tab

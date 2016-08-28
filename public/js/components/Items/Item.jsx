@@ -95,7 +95,7 @@ export default class Item extends Component {
 
     return connectDragSource(
       connectDropTarget(
-        <div style={{opacity}} className={this.props.className}>
+        <div style={{opacity}} className={this.props.className} onClick={this.props.onFocus}>
           {this._getIcon()}
           <input
             type="checkbox"
@@ -109,7 +109,6 @@ export default class Item extends Component {
           />
           {this.props.visible ? <label
             className={todo.done ? 'complete' : ''}
-            onClick={this.props.onFocus}
             dangerouslySetInnerHTML={{__html: this.getLabel(todo)}}></label> : ''}
           {this.getDateControl(todo)}
           {this.getPreview(todo)}
@@ -194,7 +193,7 @@ export const ItemDateType = {
   'IN_PROGRESS' : 3
 };
 
-export function getDateTypeForItem(dateStart, dateEnd) {  
+export function getDateTypeForItem(dateStart, dateEnd) {
   if (!dateEnd) return ItemDateType.STANDARD;
   const today = moment();
   if (moment(today).isSameOrAfter(dateEnd)) {
