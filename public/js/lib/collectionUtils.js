@@ -47,19 +47,17 @@ export function flatr(items, childField = 'children') {
  * @returns {*}
  */
 export function filterr(items, condition, childField = 'children') {
-  function process(result, i) {
-    i = clone(i); // clone
-
-    if (!condition(i)) return result;
-
-    if (childField !== undefined && i[childField]) {
-      i[childField] = i[childField].reduce(process, []);
-    }
-
-    result.push(i);
-    return result;
+  function process(n) {
+    return n
+      .filter(condition)
+      .map((i) => {
+        if (childField !== undefined && i[childField]) {
+          i[childField] = process(i[childField]);
+        }
+        return i;
+      });
   }
-  return items.reduce(process, []);
+  return process(items);
 }
 
 /**

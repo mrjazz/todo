@@ -69,14 +69,6 @@ describe('collections test', function() {
 
   });
 
-  it('filterr', () => {
-    const result = filterr(arr, function (o) {
-      return o.label != 'a2';
-    });
-
-    result[0].children.length.should.equal(1);
-  });
-
   it('findr', () => {
     findr(arr, (i) => i.label == 'a2', 'children').label.should.equal('a2');
   });
@@ -127,6 +119,23 @@ describe('collections test', function() {
     result[1].label.should.equal('a1');
     result[2].label.should.equal('a2');
     result[3].label.should.equal('b');
+  });
+
+  it('filterr', () => {
+    const result = filterr(
+      [
+        {label: 'a', children: [
+          {label: 'a1'},
+          {label: 'a2'}
+        ]},
+        {label: 'b'}
+      ], function (o) {
+        return o.label != 'a1';
+      }
+    );
+
+    result[0].children.length.should.equal(1);
+    result[0].children[0].label.should.equal('a2');
   });
 
 });
