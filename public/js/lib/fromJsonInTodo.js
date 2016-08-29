@@ -17,6 +17,7 @@ export default function fromJsonInTodo(json) {
         item.children && item.children.length > 0 ? process(item.children) : []
       );
 
+      todo.open = value(item, 'open', false);
       todo.done = value(item, 'done', false);
       todo.dateStart = value(item, 'dateStart', null);
       todo.dateEnd = value(item, 'dateEnd', null);
