@@ -1,4 +1,4 @@
-import todoUnserialize from '../lib/fromJsonInTodo.js';
+import fromJsonInTodo from '../lib/fromJsonInTodo.js';
 
 const stateKey = 'state';
 
@@ -8,10 +8,11 @@ export const loadState = () => {
     if (serializedState === null) {
       return undefined;
     }
+
     const json = JSON.parse(serializedState);
 
     // unserialize todos from json
-    json.todos.todos = todoUnserialize(json.todos.todos);
+    json.todos.todos = fromJsonInTodo(json.todos.todos);
 
     return json;
   } catch (err) {
