@@ -22,7 +22,7 @@ import * as TodoAction from '../../actions/todos';
 import * as AppAction from '../../actions/app';
 
 
-export default class ItemsList extends Component {
+export class ItemsList extends Component {
 
   state;
 
@@ -618,7 +618,7 @@ export default class ItemsList extends Component {
 
 }
 
-DragDropContext(HTML5Backend)(ItemsList)
+export default DragDropContext(HTML5Backend)(ItemsList)
 
 // helper functions
 
