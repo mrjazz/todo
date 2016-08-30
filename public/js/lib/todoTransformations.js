@@ -12,16 +12,12 @@ import TreeNode from '../models/TreeNode.js';
  */
 export function transformTodos(todos, condition) {
 
-  let result = [];
+  let result = todos;
   const groups = {};
 
   if (condition && condition['searchBy']) {
-    todos = searchr(todos, condition['searchBy']);
-  }
-
-  function filterBy(i) {
-    return condition && condition['filterBy'] ? !condition['filterBy'](i) : true;
-  }
+    result = searchr(result, condition['searchBy']);
+  }  
 
   function orderBy(i) {
     if (condition && condition['orderBy'] && i['children'] && i['children'].length > 0) {
@@ -30,16 +26,24 @@ export function transformTodos(todos, condition) {
     return i;
   }
 
+  function filterBy(todos) {    
+    if (condition && condition['filterBy']) {      
+      return filterr(todos, (i) => condition['filterBy'](i));
+    } else {
+      return todos;
+    }
+  }
+
   function groupBy(arr, matcher) {
     for (let i in arr) {
       const value = arr[i];
 
       // filter condition apply
-      if (condition && condition['filterBy'] && condition['filterBy'](value)) continue;
+      // if (condition && condition['filterBy'] && condition['filterBy'](value)) continue;
 
-      const matchedGroups = matcher(value);
+      const matchedGroups = matcher(value);            
 
-      if (matchedGroups) {
+      if (Array.isArray(matchedGroups)) {
         matchedGroups.map((j) => {
           if (!groups[j]) groups[j] = [];
           groups[j].push(value);
@@ -50,30 +54,26 @@ export function transformTodos(todos, condition) {
         groupBy(value.children, matcher);
       }
     }
-  }
+  }  
 
   if (condition && condition['groupBy']) {
-    groupBy(todos, condition['groupBy']);
+    groupBy(result, condition['groupBy']);    
+    result = []
 
     let groupId = -1;
     for (let j in groups) {
       // flat groups and apply filter condition if exists
-      let children = flatr(groups[j]).filter((i) => filterBy(i));
+      let children = filterBy(flatr(groups[j]));
       result.push(new TreeNode(groupId--, `${j} (${lengthr(children)})`, children));
     }
-
-    if (condition && condition['orderBy']) {
-      result.sort(condition['orderBy']);
-    }
-
   } else {
-    // just apply filterBy condition if exists
-    result = filterr(todos, (i) => filterBy(i));
+    result = filterBy(result);
   }
-
+  
   if (condition && condition['orderBy']) {
     result = mapr(result, (i) => orderBy(i));
   }
+
 
   return result;
 }

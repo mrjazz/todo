@@ -678,10 +678,10 @@ function applyFilter(todos, filter) {
 
     case FilterTypes.FILTER_BY_CONTEXT:
       return transformTodos(todos, {
-        filterBy: (i) =>
-          (!Array.isArray(i.children) || i.children.length == 0) &&
-          !i.done &&
-          (!i.dateStart || i.dateStart < now),
+        filterBy: (i) => false,
+          // (!Array.isArray(i.children) || i.children.length == 0),
+          // && !i.done,
+          // && (!i.dateStart || i.dateStart < now)
         groupBy: (i) => i.text.match(/#(\S*)/g)
       });
 

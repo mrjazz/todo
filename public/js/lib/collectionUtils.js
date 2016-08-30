@@ -50,6 +50,7 @@ export function filterr(items, condition, childField = 'children') {
   function process(n) {
     return n
       .filter(condition)
+      .map((i) => clone(i)) // should be immutable
       .map((i) => {
         if (childField !== undefined && i[childField]) {
           i[childField] = process(i[childField]);
