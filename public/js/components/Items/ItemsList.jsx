@@ -618,7 +618,7 @@ export default class ItemsList extends Component {
 
 }
 
-export default DragDropContext(HTML5Backend)(ItemsList)
+export DragDropContext(HTML5Backend)(ItemsList)
 
 // helper functions
 
