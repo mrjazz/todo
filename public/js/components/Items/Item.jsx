@@ -56,7 +56,7 @@ const dropTarget = {
 };
 
 
-export default class Item extends Component {
+class Item extends Component {
 
   // static contextTypes = {
   //   store: PropTypes.object.isRequired
