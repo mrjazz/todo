@@ -64,17 +64,13 @@ describe('todoList transformations', function() {
     );
     
     result.length.should.equal(2); //['#coding'].length.should.equal(1);
-    result[0].text.should.equal('#learning (3)');
-    result[1].text.should.equal('#coding (1)');
+    result[0].text.should.equal('#learning (1)');
+    result[1].text.should.equal('#coding (0)');
   
-    result[0].children.length.should.equal(3); // learning
-    result[1].children.length.should.equal(1); // coding
-  
-    result[0].children[0].text.should.equal('Learn Redux #learning');
-    result[0].children[1].text.should.equal('Read manual #coding');
-    result[0].children[2].text.should.equal('Write the code');
-  
-    result[1].children[0].text.should.equal('Read manual #coding');
+    result[0].children.length.should.equal(1); // learning
+    result[1].children.length.should.equal(0); // coding
+    
+    result[0].children[0].text.should.equal('Write the code');
   });
   
   it('without groupBy', () => {
@@ -98,11 +94,9 @@ describe('todoList transformations', function() {
     );
 
     result.length.should.equal(2);
-    result[0].text.should.equal('#learning (3)');
-    result[1].text.should.equal('#coding (1)');
-  
-    result[0].children.length.should.equal(3);
-    result[0].children[2].text.should.equal('Write the code');
+    result[0].text.should.equal('#learning (1)');
+    result[1].text.should.equal('#coding (0)');
+    
   });
 
   it('groupBy & filterBy & orderBy', () => {
@@ -193,13 +187,18 @@ describe('todoList transformations', function() {
       }]);
   
       const result = transformTodos(todos, {
-        filterBy: (i) =>
-          (!i.text.match(/#(\S*)/g) && i.children.length > 0) ||
-          (i.text.match(/#(\S*)/g) && i.children.length === 0) ||
-          i.done,
-        // && (!i.dateStart || i.dateStart < now)
+        filterBy: (i) => !i.done,
         groupBy: (i) => i.text.match(/#(\S*)/g)
       });
+    
+      result.length.should.equal(3);
+      result[0].children.length.should.equal(0);
+      result[1].children.length.should.equal(2);
+      result[2].children.length.should.equal(0);
+
+      result[0].text.should.equal('#elance (0)');
+      result[1].text.should.equal('#clients (2)');
+      result[2].text.should.equal('#home (0)');
   
   });
 

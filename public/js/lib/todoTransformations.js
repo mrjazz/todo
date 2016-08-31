@@ -37,33 +37,34 @@ export function transformTodos(todos, condition) {
   function groupBy(arr, matcher) {
     for (let i in arr) {
       const value = arr[i];
-
       // filter condition apply
       // if (condition && condition['filterBy'] && condition['filterBy'](value)) continue;
-
-      const matchedGroups = matcher(value);            
-
-      if (Array.isArray(matchedGroups)) {
+      const matchedGroups = matcher(value);                  
+      if (matchedGroups !== null) {
         matchedGroups.map((j) => {
           if (!groups[j]) groups[j] = [];
           groups[j].push(value);
         });
-      }
+      }      
 
       if (value.children) {
         groupBy(value.children, matcher);
       }
     }
-  }  
+  }
 
   if (condition && condition['groupBy']) {
     groupBy(result, condition['groupBy']);    
-    result = []
+
+    result = [];
 
     let groupId = -1;
     for (let j in groups) {
       // flat groups and apply filter condition if exists
-      let children = filterBy(flatr(groups[j]));
+      let children = filterBy(flatr(groups[j])) // make tree flat and filter if filter exists
+        .filter((i) => condition['groupBy'](i) === null); // not include items matched as groups
+
+      
       result.push(new TreeNode(groupId--, `${j} (${lengthr(children)})`, children));
     }
   } else {
@@ -73,7 +74,6 @@ export function transformTodos(todos, condition) {
   if (condition && condition['orderBy']) {
     result = mapr(result, (i) => orderBy(i));
   }
-
 
   return result;
 }

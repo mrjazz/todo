@@ -5,7 +5,7 @@ import ItemsList from '../components/Items/ItemsList.jsx';
 import CommandLine from '../components/CommandLine.jsx';
 
 
-export default class ItemsView extends Component {
+export class ItemsView extends Component {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired

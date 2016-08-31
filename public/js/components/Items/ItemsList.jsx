@@ -9,8 +9,10 @@ import ItemsFilter from './ItemsFilter.jsx';
 import ItemNote from './ItemNote.jsx';
 import ItemAdd from './ItemAdd.jsx';
 import Item from './Item.jsx';
+import ItemGroup from './ItemGroup.jsx';
 
 import Todo from '../../models/Todo';
+import TreeNode from '../../models/TreeNode';
 
 import * as TodoItemStateType from '../../constants/TodoItemStateTypes';
 import * as HighlightType from '../../constants/HighlightTypes';
@@ -50,41 +52,50 @@ export class ItemsList extends Component {
         return applyFilter(todos, filter);
       }
     );
-  }
+  }  
 
   render() {
-
     let counter = 0;
     const store = this.context.store;
 
-    // console.log(this.curState().filter);
+    const getItemComponent = (i, j) => (<Item
+              ref={j}
+              className={this.stylesForItem(i, j)}
+              todo={i}
+              focus={this.state.editId == null && this.curState().focusId == i.id}
+              visible={this.isTodoVisible(i)}
+              onDrop={this.dropItemHandler.bind(this)}
+              highlight={this.highlightItem.bind(this)}
+              onKeyDown={this.itemKeyPressHandler.bind(this)}
+              onFocus={() => this.itemFocusHandler(i.id)}
+              onFocusOut={() => this.focusOutHandler()}
+              onChange={() => this.props.checkTodo(i.id)}
+              onFlipTodo={() => store.dispatch(TodoAction.flipTodo(i.id))}
+              onCheckTodo={() => {
+                this.keepPositionAfterAction(i.id, () => store.dispatch(TodoAction.checkTodo(i.id)));
+              }}
+            >
+              {this.getItemBody(i)}
+            </Item>)    
+
+    const getGroupComponent = (i, j) => (<ItemGroup key={j}>{i.text}</ItemGroup>)
+
+    const getRightComponent = (i) => {
+      if (i instanceof Todo) {
+        return getItemComponent;
+      } else {
+        return getGroupComponent;
+      }
+    }
 
     const renderItems = (items) => {
       return items.map(
-        (i, j) => (<div key={j}>
-                    <Item
-                      ref={j}
-                      className={this.stylesForItem(i, counter++)}
-                      todo={i}
-                      focus={this.state.editId == null && this.curState().focusId == i.id}
-                      visible={this.isTodoVisible(i)}
-                      onDrop={this.dropItemHandler.bind(this)}
-                      highlight={this.highlightItem.bind(this)}
-                      onKeyDown={this.itemKeyPressHandler.bind(this)}
-                      onFocus={() => this.itemFocusHandler(i.id)}
-                      onFocusOut={() => this.focusOutHandler()}
-                      onChange={() => this.props.checkTodo(i.id)}
-                      onFlipTodo={() => store.dispatch(TodoAction.flipTodo(i.id))}
-                      onCheckTodo={() => {
-                        this.keepPositionAfterAction(i.id, () => store.dispatch(TodoAction.checkTodo(i.id)));
-                      }}
-                    >
-                      {this.getItemComponent(i)}
-                    </Item>
+        (i) => (<div key={++counter}>
+                    {getRightComponent(i)(i, counter)}
                     {i.children != undefined && i.children.length > 0 && i.open ?
                      <div className="items">{renderItems(i.children)}</div>
                      : ''}
-                  </div>)
+                  </div>)        
       );
     };
 
@@ -125,7 +136,7 @@ export class ItemsList extends Component {
     return true;
   }
 
-  getItemComponent(todo) {
+  getItemBody(todo) {
     if (todo.id === this.state.editId) {
       switch (this.state.focusedItemState) {
         case TodoItemStateType.NOTE:
@@ -665,23 +676,20 @@ function applyFilter(todos, filter) {
   switch(filter) {
     case FilterTypes.FILTER_TODO:
       return transformTodos(todos, {searchBy: (i) =>
-        (!Array.isArray(i.children) || i.children.length == 0) &&
+        i.children.length == 0 &&
         !i.done &&
         (!i.dateStart || i.dateStart < now)
       });
 
     case FilterTypes.FILTER_ACTIVE:
-      return transformTodos(todos, {filterBy: (i) => i.done});
+      return transformTodos(todos, {filterBy: (i) => !i.done});
 
     case FilterTypes.FILTER_COMPLETED:
       return transformTodos(todos, {searchBy: (i) => i.done});
 
     case FilterTypes.FILTER_BY_CONTEXT:
       return transformTodos(todos, {
-        filterBy: (i) => false,
-          // (!Array.isArray(i.children) || i.children.length == 0),
-          // && !i.done,
-          // && (!i.dateStart || i.dateStart < now)
+        filterBy: (i) => !i.done,
         groupBy: (i) => i.text.match(/#(\S*)/g)
       });
 
