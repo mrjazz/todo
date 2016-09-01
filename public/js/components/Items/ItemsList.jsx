@@ -52,50 +52,53 @@ export class ItemsList extends Component {
         return applyFilter(todos, filter);
       }
     );
-  }  
+  }
+
+  getItemComponent(i, j) {
+    return (<Item
+      ref={j}
+      className={this.stylesForItem(i, j)}
+      todo={i}
+      focus={this.state.editId == null && this.curState().focusId == i.id}
+      visible={this.isTodoVisible(i)}
+      onDrop={this.dropItemHandler.bind(this)}
+      highlight={this.highlightItem.bind(this)}
+      onKeyDown={this.itemKeyPressHandler.bind(this)}
+      onFocus={() => this.itemFocusHandler(i.id)}
+      onFocusOut={() => this.focusOutHandler()}
+      onChange={() => this.props.checkTodo(i.id)}
+      onFlipTodo={() => store.dispatch(TodoAction.flipTodo(i.id))}
+      onCheckTodo={() => {
+        this.keepPositionAfterAction(i.id, () => store.dispatch(TodoAction.checkTodo(i.id)));
+      }}
+    >
+      {this.getItemBody(i)}
+    </Item>);
+  }
+
+  getGroupComponent(i, j) {
+    return (<ItemGroup key={j}>{i.text}</ItemGroup>);
+  }
+
+  getRightComponent(i) {
+    if (i instanceof Todo) {
+      return (i, j) => this.getItemComponent(i, j);
+    } else {
+      return (i, j) => this.getGroupComponent(i, j);
+    }
+  }
 
   render() {
     let counter = 0;
-    const store = this.context.store;
-
-    const getItemComponent = (i, j) => (<Item
-              ref={j}
-              className={this.stylesForItem(i, j)}
-              todo={i}
-              focus={this.state.editId == null && this.curState().focusId == i.id}
-              visible={this.isTodoVisible(i)}
-              onDrop={this.dropItemHandler.bind(this)}
-              highlight={this.highlightItem.bind(this)}
-              onKeyDown={this.itemKeyPressHandler.bind(this)}
-              onFocus={() => this.itemFocusHandler(i.id)}
-              onFocusOut={() => this.focusOutHandler()}
-              onChange={() => this.props.checkTodo(i.id)}
-              onFlipTodo={() => store.dispatch(TodoAction.flipTodo(i.id))}
-              onCheckTodo={() => {
-                this.keepPositionAfterAction(i.id, () => store.dispatch(TodoAction.checkTodo(i.id)));
-              }}
-            >
-              {this.getItemBody(i)}
-            </Item>)    
-
-    const getGroupComponent = (i, j) => (<ItemGroup key={j}>{i.text}</ItemGroup>)
-
-    const getRightComponent = (i) => {
-      if (i instanceof Todo) {
-        return getItemComponent;
-      } else {
-        return getGroupComponent;
-      }
-    }
 
     const renderItems = (items) => {
       return items.map(
         (i) => (<div key={++counter}>
-                    {getRightComponent(i)(i, counter)}
+                    {this.getRightComponent(i)(i, counter)}
                     {i.children != undefined && i.children.length > 0 && i.open ?
                      <div className="items">{renderItems(i.children)}</div>
                      : ''}
-                  </div>)        
+                  </div>)
       );
     };
 
