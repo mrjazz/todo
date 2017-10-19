@@ -1,4 +1,8 @@
 linters:
+  eslint:
+    config: './.eslintrc'
+  jscs:
+    config: './.jshintrc'
   csslint: {  }
   phpcs:
     standard: PSR2
